@@ -7,8 +7,9 @@ import { runCurriculumIntelligence } from './agents/curriculumIntelligence.js';
 import { runExperienceDesigner } from './agents/experienceDesigner.js';
 import { runContentGenerator } from './agents/contentGenerator.js';
 import { runTeacherAssistant } from './agents/teacherAssistant.js';
+import { runLessonEvaluator } from './agents/lessonEvaluator.js';
 import { buildWorksheet } from './utils/worksheetBuilder.js';
-import { DEMO_RESPONSE } from './demo/demoCache.js';
+import { DEMO_RESPONSES } from './demo/demoCache.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -26,7 +27,8 @@ app.get('/api/health', (_req, res) => {
     status: 'ok',
     mode: DEMO_MODE ? 'DEMO' : 'LIVE',
     model: DEMO_MODE ? 'demo-cache' : GROQ_MODEL,
-    provider: DEMO_MODE ? 'none' : 'Groq (free)',
+    provider: DEMO_MODE ? 'none (demo)' : 'Groq (free)',
+    agents: 5,
     timestamp: new Date().toISOString(),
   });
 });
@@ -48,60 +50,93 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
 
 // ─── Main Generation ──────────────────────────────────────────────────────────
 app.post('/api/generate', async (req, res) => {
-  const { subject, year, topic, language = 'Bahasa Melayu', objectives = '', extractedText = '' } = req.body;
+  const {
+    subject, year, topic,
+    language = 'English',
+    objectives = '',
+    extractedText = '',
+    country = '',
+    curriculumStandard = '',
+    studentPersona = 'On-Level',
+  } = req.body;
 
   if (!subject || !year || !topic) {
     return res.status(400).json({ error: 'subject, year, and topic are required.' });
   }
 
-  // ── DEMO MODE — instant response, no API call ──────────────────────────────
+  // ── DEMO MODE ────────────────────────────────────────────────────────────────
   if (DEMO_MODE) {
-    console.log(`\n🎭 [DEMO MODE] Returning cached response for: ${subject} ${year} — ${topic}`);
-    // Simulate a brief delay so the progress animation plays
-    await new Promise(r => setTimeout(r, 2000));
+    console.log(`\n🎭 [DEMO] ${subject} ${year} — ${topic} (${country || 'International'})`);
+    await new Promise(r => setTimeout(r, 2500)); // let animation play
+
+    // Pick demo based on country/language hint
+    let demo = DEMO_RESPONSES.universal;
+    if (country === 'Malaysia' || language === 'Bahasa Melayu') demo = DEMO_RESPONSES.malaysia;
+    else if (country === 'United Kingdom') demo = DEMO_RESPONSES.uk;
+
     return res.json({
-      ...DEMO_RESPONSE,
+      ...demo,
       generation_id: `edf_demo_${Date.now()}`,
       created_at: new Date().toISOString(),
+      subject, year, topic, country, language, studentPersona,
     });
   }
 
-  // ── LIVE MODE — real Groq API calls ───────────────────────────────────────
+  // ── LIVE MODE — 5-Agent Pipeline ──────────────────────────────────────────
   const generationId = `edf_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const createdAt = new Date().toISOString();
+  const startTime = Date.now();
+  let agentCalls = 0;
 
   try {
-    const context = { subject, year, topic, language, objectives, extractedText };
-
-    console.log(`\n🎓 [${generationId}] Groq generating: ${subject} ${year} — ${topic} (${language})`);
-    console.log(`   Model: ${GROQ_MODEL}`);
+    const context = { subject, year, topic, language, objectives, extractedText, country, curriculumStandard, studentPersona };
+    console.log(`\n🎓 [${generationId}] ${subject} ${year} — ${topic} | ${country || 'International'} | ${studentPersona}`);
 
     // Agent 1 — Curriculum Intelligence
-    console.log('  [1/4] Curriculum Intelligence...');
+    console.log('  [1/5] Curriculum Intelligence...');
     const blueprint = await runCurriculumIntelligence(context);
+    agentCalls++;
 
-    // Agent 2 — Learning Experience Designer
-    console.log('  [2/4] Experience Designer...');
+    // Agent 2 — Experience Designer
+    console.log('  [2/5] Experience Designer...');
     const experienceDesign = await runExperienceDesigner({ ...context, blueprint });
+    agentCalls++;
 
     // Agent 3 — Content Generator
-    console.log('  [3/4] Content Generator...');
+    console.log('  [3/5] Content Generator...');
     const gameContent = await runContentGenerator({ ...context, blueprint, experienceDesign });
+    agentCalls++;
 
-    // Agent 4 — Teacher Assistant + Worksheet (parallel)
-    console.log('  [4/4] Teacher Assistant + Worksheet...');
+    // Agent 4 + Worksheet (parallel)
+    console.log('  [4/5] Teacher Assistant + Worksheet...');
     const [teachingInsights, { worksheetHTML, answerKeyHTML }] = await Promise.all([
       runTeacherAssistant({ ...context, blueprint, experienceDesign }),
       Promise.resolve(buildWorksheet({ blueprint, gameContent, subject, year, topic, language })),
     ]);
+    agentCalls++;
 
-    console.log(`  ✅ [${generationId}] Complete!\n`);
+    // Agent 5 — Lesson Evaluator
+    console.log('  [5/5] Lesson Evaluator...');
+    const lessonEvaluation = await runLessonEvaluator({ subject, year, topic, language, studentPersona, blueprint, gameContent, teachingInsights });
+    agentCalls++;
+
+    const generationTimeMs = Date.now() - startTime;
+    console.log(`  ✅ [${generationId}] Complete in ${(generationTimeMs / 1000).toFixed(1)}s!\n`);
+
+    const analytics = {
+      generation_time_ms: generationTimeMs,
+      agent_calls: agentCalls,
+      resources_created: 6,
+      estimated_time_saved_minutes: 135,
+      model: GROQ_MODEL,
+      source_confidence: blueprint.confidenceLevel || 'general',
+    };
 
     res.json({
       generation_id: generationId,
       model: GROQ_MODEL,
-      created_at: createdAt,
+      created_at: new Date().toISOString(),
       status: 'complete',
+      subject, year, topic, country, language, studentPersona,
       lesson: { ...blueprint, experience_design: experienceDesign },
       resources: {
         quiz: { data: gameContent.quiz, engineConfig: buildQuizEngineConfig(gameContent.quiz) },
@@ -110,7 +145,10 @@ app.post('/api/generate', async (req, res) => {
         answer_key: { html: answerKeyHTML },
       },
       teaching_insights: teachingInsights,
+      lesson_evaluation: lessonEvaluation,
+      analytics,
     });
+
   } catch (err) {
     console.error(`  ❌ [${generationId}] Error:`, err.message);
     res.status(500).json({ error: err.message || 'Generation failed. Please try again.' });
@@ -119,7 +157,7 @@ app.post('/api/generate', async (req, res) => {
 
 // ─── Performance Analysis ─────────────────────────────────────────────────────
 app.post('/api/analyze-performance', async (req, res) => {
-  const { results, topic, language = 'Bahasa Melayu' } = req.body;
+  const { results, topic, language = 'English' } = req.body;
   if (!results || !topic) return res.status(400).json({ error: 'results and topic are required.' });
 
   if (DEMO_MODE) {
@@ -128,11 +166,11 @@ app.post('/api/analyze-performance', async (req, res) => {
       analysis: {
         overall_score: 72,
         weak_questions: [
-          { question_id: 3, error_rate: 0.6, insight: 'Ramai murid keliru antara tenaga haba dan tenaga cahaya.' },
-          { question_id: 7, error_rate: 0.45, insight: 'Konsep pertukaran tenaga perlu diperkukuhkan.' },
+          { question_id: 3, error_rate: 0.6, insight: 'Students confused between solid and liquid states at the particle level.' },
+          { question_id: 7, error_rate: 0.45, insight: 'Energy transfer concept needs reinforcement with visual model.' },
         ],
-        class_recommendation: 'Ulang semak pertukaran tenaga dengan demonstrasi langsung.',
-        follow_up_activity: 'Aktiviti "Rantaian Tenaga" — murid lukis 3 pertukaran tenaga dalam kehidupan harian.',
+        class_recommendation: 'Review state changes with a particle model demonstration before moving to next topic.',
+        follow_up_activity: '"Particle Sorting" — students categorise particle arrangements for each state of matter.',
       },
     });
   }
@@ -159,8 +197,8 @@ function buildMatchingEngineConfig(matching) {
 }
 
 app.listen(PORT, () => {
-  const mode = DEMO_MODE ? '🎭 DEMO MODE (no API key needed)' : `🤖 LIVE — Groq/${GROQ_MODEL}`;
-  console.log(`\n🚀 EduForge AI — http://localhost:${PORT}`);
-  console.log(`   ${mode}`);
+  const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${GROQ_MODEL}`;
+  console.log(`\n🚀 EduForge AI — The AI Teaching Operating System`);
+  console.log(`   http://localhost:${PORT} | ${mode} | 5 Agents`);
   console.log(`   Health: http://localhost:${PORT}/api/health\n`);
 });
