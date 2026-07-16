@@ -1,0 +1,73 @@
+import { useState, useCallback } from 'react';
+
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+export function useGeneration() {
+  const [status, setStatus] = useState('idle'); // idle | uploading | generating | complete | error
+  const [step, setStep] = useState(0); // 0-3 for 4 agents
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+
+  const uploadFile = useCallback(async (file) => {
+    setStatus('uploading');
+    const form = new FormData();
+    form.append('file', file);
+    const res = await fetch(`${API}/api/extract`, { method: 'POST', body: form });
+    if (!res.ok) throw new Error('File extraction failed');
+    const data = await res.json();
+    return data.text;
+  }, []);
+
+  const generate = useCallback(async ({ subject, year, topic, language, objectives, file }) => {
+    setStatus('generating');
+    setStep(0);
+    setError(null);
+    setResult(null);
+
+    try {
+      let extractedText = '';
+      if (file) {
+        setStatus('uploading');
+        extractedText = await uploadFile(file);
+        setStatus('generating');
+      }
+
+      // Simulate step progress (each agent takes ~3-7s)
+      const stepTimers = [
+        setTimeout(() => setStep(1), 3000),
+        setTimeout(() => setStep(2), 7000),
+        setTimeout(() => setStep(3), 11000),
+      ];
+
+      const res = await fetch(`${API}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subject, year, topic, language, objectives, extractedText }),
+      });
+
+      stepTimers.forEach(clearTimeout);
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Generation failed');
+      }
+
+      const data = await res.json();
+      setStep(4);
+      setResult(data);
+      setStatus('complete');
+    } catch (err) {
+      setError(err.message);
+      setStatus('error');
+    }
+  }, [uploadFile]);
+
+  const reset = useCallback(() => {
+    setStatus('idle');
+    setStep(0);
+    setResult(null);
+    setError(null);
+  }, []);
+
+  return { status, step, result, error, generate, reset };
+}
