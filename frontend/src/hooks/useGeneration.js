@@ -4,7 +4,7 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export function useGeneration() {
   const [status, setStatus] = useState('idle'); // idle | uploading | generating | complete | error
-  const [step, setStep] = useState(0); // 0-3 for 4 agents
+  const [step, setStep] = useState(0); // 0-4 for 5 agents
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
@@ -18,7 +18,10 @@ export function useGeneration() {
     return data.text;
   }, []);
 
-  const generate = useCallback(async ({ subject, year, topic, language, objectives, file }) => {
+  const generate = useCallback(async ({
+    subject, year, topic, language, objectives, file,
+    country, curriculumStandard, studentPersona,
+  }) => {
     setStatus('generating');
     setStep(0);
     setError(null);
@@ -32,17 +35,23 @@ export function useGeneration() {
         setStatus('generating');
       }
 
-      // Simulate step progress (each agent takes ~3-7s)
+      // Simulate 5-agent progress (each agent ~3-5s, evaluator faster)
       const stepTimers = [
-        setTimeout(() => setStep(1), 3000),
-        setTimeout(() => setStep(2), 7000),
-        setTimeout(() => setStep(3), 11000),
+        setTimeout(() => setStep(1), 3000),   // Agent 2 starts
+        setTimeout(() => setStep(2), 7000),   // Agent 3 starts
+        setTimeout(() => setStep(3), 11000),  // Agent 4 starts
+        setTimeout(() => setStep(4), 15000),  // Agent 5 (Evaluator) starts
       ];
 
       const res = await fetch(`${API}/api/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, year, topic, language, objectives, extractedText }),
+        body: JSON.stringify({
+          subject, year, topic, language, objectives, extractedText,
+          country: country || '',
+          curriculumStandard: curriculumStandard || '',
+          studentPersona: studentPersona || 'On-Level',
+        }),
       });
 
       stepTimers.forEach(clearTimeout);
@@ -53,7 +62,7 @@ export function useGeneration() {
       }
 
       const data = await res.json();
-      setStep(4);
+      setStep(5); // all done
       setResult(data);
       setStatus('complete');
     } catch (err) {

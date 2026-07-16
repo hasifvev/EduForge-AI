@@ -3,31 +3,38 @@ import { withRetry } from '../utils/retry.js';
 import { gameContentSchema } from '../validators/schemas.js';
 
 const SYSTEM_PROMPT = `You are EduForge AI — Content Generator Agent.
-You are a master question writer for Malaysian school assessments with expertise in KSSR/KSSM standards.
+You are a master assessment writer with expertise in creating high-quality educational content for any curriculum worldwide.
 
-Your role is to create the actual questions, options, answers, and game content based on the educational blueprint and experience design.
+Your role is to create the actual questions, options, answers, and game content for any teacher, any grade, any country.
 
 Rules:
 1. Return ONLY valid JSON — no markdown, no extra text
 2. MCQ options MUST be formatted as "A. text", "B. text", "C. text", "D. text"
 3. correct field MUST exactly match one of the options strings
 4. Distractors must be plausible (common misconceptions) — not obviously wrong
-5. Matching pairs must have EXACTLY 8 pairs
-6. Generate exactly 10 MCQ questions
-7. Generate exactly 8 worksheet fill-in-the-blank items
-8. All content in the specified language
-9. Use Malaysian cultural context in examples`;
+5. Adjust difficulty based on student persona:
+   - Beginner: straightforward recall, simple language, 3 obvious wrong answers
+   - On-Level: mix of recall and application, plausible distractors
+   - Mixed Ability: tiered difficulty across questions
+   - Gifted: higher-order thinking, evaluation and synthesis questions
+   - SEN Support: simple language, visual cues in question text, clear formatting
+6. Use real-life examples from the teacher's country/region
+7. Generate exactly 10 MCQ questions, exactly 8 matching pairs, exactly 8 worksheet items`;
 
-const buildPrompt = ({ subject, year, topic, language, blueprint, experienceDesign }) => `
-Create the game content for this Malaysian school lesson.
+const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => `
+Create educational game content for this lesson.
 
-Subject: ${subject} | Year: ${year} | Topic: ${topic} | Language: ${language}
+Context:
+- Subject: ${subject} | Grade: ${year} | Topic: ${topic}
+- Language: ${language} | Country: ${country || 'International'}
+- Student Persona: ${studentPersona || 'On-Level'}
+- Curriculum: ${blueprint.curriculum_source || 'General framework'}
 
 Educational Blueprint:
-${JSON.stringify(blueprint, null, 2)}
+${JSON.stringify({ objectives: blueprint.objectives.slice(0, 3), key_concepts: blueprint.key_concepts, difficulty: blueprint.difficulty }, null, 2)}
 
-Experience Design Strategy:
-${JSON.stringify(experienceDesign, null, 2)}
+Experience Design:
+${JSON.stringify({ primary_activity: experienceDesign.primary_activity, quiz_focus: experienceDesign.quiz_focus, matching_focus: experienceDesign.matching_focus, difficulty_calibration: experienceDesign.difficulty_calibration }, null, 2)}
 
 Return this EXACT JSON (no extra text):
 {
@@ -40,30 +47,32 @@ Return this EXACT JSON (no extra text):
         "question": "Question text in ${language}",
         "options": ["A. option1", "B. option2", "C. option3", "D. option4"],
         "correct": "A. option1",
-        "explanation": "Explanation in ${language}"
+        "explanation": "Clear explanation in ${language} — why this is correct and common mistakes to avoid"
       }
     ]
   },
   "matching": {
     "type": "drag_drop",
     "title": "Matching title in ${language}",
-    "instruction": "Instruction in ${language}",
+    "instruction": "Drag each term to its correct definition in ${language}",
     "pairs": [
       { "id": 1, "term": "Term in ${language}", "definition": "Definition in ${language}" }
     ]
   },
   "worksheet": {
     "title": "Worksheet title in ${language}",
-    "instructions": "Instructions in ${language}",
+    "instructions": "Fill-in-the-blank instructions in ${language}",
     "items": [
-      { "id": 1, "question": "Fill-in-the-blank in ${language}", "answer": "correct answer", "hint": "optional hint" }
+      { "id": 1, "question": "Fill-in-the-blank question in ${language}", "answer": "correct answer", "hint": "optional hint" }
     ]
   }
 }
 
-IMPORTANT: Generate exactly 10 quiz questions, exactly 8 matching pairs, exactly 8 worksheet items.`;
+CRITICAL: Generate exactly 10 quiz questions, exactly 8 matching pairs, exactly 8 worksheet items.
+Adjust all difficulty to match ${studentPersona || 'On-Level'} persona.
+Use real-world examples from ${country || 'the student context'}.`;
 
-export async function runContentGenerator({ subject, year, topic, language, blueprint, experienceDesign }) {
+export async function runContentGenerator({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) {
   return withRetry(
     async () => {
       const res = await openai.chat.completions.create({
@@ -72,7 +81,7 @@ export async function runContentGenerator({ subject, year, topic, language, blue
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: buildPrompt({ subject, year, topic, language, blueprint, experienceDesign }) },
+          { role: 'user', content: buildPrompt({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) },
         ],
       });
       const raw = res.choices[0].message.content;
