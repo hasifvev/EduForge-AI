@@ -17,8 +17,10 @@ EduForge AI uses Codex as its **software engineering agent**. Rather than genera
 
 **File:** `frontend/public/engines/quiz-engine.js`
 **Lines:** ~280
+
 **Codex prompt pattern used:**
-```
+
+```text
 Build a self-contained JavaScript MCQ quiz engine module.
 Requirements:
 - Module pattern (IIFE), no dependencies
@@ -33,6 +35,7 @@ Requirements:
 ```
 
 **What Codex built:**
+
 - Complete game loop (render → select → feedback → next → results)
 - Confetti particle animation system (120 particles, 5 colors)
 - Score results with animated progress bar
@@ -45,8 +48,10 @@ Requirements:
 
 **File:** `frontend/public/engines/matching-engine.js`
 **Lines:** ~320
+
 **Codex prompt pattern used:**
-```
+
+```text
 Build a self-contained drag-and-drop matching game engine.
 Requirements:
 - Module pattern (IIFE), no dependencies
@@ -60,6 +65,7 @@ Requirements:
 ```
 
 **What Codex built:**
+
 - Full drag-and-drop implementation (HTML5 DnD API)
 - Touch/tap fallback for mobile devices
 - Pair shuffle algorithm (Fisher-Yates)
@@ -72,14 +78,17 @@ Requirements:
 
 **File:** `backend/validators/schemas.js`
 **Lines:** ~120
+
 **Codex prompt pattern used:**
-```
+
+```text
 Write Zod v3 validation schemas for 4 AI agent JSON outputs.
 Schema requirements: [detailed field specs]
 Include min/max constraints, enum values, optional fields with defaults.
 ```
 
 **What Codex built:**
+
 - `blueprintSchema` — Educational Blueprint (Agent 1)
 - `experienceSchema` — Learning Experience Design (Agent 2)
 - `gameContentSchema` — MCQ + matching + worksheet content (Agent 3)
@@ -91,8 +100,10 @@ Include min/max constraints, enum values, optional fields with defaults.
 
 **File:** `backend/utils/retry.js`
 **Lines:** ~68
+
 **Codex prompt pattern used:**
-```
+
+```text
 Write a withRetry async utility that wraps AI agent calls.
 Requirements:
 - Catch ZodError (schema validation) and SyntaxError (JSON parse)
@@ -102,6 +113,7 @@ Requirements:
 ```
 
 **What Codex built:**
+
 - Generic `withRetry(fn, options)` wrapper
 - Zod error message extraction (flattens issue paths)
 - Exponential backoff with `setTimeout`
@@ -114,15 +126,19 @@ Requirements:
 The original plan was to use Codex to generate complete HTML game files on every request. Codex helped identify this was architecturally weak:
 
 **Before (rejected):**
-```
+
+```text
 GPT generates JSON → Codex generates HTML → return HTML
 ```
+
 Problem: Every request = new Codex call = slow, expensive, unreliable for demos.
 
 **After (implemented):**
-```
+
+```text
 GPT generates JSON → Codex-built engine renders it → interactive experience
 ```
+
 Benefit: Codex builds the engine once. GPT only generates data. Faster, more reliable, better separation of concerns.
 
 This architectural insight from Codex improved the entire system.
