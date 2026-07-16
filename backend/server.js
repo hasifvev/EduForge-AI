@@ -18,7 +18,25 @@ const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+// ─── CORS ─────────────────────────────────────────────────────────────────────
+// Allow localhost (dev) + any Vercel deployment (*.vercel.app) + custom domain
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    // Allow no-origin (curl, Postman) + allowed list + any vercel.app domain
+    if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // ─── Health ──────────────────────────────────────────────────────────────────
@@ -196,9 +214,16 @@ function buildMatchingEngineConfig(matching) {
   return { title: matching?.title || 'Matching', instruction: matching?.instruction || '', pairs: matching?.pairs || [], type: 'drag_drop' };
 }
 
-app.listen(PORT, () => {
-  const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${GROQ_MODEL}`;
-  console.log(`\n🚀 EduForge AI — The AI Teaching Operating System`);
-  console.log(`   http://localhost:${PORT} | ${mode} | 5 Agents`);
-  console.log(`   Health: http://localhost:${PORT}/api/health\n`);
-});
+// ─── Export for Vercel Serverless ────────────────────────────────────────────
+export default app;
+
+// ─── Local Dev Server ─────────────────────────────────────────────────────────
+// Only start the HTTP server when NOT running inside Vercel serverless
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${GROQ_MODEL}`;
+    console.log(`\n🚀 EduForge AI — The AI Teaching Operating System`);
+    console.log(`   http://localhost:${PORT} | ${mode} | 5 Agents`);
+    console.log(`   Health: http://localhost:${PORT}/api/health\n`);
+  });
+}

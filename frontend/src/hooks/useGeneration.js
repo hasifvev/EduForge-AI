@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// In production (Vercel), frontend + backend share the same domain — use relative URLs.
+// In local dev, proxy in vite.config.js handles /api → localhost:3001.
+const API = import.meta.env.VITE_API_URL || '';
 
 export function useGeneration() {
   const [status, setStatus] = useState('idle'); // idle | uploading | generating | complete | error
