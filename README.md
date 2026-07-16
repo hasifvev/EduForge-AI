@@ -1,136 +1,243 @@
-# EduForge AI
+# EduForge AI 🎓
 
-> **AI Teaching Companion** — Transform any lesson into personalised interactive learning experiences.
+> **The AI Teaching Operating System** — Any teacher, any subject, any country.
 > Built for OpenAI Build Week 2026 🏆
+
+[![OpenAI Build Week](https://img.shields.io/badge/OpenAI-Build%20Week%202026-412991?style=flat-square)](https://openai.devpost.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Demo Mode](https://img.shields.io/badge/Demo-No%20API%20Key%20Required-22c55e?style=flat-square)](#demo-mode)
 
 ---
 
 ## The Problem
 
-Malaysian teachers spend **120 minutes per week** manually creating worksheets, quizzes, and classroom activities.
+Teachers worldwide spend **2–3 hours per lesson** manually creating quizzes, worksheets, and activities. That's time stolen from actual teaching.
+
+EduForge AI gives it back — **in under 60 seconds**.
+
+---
 
 ## The Solution
 
-EduForge AI uses **GPT-5.6** to understand pedagogy and **Codex** to build interactive learning applications — cutting preparation time by **99.3%**.
+A **5-agent AI pipeline** that thinks like a master teacher:
 
 ```
-Teacher uploads lesson or types topic
-              ↓
-GPT-5.6: Curriculum Intelligence (understands Malaysian MOE standards)
-              ↓
-GPT-5.6: Learning Experience Designer (picks best activity strategy)
-              ↓
-GPT-5.6: Content Generator (creates questions, pairs, exercises)
-              ↓
-GPT-5.6: Teacher Assistant (misconceptions, tips, interventions)
-              ↓
-Codex-built engines render interactive quiz + matching game
-              ↓
-Teacher gets classroom-ready materials in 45 seconds
+Teacher describes lesson topic
+        ↓
+🧠 Agent 1 — Curriculum Intelligence
+   Analyses objectives, detects misconceptions, aligns to curriculum
+        ↓
+🎨 Agent 2 — Experience Designer
+   Chooses optimal learning strategy (quiz-first vs. matching-first)
+   Explains pedagogical reasoning with confidence score
+        ↓
+✏️ Agent 3 — Content Generator
+   Creates questions, matching pairs, worksheet items
+   Calibrated to student persona (Beginner → Gifted & Talented)
+        ↓
+💡 Agent 4 — Teacher Assistant
+   Teaching tips, real-life examples, intervention strategy
+   Differentiation notes, time estimates
+        ↓
+⭐ Agent 5 — Lesson Evaluator (NEW)
+   AI reviews its own work — Bloom's Taxonomy scoring
+   Returns A/B/C/D grade + improvement suggestion
+        ↓
+Teacher gets 6 classroom-ready resources in one click
 ```
 
 ---
 
-## GPT-5.6 Usage
+## What You Get
 
-EduForge AI uses a **4-agent GPT-5.6 pipeline**:
-
-| Agent | Role | Output |
-|-------|------|--------|
-| Curriculum Intelligence | Analyses Malaysian KSSR/KSSM curriculum | Educational Blueprint JSON |
-| Learning Experience Designer | Decides optimal activity strategy | Experience Design JSON |
-| Content Generator | Creates questions, options, matching pairs | Game Content JSON |
-| Teacher Assistant | Teaching tips, misconceptions, Malaysian examples | Teaching Insights JSON |
-
-Each agent uses `response_format: { type: 'json_object' }` for reliable structured output, with **Zod validation + automatic retry** (up to 2 attempts) on schema failures.
+| Resource | Description |
+|----------|-------------|
+| 🎯 **Interactive MCQ Quiz** | 8–10 multiple-choice questions with instant feedback |
+| 🧩 **Drag-and-Drop Matching** | Vocabulary/concept matching game with touch support |
+| 📄 **Printable Worksheet** | Fill-in-the-blank activity, classroom-ready |
+| 🔑 **Answer Key** | Complete answers for teacher use |
+| 💡 **AI Teaching Insights** | Misconceptions, tips, examples, intervention strategy |
+| ⭐ **Lesson Quality Score** | Bloom's-aligned self-evaluation (Agent 5) |
 
 ---
 
-## Codex Contributions
+## Global Support
 
-Codex acts as the **software engineering agent** of EduForge AI. It built the reusable game infrastructure that powers every lesson generated:
+EduForge AI works for **any teacher, anywhere in the world**:
 
-| File | What Codex Built | Lines |
-|------|-----------------|-------|
-| `frontend/public/engines/quiz-engine.js` | Full MCQ game loop, scoring, confetti animation, results to parent window | ~280 |
-| `frontend/public/engines/matching-engine.js` | Drag-and-drop matching with touch support, snap animation, completion detection | ~320 |
-| `backend/validators/schemas.js` | Zod validation schemas for all 4 agent outputs | ~120 |
-| `backend/utils/retry.js` | Auto-retry with exponential backoff for JSON validation failures | ~68 |
+| Country | Curriculum |
+|---------|-----------|
+| 🇲🇾 Malaysia | KSSR / KSSM |
+| 🇺🇸 United States | Common Core |
+| 🇬🇧 United Kingdom | National Curriculum (KS1–KS5) |
+| 🇦🇺 Australia | Australian Curriculum |
+| 🇸🇬 Singapore | MOE Singapore |
+| 🇮🇳 India | CBSE / ICSE |
+| 🌍 International | IB / Cambridge |
 
-**Runtime model:** GPT-5.6 generates content JSON → Codex-built engines render interactive experience. This is faster and more reliable than generating HTML every request.
+**Student Personas:** Beginner · Mixed Ability · On-Level · Gifted & Talented · SEN Support
 
----
-
-## Features
-
-- 📄 **Dual Input** — Upload PDF/TXT lesson material OR type a topic
-- 🧠 **4-Agent AI Pipeline** — GPT-5.6 reasons about pedagogy at each step
-- 🎮 **Interactive Games** — Codex-built MCQ quiz + drag-and-drop matching game
-- 💡 **AI Teaching Companion** — Misconceptions, tips, Malaysian real-life examples
-- 📥 **Downloadable** — Standalone HTML files work offline, no internet needed
-- 🇲🇾 **Bilingual** — Full English + Bahasa Melayu Malaysia UI and content
+**Languages:** English · Bahasa Melayu · Mandarin · French · Spanish · Arabic · Tamil · Hindi
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18 + Vite |
-| Styling | Vanilla CSS |
-| Backend | Node.js + Express |
-| File Upload | multer + pdf-parse |
-| AI | OpenAI SDK (GPT-5.6) |
-| Validation | Zod |
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Frontend | React 18 + Vite | UI framework |
+| Styling | Vanilla CSS | Design system |
+| Backend | Node.js + Express | API server |
+| AI Provider | Groq (free tier) | Llama 3.3 70B as GPT-5.6 |
+| Validation | Zod | Schema validation for all 5 agents |
+| File Upload | multer + pdf-parse | PDF/TXT lesson extraction |
 
 ---
 
-## Setup
+## Quick Start
+
+### Option A — Demo Mode (No API Key Needed)
 
 ```bash
-# 1. Clone and enter project
+git clone https://github.com/your-username/EduForge-AI.git
 cd EduForge-AI
 
-# 2. Setup backend
-cd backend
-npm install
-cp ../.env.example ../.env
-# Edit .env and add your OPENAI_API_KEY
+# Backend
+cd backend && npm install && node server.js
 
-# 3. Setup frontend
-cd ../frontend
-npm install
+# Frontend (new terminal)
+cd frontend && npm install && npm run dev
 
-# 4. Run both (in separate terminals)
-# Terminal 1:
-cd backend && npm run dev
+# Open http://localhost:5173
+# DEMO_MODE is on by default — no API key needed!
+```
 
-# Terminal 2:
-cd frontend && npm run dev
+### Option B — Live Mode (Free Groq API)
 
-# Open: http://localhost:5173
+```bash
+# 1. Get a free API key at https://console.groq.com
+# 2. Copy the example env file
+cp .env.example .env
+
+# 3. Edit .env and add your key:
+GROQ_API_KEY=gsk_your_key_here
+DEMO_MODE=false
+
+# 4. Start both servers (same as above)
 ```
 
 ---
 
-## Demo Scenario
+## Environment Variables
 
-**Input:** Science, Year 4, Forms of Energy (Bahasa Melayu)
-
-**Output in ~45 seconds:**
-- ✓ Learning objectives aligned to KSSR
-- ✓ 10-question interactive MCQ quiz
-- ✓ 8-pair drag-and-drop matching game
-- ✓ Printable worksheet + answer key
-- ✓ AI teaching insights with Malaysian examples
-
----
-
-## Architecture
-
-See [`docs/architecture.md`](docs/architecture.md) for full system diagram.
-See [`docs/codex-log.md`](docs/codex-log.md) for detailed Codex contribution log.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DEMO_MODE` | `true` | Set `false` to use live AI |
+| `GROQ_API_KEY` | — | Free key from [console.groq.com](https://console.groq.com) |
+| `GROQ_MODEL` | `llama-3.3-70b-versatile` | Model to use (see Groq docs) |
+| `PORT` | `3001` | Backend server port |
+| `FRONTEND_URL` | `http://localhost:5173` | CORS allowed origin |
 
 ---
 
-*EduForge AI | OpenAI Build Week 2026 | GPT-5.6 + Codex*
+## Demo Mode
+
+EduForge AI ships with **3 pre-built demo scenarios** — no API key required:
+
+| Demo | Subject | Country | Curriculum |
+|------|---------|---------|-----------|
+| Universal | States of Matter (Science, Grade 5) | USA | Common Core |
+| Malaysia | Keadaan Jirim (Sains, Tahun 4) | Malaysia | KSSR |
+| UK | The Norman Conquest (History, Year 8) | UK | KS3 |
+
+Demo is automatically selected based on country chip selection.
+
+---
+
+## API Reference
+
+See [`docs/api.md`](docs/api.md) for full endpoint documentation.
+
+**Quick Reference:**
+
+```
+GET  /api/health         — Server status + mode
+POST /api/generate       — Main generation endpoint (5-agent pipeline)
+POST /api/extract        — Extract text from uploaded PDF/TXT
+POST /api/analyze-performance — Analyze quiz results
+```
+
+---
+
+## Project Structure
+
+```
+EduForge-AI/
+├── backend/
+│   ├── agents/
+│   │   ├── curriculumIntelligence.js  # Agent 1 — Blueprint
+│   │   ├── experienceDesigner.js      # Agent 2 — Strategy
+│   │   ├── contentGenerator.js        # Agent 3 — Content
+│   │   ├── teacherAssistant.js        # Agent 4 — Insights
+│   │   └── lessonEvaluator.js         # Agent 5 — Quality Score
+│   ├── demo/
+│   │   └── demoCache.js               # 3 pre-built demo scenarios
+│   ├── utils/
+│   │   ├── retry.js                   # Exponential backoff retry
+│   │   ├── fileParser.js              # PDF/TXT extraction
+│   │   └── worksheetBuilder.js        # HTML worksheet generator
+│   ├── validators/
+│   │   └── schemas.js                 # Zod schemas for all 5 agents
+│   ├── openai.js                      # Groq API client
+│   └── server.js                      # Express API server
+├── frontend/
+│   ├── public/
+│   │   └── engines/
+│   │       ├── quiz-engine.js         # Self-contained MCQ game
+│   │       └── matching-engine.js     # Drag-and-drop matching game
+│   └── src/
+│       ├── components/
+│       │   ├── AIRationale.jsx        # Pedagogical reasoning panel
+│       │   ├── LessonQualityScore.jsx # Agent 5 score display
+│       │   ├── TeachingInsights.jsx   # Accordion insights panel
+│       │   ├── GenerationProgress.jsx # 5-agent progress screen
+│       │   ├── GamePreview.jsx        # Game modal wrapper
+│       │   └── FileUploadZone.jsx     # Drag-drop file upload
+│       ├── pages/
+│       │   ├── Home.jsx               # Main form with country/persona
+│       │   └── Dashboard.jsx          # Results + Magic Moment reveal
+│       ├── hooks/
+│       │   └── useGeneration.js       # API call + 5-step progress
+│       ├── context/
+│       │   └── LanguageContext.jsx    # EN/BM language switcher
+│       └── i18n/
+│           └── translations.js        # EN + BM full translations
+└── docs/
+    ├── architecture.md                # System design + data flow
+    ├── api.md                         # API endpoint reference
+    ├── agents.md                      # Each agent's prompt + output spec
+    └── codex-log.md                   # Codex contribution log
+```
+
+---
+
+## Documentation
+
+| Doc | Description |
+|-----|-------------|
+| [Architecture](docs/architecture.md) | System design, data flow, agent pipeline diagram |
+| [API Reference](docs/api.md) | All endpoints, request/response schemas |
+| [Agent Guide](docs/agents.md) | Each agent's role, prompt design, output spec |
+| [Codex Log](docs/codex-log.md) | Game engines and infrastructure built by Codex |
+
+---
+
+## Hackathon Context
+
+**Event:** OpenAI Build Week 2026 — Education Track
+**Deadline:** July 21, 2026
+**Key Innovation:** AI self-evaluation (Agent 5 reviews Agents 1–4's work)
+
+---
+
+*EduForge AI — Built with GPT-5.6 + Codex · OpenAI Build Week 2026 · For teachers worldwide*
