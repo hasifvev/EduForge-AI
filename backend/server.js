@@ -15,7 +15,7 @@ import { DEMO_RESPONSES } from './demo/demoCache.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DEMO_MODE = process.env.DEMO_MODE !== 'false'; // default: always demo
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
@@ -45,8 +45,8 @@ app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     mode: DEMO_MODE ? 'DEMO' : 'LIVE',
-    model: DEMO_MODE ? 'demo-cache' : GROQ_MODEL,
-    provider: DEMO_MODE ? 'none (demo)' : 'Groq (free)',
+    model: DEMO_MODE ? 'demo-cache' : OPENAI_MODEL,
+    provider: DEMO_MODE ? 'none (demo)' : 'OpenAI',
     agents: 5,
     timestamp: new Date().toISOString(),
   });
@@ -143,13 +143,13 @@ app.post('/api/generate', async (req, res) => {
       agent_calls: agentCalls,
       resources_created: 10,
       estimated_time_saved_minutes: 210,
-      model: GROQ_MODEL,
+      model: OPENAI_MODEL,
       source_confidence: blueprint.confidenceLevel || 'general',
     };
 
     res.json({
       generation_id: generationId,
-      model: GROQ_MODEL,
+      model: OPENAI_MODEL,
       created_at: new Date().toISOString(),
       status: 'complete',
       subject, year, topic, country, language, studentPersona,
@@ -220,7 +220,7 @@ export default app;
 // Only start the HTTP server when NOT running inside Vercel serverless
 if (process.env.VERCEL !== '1') {
   app.listen(PORT, () => {
-    const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${GROQ_MODEL}`;
+    const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${OPENAI_MODEL}`;
     console.log(`\n🚀 EduForge AI — The AI Teaching Operating System`);
     console.log(`   http://localhost:${PORT} | ${mode} | 5 Agents`);
     console.log(`   Health: http://localhost:${PORT}/api/health\n`);

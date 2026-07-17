@@ -231,6 +231,8 @@ body {
   font-size: 14px; color: var(--text-muted); display: flex; align-items: center; justify-content: center;
 }
 .upload-remove:hover { border-color: var(--red); color: var(--red); }
+.upload-limit-notice { display: grid; gap: 8px; margin-top: 10px; padding: 12px; border: 1px solid #FCD34D; border-radius: var(--radius-sm); background: #FFFBEB; color: #92400E; font-size: 13px; }
+.upload-limit-notice a { color: var(--blue); font-weight: 700; }
 
 .form-error {
   background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B;

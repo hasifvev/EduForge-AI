@@ -1,22 +1,29 @@
 import { useState, useRef } from 'react';
 import { useLang } from '../context/LanguageContext.jsx';
 
-export default function FileUploadZone({ onFileSelect, selectedFile }) {
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
+export default function FileUploadZone({ onFileSelect, onFileTooLarge, selectedFile }) {
   const { t } = useLang();
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef(null);
 
+  const selectFile = (file) => {
+    if (!file || !isValid(file)) return;
+    if (file.size > MAX_UPLOAD_BYTES) {
+      onFileTooLarge?.(file);
+      return;
+    }
+    onFileSelect(file);
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
     setDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file && isValid(file)) onFileSelect(file);
+    selectFile(e.dataTransfer.files[0]);
   };
 
-  const handleChange = (e) => {
-    const file = e.target.files[0];
-    if (file && isValid(file)) onFileSelect(file);
-  };
+  const handleChange = (e) => selectFile(e.target.files[0]);
 
   const isValid = (file) => {
     const allowed = ['application/pdf', 'text/plain'];

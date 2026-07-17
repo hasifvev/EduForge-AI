@@ -14,6 +14,11 @@ export const translations = {
     upload_label: 'Upload Lesson Material',
     upload_hint: 'PDF or TXT — any lesson plan, textbook page, or notes',
     upload_or: 'or describe your lesson',
+    upload_limit_title: 'This file is too large to upload',
+    upload_limit_notice: '{name} is above the 4 MB upload limit.',
+    upload_limit_search: 'Search for material',
+    field_material_link: 'Material link',
+    material_link_placeholder: 'Paste a public material link',
 
     // Form fields
     field_country: 'Country / Region',
@@ -177,6 +182,11 @@ export const translations = {
     upload_label: 'Muat Naik Bahan Pelajaran',
     upload_hint: 'PDF atau TXT — pelan pelajaran, halaman buku teks, atau nota',
     upload_or: 'atau nyatakan pelajaran anda',
+    upload_limit_title: 'Fail ini terlalu besar untuk dimuat naik',
+    upload_limit_notice: '{name} melebihi had muat naik 4 MB.',
+    upload_limit_search: 'Cari bahan',
+    field_material_link: 'Pautan bahan',
+    material_link_placeholder: 'Tampal pautan bahan awam',
 
     // Form fields
     field_country: 'Negara / Rantau',

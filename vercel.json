@@ -11,8 +11,5 @@
     "api/index.js": {
       "maxDuration": 30
     }
-  },
-  "env": {
-    "DEMO_MODE": "true"
   }
 }

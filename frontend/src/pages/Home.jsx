@@ -56,8 +56,11 @@ export default function Home() {
     }
     setFormError('');
     const lang = form.language || t.languages[0];
-    generate({ ...form, language: lang, file });
+    const objectives = [form.objectives, form.materialUrl ? 'Teacher reference material URL: ' + form.materialUrl : ''].filter(Boolean).join('\n');
+    generate({ ...form, objectives, language: lang, file });
   }, [form, file, generate, t]);
+
+  const materialSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent([form.subject, form.year, form.topic, 'teaching material PDF'].filter(Boolean).join(' '));
 
   const currentGrades = selectedCountry
     ? (t.gradeSystems[selectedCountry.gradeSystem] || t.gradeSystems.us)
@@ -98,6 +101,18 @@ export default function Home() {
           <div className="form-block">
             <FileUploadZone onFileSelect={setFile} selectedFile={file} />
             <div className="divider"><span>{t.upload_or}</span></div>
+          </div>
+
+          <div className="field-group">
+            <label className="field-label">{t.field_material_link}</label>
+            <input
+              className="field-input"
+              type="url"
+              inputMode="url"
+              value={form.materialUrl}
+              onChange={set('materialUrl')}
+              placeholder={t.material_link_placeholder}
+            />
           </div>
 
           {/* Country Quick-Select */}

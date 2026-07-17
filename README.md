@@ -6,6 +6,9 @@
 [![OpenAI Build Week](https://img.shields.io/badge/OpenAI-Build%20Week%202026-412991?style=flat-square)](https://openai.devpost.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Demo Mode](https://img.shields.io/badge/Demo-No%20API%20Key%20Required-22c55e?style=flat-square)](#demo-mode)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20EduForge%20AI-2563eb?style=flat-square)](https://edu-forge-ai-weld.vercel.app)
+
+**Live demo:** [edu-forge-ai-weld.vercel.app](https://edu-forge-ai-weld.vercel.app)
 
 ---
 
