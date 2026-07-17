@@ -2,19 +2,35 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { extractFileText } from './utils/fileParser.js';
 import { runCurriculumIntelligence } from './agents/curriculumIntelligence.js';
 import { runExperienceDesigner } from './agents/experienceDesigner.js';
 import { runContentGenerator } from './agents/contentGenerator.js';
 import { runTeacherAssistant } from './agents/teacherAssistant.js';
 import { runLessonEvaluator } from './agents/lessonEvaluator.js';
+import { runStudyMaterialsGenerator } from './agents/studyMaterialsGenerator.js';
 import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
+import { generateRequestSchema, performanceRequestSchema, parseRequest } from './validators/requestSchemas.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DEMO_MODE = process.env.DEMO_MODE !== 'false'; // default: always demo
 const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: DEMO_MODE ? 60 : 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
@@ -37,7 +53,8 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({ limit: '128kb' }));
+app.use('/api', apiLimiter);
 
 // ─── Health ──────────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
@@ -68,6 +85,13 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
 
 // ─── Main Generation ──────────────────────────────────────────────────────────
 app.post('/api/generate', async (req, res) => {
+  let payload;
+  try {
+    payload = parseRequest(generateRequestSchema, req.body);
+  } catch (err) {
+    return res.status(err.statusCode || 400).json({ error: err.message });
+  }
+
   const {
     subject, year, topic,
     language = 'English',
@@ -76,11 +100,7 @@ app.post('/api/generate', async (req, res) => {
     country = '',
     curriculumStandard = '',
     studentPersona = 'On-Level',
-  } = req.body;
-
-  if (!subject || !year || !topic) {
-    return res.status(400).json({ error: 'subject, year, and topic are required.' });
-  }
+  } = payload;
 
   // ── DEMO MODE ────────────────────────────────────────────────────────────────
   if (DEMO_MODE) {
@@ -119,18 +139,15 @@ app.post('/api/generate', async (req, res) => {
     const experienceDesign = await runExperienceDesigner({ ...context, blueprint });
     agentCalls++;
 
-    // Agent 3 — Content Generator
-    console.log('  [3/5] Content Generator...');
-    const gameContent = await runContentGenerator({ ...context, blueprint, experienceDesign });
-    agentCalls++;
-
-    // Agent 4 + Worksheet (parallel)
-    console.log('  [4/5] Teacher Assistant + Worksheet...');
-    const [teachingInsights, { worksheetHTML, answerKeyHTML }] = await Promise.all([
+    // Agents 3+4 — Content, Study Materials, Teacher Assistant + Worksheet (parallel)
+    console.log('  [3/5] Content Generator + Study Materials + Teacher Assistant (parallel)...');
+    const [gameContent, studyMaterials, teachingInsights, { worksheetHTML, answerKeyHTML }] = await Promise.all([
+      runContentGenerator({ ...context, blueprint, experienceDesign }),
+      runStudyMaterialsGenerator({ ...context, blueprint }),
       runTeacherAssistant({ ...context, blueprint, experienceDesign }),
-      Promise.resolve(buildWorksheet({ blueprint, gameContent, subject, year, topic, language })),
+      Promise.resolve(buildWorksheet({ blueprint, gameContent: null, subject, year, topic, language })),
     ]);
-    agentCalls++;
+    agentCalls += 3;
 
     // Agent 5 — Lesson Evaluator
     console.log('  [5/5] Lesson Evaluator...');
@@ -143,8 +160,8 @@ app.post('/api/generate', async (req, res) => {
     const analytics = {
       generation_time_ms: generationTimeMs,
       agent_calls: agentCalls,
-      resources_created: 6,
-      estimated_time_saved_minutes: 135,
+      resources_created: 10,
+      estimated_time_saved_minutes: 210,
       model: GROQ_MODEL,
       source_confidence: blueprint.confidenceLevel || 'general',
     };
@@ -162,6 +179,7 @@ app.post('/api/generate', async (req, res) => {
         worksheet: { html: worksheetHTML },
         answer_key: { html: answerKeyHTML },
       },
+      study_materials: studyMaterials,
       teaching_insights: teachingInsights,
       lesson_evaluation: lessonEvaluation,
       analytics,
@@ -175,8 +193,14 @@ app.post('/api/generate', async (req, res) => {
 
 // ─── Performance Analysis ─────────────────────────────────────────────────────
 app.post('/api/analyze-performance', async (req, res) => {
-  const { results, topic, language = 'English' } = req.body;
-  if (!results || !topic) return res.status(400).json({ error: 'results and topic are required.' });
+  let payload;
+  try {
+    payload = parseRequest(performanceRequestSchema, req.body);
+  } catch (err) {
+    return res.status(err.statusCode || 400).json({ error: err.message });
+  }
+
+  const { results, topic, language = 'English' } = payload;
 
   if (DEMO_MODE) {
     return res.json({
