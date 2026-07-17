@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { extractFileText } from './utils/fileParser.js';
 import { runCurriculumIntelligence } from './agents/curriculumIntelligence.js';
 import { runExperienceDesigner } from './agents/experienceDesigner.js';
@@ -11,11 +13,24 @@ import { runLessonEvaluator } from './agents/lessonEvaluator.js';
 import { runStudyMaterialsGenerator } from './agents/studyMaterialsGenerator.js';
 import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
+import { generateRequestSchema, performanceRequestSchema, parseRequest } from './validators/requestSchemas.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DEMO_MODE = process.env.DEMO_MODE !== 'false'; // default: always demo
 const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: DEMO_MODE ? 60 : 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 
@@ -38,7 +53,8 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({ limit: '128kb' }));
+app.use('/api', apiLimiter);
 
 // ─── Health ──────────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
@@ -69,6 +85,13 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
 
 // ─── Main Generation ──────────────────────────────────────────────────────────
 app.post('/api/generate', async (req, res) => {
+  let payload;
+  try {
+    payload = parseRequest(generateRequestSchema, req.body);
+  } catch (err) {
+    return res.status(err.statusCode || 400).json({ error: err.message });
+  }
+
   const {
     subject, year, topic,
     language = 'English',
@@ -77,11 +100,7 @@ app.post('/api/generate', async (req, res) => {
     country = '',
     curriculumStandard = '',
     studentPersona = 'On-Level',
-  } = req.body;
-
-  if (!subject || !year || !topic) {
-    return res.status(400).json({ error: 'subject, year, and topic are required.' });
-  }
+  } = payload;
 
   // ── DEMO MODE ────────────────────────────────────────────────────────────────
   if (DEMO_MODE) {
@@ -174,8 +193,14 @@ app.post('/api/generate', async (req, res) => {
 
 // ─── Performance Analysis ─────────────────────────────────────────────────────
 app.post('/api/analyze-performance', async (req, res) => {
-  const { results, topic, language = 'English' } = req.body;
-  if (!results || !topic) return res.status(400).json({ error: 'results and topic are required.' });
+  let payload;
+  try {
+    payload = parseRequest(performanceRequestSchema, req.body);
+  } catch (err) {
+    return res.status(err.statusCode || 400).json({ error: err.message });
+  }
+
+  const { results, topic, language = 'English' } = payload;
 
   if (DEMO_MODE) {
     return res.json({
