@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { escapeHtml } from '../utils/escapeHtml.js';
 
 const QUESTION_TYPE_LABELS = {
   mcq: 'MCQ',
@@ -24,10 +25,10 @@ export default function MockExam({ data }) {
   const printExam = () => {
     const w = window.open('', '_blank');
     const answersHtml = showMarkScheme ? data.questions.map(q =>
-      `<div class="answer"><strong>Q${q.id} (${q.marks} marks)</strong><br/>${q.expected_answer}<br/><em>Rubric: ${q.rubric}</em></div>`
+      `<div class="answer"><strong>Q${escapeHtml(q.id)} (${escapeHtml(q.marks)} marks)</strong><br/>${escapeHtml(q.expected_answer)}<br/><em>Rubric: ${escapeHtml(q.rubric)}</em></div>`
     ).join('') : '';
 
-    const html = `<!DOCTYPE html><html><head><title>${data.title}</title>
+    const html = `<!DOCTYPE html><html><head><title>${escapeHtml(data.title)}</title>
     <style>
       body { font-family: Arial, sans-serif; max-width: 750px; margin: 40px auto; color: #111; }
       .exam-header { border: 2px solid #000; padding: 16px; margin-bottom: 24px; }
@@ -43,22 +44,22 @@ export default function MockExam({ data }) {
       @media print { body { margin: 20px; } }
     </style></head><body>
     <div class="exam-header">
-      <h1>${data.title}</h1>
+      <h1>${escapeHtml(data.title)}</h1>
       <div class="exam-meta">
-        <span>📋 <strong>${data.exam_board}</strong></span>
-        <span>⏱ ${data.duration_minutes} minutes</span>
-        <span>📊 Total: ${data.total_marks} marks</span>
-        <span>🎓 ${data.grade_band}</span>
+        <span>📋 <strong>${escapeHtml(data.exam_board)}</strong></span>
+        <span>⏱ ${escapeHtml(data.duration_minutes)} minutes</span>
+        <span>📊 Total: ${escapeHtml(data.total_marks)} marks</span>
+        <span>🎓 ${escapeHtml(data.grade_band)}</span>
       </div>
-      <p style="margin-top:10px; font-size:13px; color:#555;">${data.format_style}</p>
+      <p style="margin-top:10px; font-size:13px; color:#555;">${escapeHtml(data.format_style)}</p>
     </div>
     ${Object.entries(sections).map(([sectionName, qs]) => `
-      <div class="section-label">${sectionName}</div>
+      <div class="section-label">${escapeHtml(sectionName)}</div>
       ${qs.map(q => `
         <div class="question">
-          <span class="q-marks">[${q.marks} mark${q.marks > 1 ? 's' : ''}]</span>
-          <strong>Question ${q.id}.</strong>
-          <p style="white-space:pre-line; margin: 8px 0;">${q.question}</p>
+          <span class="q-marks">[${escapeHtml(q.marks)} mark${q.marks > 1 ? 's' : ''}]</span>
+          <strong>Question ${escapeHtml(q.id)}.</strong>
+          <p style="white-space:pre-line; margin: 8px 0;">${escapeHtml(q.question)}</p>
           <div class="answer-lines">
             ${Array.from({ length: Math.min(q.marks * 2, 8) }).map(() => '<div class="answer-line"></div>').join('')}
           </div>

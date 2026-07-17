@@ -17,8 +17,8 @@ export const translations = {
     upload_limit_title: 'This file is too large to upload',
     upload_limit_notice: '{name} is above the 4 MB upload limit.',
     upload_limit_search: 'Search for material',
-    field_material_link: 'Material link',
-    material_link_placeholder: 'Paste a public material link',
+    field_material_link: 'Material link (reference only)',
+    material_link_placeholder: 'Saved with the lesson; link content is not imported',
 
     // Form fields
     field_country: 'Country / Region',
@@ -185,8 +185,8 @@ export const translations = {
     upload_limit_title: 'Fail ini terlalu besar untuk dimuat naik',
     upload_limit_notice: '{name} melebihi had muat naik 4 MB.',
     upload_limit_search: 'Cari bahan',
-    field_material_link: 'Pautan bahan',
-    material_link_placeholder: 'Tampal pautan bahan awam',
+    field_material_link: 'Pautan bahan (rujukan sahaja)',
+    material_link_placeholder: 'Disimpan bersama pelajaran; kandungan pautan tidak diimport',
 
     // Form fields
     field_country: 'Negara / Rantau',

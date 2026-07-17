@@ -1,5 +1,6 @@
 import { openai, GPT_MODEL } from '../openai.js';
 import { withRetry } from '../utils/retry.js';
+import { formatUntrustedLessonMaterial } from '../utils/promptSecurity.js';
 import { blueprintSchema } from '../validators/schemas.js';
 
 const SYSTEM_PROMPT = `You are EduForge AI — Curriculum Intelligence Agent.
@@ -29,7 +30,7 @@ Teacher Context:
 - Curriculum Standard: ${curriculumStandard || 'Not specified — infer or use generic'}
 - Student Persona: ${studentPersona || 'On-Level'}
 - Learning objectives: ${objectives || 'Not provided — infer from topic'}
-${extractedText ? `\nLesson material provided:\n${extractedText.slice(0, 2000)}` : ''}
+${extractedText ? `\nLesson material provided:\n${formatUntrustedLessonMaterial(extractedText)}` : ''}
 
 Return this EXACT JSON:
 {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { escapeHtml } from '../utils/escapeHtml.js';
 
 const PERSONA_ICONS = { Beginner: '🌱', 'On-Level': '📗', Gifted: '🚀', 'SEN Support': '💛' };
 const RESOURCE_ICONS = {
@@ -46,7 +47,7 @@ export default function StudySchedule({ data }) {
 
   const printSchedule = () => {
     const w = window.open('', '_blank');
-    const html = `<!DOCTYPE html><html><head><title>${data.title}</title>
+    const html = `<!DOCTYPE html><html><head><title>${escapeHtml(data.title)}</title>
     <style>
       body { font-family: Arial, sans-serif; max-width: 750px; margin: 40px auto; }
       h1 { font-size: 20px; } h2 { font-size: 15px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
@@ -57,20 +58,20 @@ export default function StudySchedule({ data }) {
       .diff h3 { margin: 0 0 8px; font-size: 14px; }
       .diff p { margin: 4px 0; font-size: 13px; }
     </style></head><body>
-    <h1>${data.title}</h1>
-    <p>📅 ${data.total_weeks} weeks · ${data.total_lessons} lessons · ${data.overview}</p>
+    <h1>${escapeHtml(data.title)}</h1>
+    <p>📅 ${escapeHtml(data.total_weeks)} weeks · ${escapeHtml(data.total_lessons)} lessons · ${escapeHtml(data.overview)}</p>
     <table>
       <thead><tr><th>Time</th><th>Activity</th><th>Resource</th><th>Duration</th><th>Notes</th></tr></thead>
       <tbody>
         ${data.schedule.map(d => `
-          <tr><td>${d.time}</td><td>${d.activity}</td><td>${d.resource}</td><td>${d.duration_minutes} min</td><td>${d.persona_note || ''}</td></tr>
+          <tr><td>${escapeHtml(d.time)}</td><td>${escapeHtml(d.activity)}</td><td>${escapeHtml(d.resource)}</td><td>${escapeHtml(d.duration_minutes)} min</td><td>${escapeHtml(d.persona_note)}</td></tr>
         `).join('')}
       </tbody>
     </table>
     ${data.differentiation ? `
     <div class="diff">
       <h2>Differentiation Guide</h2>
-      ${Object.entries(data.differentiation).map(([k, v]) => `<p><strong>${k.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}:</strong> ${v}</p>`).join('')}
+      ${Object.entries(data.differentiation).map(([k, v]) => `<p><strong>${k.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}:</strong> ${escapeHtml(v)}</p>`).join('')}
     </div>` : ''}
     </body></html>`;
     w.document.write(html);

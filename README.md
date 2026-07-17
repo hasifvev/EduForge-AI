@@ -91,7 +91,7 @@ EduForge AI works for **any teacher, anywhere in the world**:
 | Frontend | React 18 + Vite | UI framework |
 | Styling | Vanilla CSS | Design system |
 | Backend | Node.js + Express | API server |
-| AI Provider | Groq (free tier) | Llama 3.3 70B as GPT-5.6 |
+| AI Provider | OpenAI API | `gpt-4.1-mini` in live mode; cached responses in demo mode |
 | Validation | Zod | Schema validation for all 5 agents |
 | File Upload | multer + pdf-parse | PDF/TXT lesson extraction |
 
@@ -115,7 +115,7 @@ cd frontend && npm install && npm run dev
 # DEMO_MODE is on by default — no API key needed!
 ```
 
-### Option B — Live Mode (Free Groq API)
+### Option B — Live Mode (OpenAI API)
 
 ```bash
 # 1. Get a free API key at https://console.groq.com
@@ -123,7 +123,7 @@ cd frontend && npm install && npm run dev
 cp .env.example .env
 
 # 3. Edit .env and add your key:
-GROQ_API_KEY=gsk_your_key_here
+OPENAI_API_KEY=your_openai_project_key
 DEMO_MODE=false
 
 # 4. Start both servers (same as above)
@@ -136,8 +136,8 @@ DEMO_MODE=false
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `DEMO_MODE` | `true` | Set `false` to use live AI |
-| `GROQ_API_KEY` | — | Free key from [console.groq.com](https://console.groq.com) |
-| `GROQ_MODEL` | `llama-3.3-70b-versatile` | Model to use (see Groq docs) |
+| `OPENAI_API_KEY` | — | OpenAI project API key for live mode |
+| `OPENAI_MODEL` | `gpt-4.1-mini` | Model used in live mode |
 | `PORT` | `3001` | Backend server port |
 | `FRONTEND_URL` | `http://localhost:5173` | CORS allowed origin |
 

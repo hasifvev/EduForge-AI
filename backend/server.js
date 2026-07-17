@@ -32,10 +32,12 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4 * 1024 * 1024 } });
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 // Allow localhost (dev) + any Vercel deployment (*.vercel.app) + custom domain
+const allowVercelPreviews = process.env.ALLOW_VERCEL_PREVIEWS === 'true';
+
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',

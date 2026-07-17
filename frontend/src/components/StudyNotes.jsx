@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { escapeHtml } from '../utils/escapeHtml.js';
 
 export default function StudyNotes({ data }) {
   const [open, setOpen] = useState(new Set([0]));
@@ -13,7 +14,7 @@ export default function StudyNotes({ data }) {
 
   const printNotes = () => {
     const w = window.open('', '_blank');
-    const html = `<!DOCTYPE html><html><head><title>${data.title}</title>
+    const html = `<!DOCTYPE html><html><head><title>${escapeHtml(data.title)}</title>
     <style>
       body { font-family: Georgia, serif; max-width: 700px; margin: 40px auto; color: #111; line-height: 1.7; }
       h1 { font-size: 24px; border-bottom: 2px solid #333; padding-bottom: 8px; }
@@ -26,13 +27,13 @@ export default function StudyNotes({ data }) {
       .key-point { background: #fffde7; padding: 2px 6px; border-radius: 4px; }
       @media print { body { margin: 20px; } }
     </style></head><body>
-    <h1>${data.title}</h1>
-    ${data.subtitle ? `<p class="subtitle">${data.subtitle}</p>` : ''}
-    ${data.grade_band_label ? `<span class="grade-badge">📚 ${data.grade_band_label}</span>` : ''}
+    <h1>${escapeHtml(data.title)}</h1>
+    ${data.subtitle ? `<p class="subtitle">${escapeHtml(data.subtitle)}</p>` : ''}
+    ${data.grade_band_label ? `<span class="grade-badge">📚 ${escapeHtml(data.grade_band_label)}</span>` : ''}
     ${data.sections.map(s => `
-      <h2>${s.heading}</h2>
-      <p>${s.content}</p>
-      <ul>${s.key_points.map(p => `<li class="key-point">${p}</li>`).join('')}</ul>
+      <h2>${escapeHtml(s.heading)}</h2>
+      <p>${escapeHtml(s.content)}</p>
+      <ul>${s.key_points.map(p => `<li class="key-point">${escapeHtml(p)}</li>`).join('')}</ul>
     `).join('')}
     </body></html>`;
     w.document.write(html);
