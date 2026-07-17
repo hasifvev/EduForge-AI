@@ -13,6 +13,7 @@ export const blueprintSchema = z.object({
   curriculum_source: z.string().optional().default('General International Framework'),
   confidenceLevel: z.enum(['high', 'inferred', 'general']).optional().default('general'),
   persona_notes: z.string().optional().default(''),
+  grade_band: z.enum(['primary', 'lower_secondary', 'upper_secondary', 'pre_university']).optional().default('lower_secondary'),
 });
 
 // ─── Agent 2: Experience Designer ─────────────────────────────────────────────
@@ -104,6 +105,103 @@ export const evaluatorSchema = z.object({
   suggestion: z.string(),
   blooms_levels_present: z.array(z.string()).optional().default([]),
   blooms_levels_missing: z.array(z.string()).optional().default([]),
+});
+
+// ─── Study Materials Agent ────────────────────────────────────────────────────
+
+// Flashcards
+const flashcardSchema = z.object({
+  id: z.number(),
+  front: z.string(),
+  back: z.string(),
+  curriculum_code: z.string().optional().default(''),
+  emoji: z.string().optional().default(''),
+});
+
+// Study Notes
+const notesSectionSchema = z.object({
+  heading: z.string(),
+  content: z.string(),
+  key_points: z.array(z.string()).min(1).max(6),
+});
+
+// Mock Exam Question (grade-adaptive — can be simple for primary)
+const examQuestionSchema = z.object({
+  id: z.number(),
+  section: z.string(),
+  question: z.string(),
+  marks: z.number(),
+  expected_answer: z.string(),
+  rubric: z.string().optional().default(''),
+  question_type: z.enum(['mcq', 'short_answer', 'structured', 'essay', 'fill_blank']).optional().default('short_answer'),
+});
+
+// Study Map node (topic learning pathway)
+const studyMapNodeSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  type: z.enum(['root', 'topic', 'subtopic', 'skill']),
+  completed: z.boolean().optional().default(false),
+  children: z.array(z.lazy(() => studyMapNodeSchema)).optional().default([]),
+});
+
+// Study Schedule day entry
+const scheduleActivitySchema = z.object({
+  time: z.string(),         // e.g. "Day 1", "Week 1 Mon"
+  activity: z.string(),
+  resource: z.string(),     // e.g. "Flashcards", "Quiz", "Worksheet"
+  duration_minutes: z.number(),
+  persona_note: z.string().optional().default(''),
+});
+
+export const studyMaterialsSchema = z.object({
+  flashcards: z.object({
+    title: z.string(),
+    cards: z.array(flashcardSchema).min(6).max(20),
+  }),
+  study_notes: z.object({
+    title: z.string(),
+    subtitle: z.string().optional().default(''),
+    grade_band_label: z.string().optional().default(''),
+    sections: z.array(notesSectionSchema).min(2).max(6),
+  }),
+  mock_exam: z.object({
+    title: z.string(),
+    exam_board: z.string(),
+    format_style: z.string(),        // e.g. "SPM Format", "GCSE Style", "Primary Practice Paper"
+    duration_minutes: z.number(),
+    total_marks: z.number(),
+    grade_band: z.string(),
+    questions: z.array(examQuestionSchema).min(4).max(20),
+  }),
+  cloze_passage: z.object({
+    title: z.string(),
+    passage: z.string(),             // blanks represented as ___(1)___
+    blanks: z.array(z.object({
+      id: z.number(),
+      word: z.string(),
+      hint: z.string().optional().default(''),
+    })).min(3).max(12),
+  }),
+  study_map: z.object({
+    title: z.string(),
+    description: z.string(),
+    root: studyMapNodeSchema,
+  }),
+  study_schedule: z.object({
+    title: z.string(),
+    persona: z.string(),
+    total_weeks: z.number(),
+    total_lessons: z.number(),
+    overview: z.string(),
+    schedule: z.array(scheduleActivitySchema).min(4).max(20),
+    differentiation: z.object({
+      beginner: z.string(),
+      on_level: z.string(),
+      gifted: z.string(),
+      sen_support: z.string(),
+    }).optional(),
+  }),
 });
 
 // ─── Analytics (server-generated, not AI) ─────────────────────────────────────

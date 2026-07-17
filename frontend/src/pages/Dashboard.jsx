@@ -4,6 +4,12 @@ import TeachingInsights from '../components/TeachingInsights.jsx';
 import GamePreview from '../components/GamePreview.jsx';
 import LessonQualityScore from '../components/LessonQualityScore.jsx';
 import AIRationale from '../components/AIRationale.jsx';
+import Flashcards from '../components/Flashcards.jsx';
+import StudyNotes from '../components/StudyNotes.jsx';
+import MockExam from '../components/MockExam.jsx';
+import ClozePassage from '../components/ClozePassage.jsx';
+import MindMap from '../components/MindMap.jsx';
+import StudySchedule from '../components/StudySchedule.jsx';
 
 const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', worksheet: '📄', answer_key: '🔑' };
 
@@ -22,11 +28,12 @@ function formatTime(ms) {
 export default function Dashboard({ result, onReset }) {
   const { t } = useLang();
   const [preview, setPreview] = useState(null);
-  const [visibleCards, setVisibleCards] = useState(0); // Magic Moment stagger
+  const [visibleCards, setVisibleCards] = useState(0);
+  const [studyHubTab, setStudyHubTab] = useState('flashcards');
 
   const {
     lesson, resources, teaching_insights,
-    lesson_evaluation, analytics,
+    lesson_evaluation, analytics, study_materials,
     generation_id, created_at,
     subject, year, topic, country, studentPersona,
   } = result;
@@ -201,6 +208,51 @@ export default function Dashboard({ result, onReset }) {
 
       {/* ── Teaching Insights ───────────────────────────────────────────── */}
       {teaching_insights && <TeachingInsights insights={teaching_insights} />}
+
+      {/* ── Study Hub ──────────────────────────────────────────────── */}
+      {study_materials && (
+        <div className="study-hub">
+          <div className="study-hub-header">
+            <h2 className="study-hub-title">📚 Study Hub</h2>
+            <p className="study-hub-sub">AI-generated materials tailored to your curriculum &amp; grade level</p>
+          </div>
+
+          <div className="study-hub-tabs" role="tablist">
+            {[
+              { id: 'flashcards', label: 'Flashcards', icon: '🃏', count: study_materials.flashcards?.cards?.length },
+              { id: 'study_notes', label: 'Study Notes', icon: '📄', count: study_materials.study_notes?.sections?.length },
+              { id: 'mock_exam', label: 'Mock Exam', icon: '📝', count: study_materials.mock_exam?.questions?.length },
+              { id: 'cloze', label: 'Cloze', icon: '✏️', count: study_materials.cloze_passage?.blanks?.length },
+              { id: 'mind_map', label: 'Study Map', icon: '🗺️' },
+              { id: 'schedule', label: 'Schedule', icon: '📅', count: study_materials.study_schedule?.total_weeks },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                role="tab"
+                aria-selected={studyHubTab === tab.id}
+                id={`study-hub-tab-${tab.id}`}
+                className={`study-hub-tab ${studyHubTab === tab.id ? 'study-hub-tab--active' : ''}`}
+                onClick={() => setStudyHubTab(tab.id)}
+              >
+                <span className="sh-tab-icon">{tab.icon}</span>
+                <span className="sh-tab-label">{tab.label}</span>
+                {tab.count != null && (
+                  <span className="sh-tab-count">{tab.count}{tab.id === 'schedule' ? 'wk' : ''}</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="study-hub-panel" role="tabpanel" aria-labelledby={`study-hub-tab-${studyHubTab}`}>
+            {studyHubTab === 'flashcards' && <Flashcards data={study_materials.flashcards} />}
+            {studyHubTab === 'study_notes' && <StudyNotes data={study_materials.study_notes} />}
+            {studyHubTab === 'mock_exam' && <MockExam data={study_materials.mock_exam} />}
+            {studyHubTab === 'cloze' && <ClozePassage data={study_materials.cloze_passage} />}
+            {studyHubTab === 'mind_map' && <MindMap data={study_materials.study_map} />}
+            {studyHubTab === 'schedule' && <StudySchedule data={study_materials.study_schedule} />}
+          </div>
+        </div>
+      )}
 
       {/* ── AI Disclaimer ───────────────────────────────────────────────── */}
       <div className="ai-disclaimer">

@@ -8,6 +8,17 @@ import { runExperienceDesigner } from './agents/experienceDesigner.js';
 import { runContentGenerator } from './agents/contentGenerator.js';
 import { runTeacherAssistant } from './agents/teacherAssistant.js';
 import { runLessonEvaluator } from './agents/lessonEvaluator.js';
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import multer from 'multer';
+import { extractFileText } from './utils/fileParser.js';
+import { runCurriculumIntelligence } from './agents/curriculumIntelligence.js';
+import { runExperienceDesigner } from './agents/experienceDesigner.js';
+import { runContentGenerator } from './agents/contentGenerator.js';
+import { runTeacherAssistant } from './agents/teacherAssistant.js';
+import { runLessonEvaluator } from './agents/lessonEvaluator.js';
+import { runStudyMaterialsGenerator } from './agents/studyMaterialsGenerator.js';
 import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
 
@@ -119,18 +130,15 @@ app.post('/api/generate', async (req, res) => {
     const experienceDesign = await runExperienceDesigner({ ...context, blueprint });
     agentCalls++;
 
-    // Agent 3 — Content Generator
-    console.log('  [3/5] Content Generator...');
-    const gameContent = await runContentGenerator({ ...context, blueprint, experienceDesign });
-    agentCalls++;
-
-    // Agent 4 + Worksheet (parallel)
-    console.log('  [4/5] Teacher Assistant + Worksheet...');
-    const [teachingInsights, { worksheetHTML, answerKeyHTML }] = await Promise.all([
+    // Agents 3+4 — Content, Study Materials, Teacher Assistant + Worksheet (parallel)
+    console.log('  [3/5] Content Generator + Study Materials + Teacher Assistant (parallel)...');
+    const [gameContent, studyMaterials, teachingInsights, { worksheetHTML, answerKeyHTML }] = await Promise.all([
+      runContentGenerator({ ...context, blueprint, experienceDesign }),
+      runStudyMaterialsGenerator({ ...context, blueprint }),
       runTeacherAssistant({ ...context, blueprint, experienceDesign }),
-      Promise.resolve(buildWorksheet({ blueprint, gameContent, subject, year, topic, language })),
+      Promise.resolve(buildWorksheet({ blueprint, gameContent: null, subject, year, topic, language })),
     ]);
-    agentCalls++;
+    agentCalls += 3;
 
     // Agent 5 — Lesson Evaluator
     console.log('  [5/5] Lesson Evaluator...');
@@ -143,8 +151,8 @@ app.post('/api/generate', async (req, res) => {
     const analytics = {
       generation_time_ms: generationTimeMs,
       agent_calls: agentCalls,
-      resources_created: 6,
-      estimated_time_saved_minutes: 135,
+      resources_created: 10,
+      estimated_time_saved_minutes: 210,
       model: GROQ_MODEL,
       source_confidence: blueprint.confidenceLevel || 'general',
     };
@@ -162,6 +170,7 @@ app.post('/api/generate', async (req, res) => {
         worksheet: { html: worksheetHTML },
         answer_key: { html: answerKeyHTML },
       },
+      study_materials: studyMaterials,
       teaching_insights: teachingInsights,
       lesson_evaluation: lessonEvaluation,
       analytics,
