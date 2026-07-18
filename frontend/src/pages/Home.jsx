@@ -4,7 +4,7 @@ import FileUploadZone from '../components/FileUploadZone.jsx';
 import GenerationProgress from '../components/GenerationProgress.jsx';
 import { useGeneration } from '../hooks/useGeneration.js';
 import Dashboard from './Dashboard.jsx';
-import { buildMaterialSearchUrl, getCurriculumMapping } from '../utils/curriculumMapping.js';
+import { buildMaterialSearchUrl, getCurriculumMapping, getSubjectsForCountry } from '../utils/curriculumMapping.js';
 
 const PERSONAS = [
   { id: 'Beginner', emoji: '🌱', label_key: 'persona_beginner' },
@@ -74,6 +74,8 @@ export default function Home() {
 
   const curriculumMapping = getCurriculumMapping(selectedCountry?.code, form.subject, form.year);
   const materialSearchUrl = buildMaterialSearchUrl({ countryCode: selectedCountry?.code, country: form.country, subject: form.subject, year: form.year, topic: form.topic });
+
+  const availableSubjects = getSubjectsForCountry(selectedCountry?.code, t.subjects);
 
   const currentGrades = selectedCountry
     ? (t.gradeSystems[selectedCountry.gradeSystem] || t.gradeSystems.us)
@@ -177,7 +179,7 @@ export default function Home() {
               <label className="field-label">{t.field_subject}</label>
               <select className="field-select" value={form.subject} onChange={set('subject')} required>
                 <option value="">—</option>
-                {t.subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                {availableSubjects.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
             <div className="field-group">
