@@ -23,6 +23,9 @@ const PORT = process.env.PORT || 3001;
 const DEMO_MODE = process.env.DEMO_MODE !== 'false'; // default: always demo
 const LIVE_MODEL = GPT_MODEL;
 
+// Vercel forwards client IPs through one trusted proxy hop.
+app.set('trust proxy', 1);
+
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
