@@ -1,39 +1,47 @@
 import { useState } from 'react';
 
-// Recursive tree node renderer
-function MapNode({ node, depth = 0 }) {
-  const [expanded, setExpanded] = useState(depth < 2); // auto-expand first 2 levels
-  const hasChildren = node.children && node.children.length > 0;
+const TYPE_META = {
+  root: { color: 'var(--accent-purple)', label: 'Main topic' },
+  topic: { color: 'var(--accent-blue)', label: 'Topic' },
+  subtopic: { color: 'var(--accent-teal)', label: 'Subtopic' },
+  skill: { color: 'var(--accent-green)', label: 'Skill' },
+};
 
-  const typeColors = {
-    root: 'var(--accent-purple)',
-    topic: 'var(--accent-blue)',
-    subtopic: 'var(--accent-teal)',
-    skill: 'var(--accent-green)',
-  };
+function getExplanation(node, mapDescription) {
+  if (node.description) return node.description;
+  const type = TYPE_META[node.type]?.label?.toLowerCase() || 'map item';
+  return `${node.label} is a ${type} in this learning pathway. ${mapDescription || 'Open related branches to explore the connected ideas.'}`;
+}
 
+function MapNode({ node, depth = 0, selectedId, onSelect }) {
+  const [expanded, setExpanded] = useState(depth < 2);
+  const hasChildren = node.children?.length > 0;
+  const meta = TYPE_META[node.type] || TYPE_META.topic;
   const typeSizes = { root: 16, topic: 14, subtopic: 13, skill: 12 };
+
+  const selectNode = () => {
+    onSelect(node);
+    if (hasChildren) setExpanded((value) => !value);
+  };
 
   return (
     <div className={`mm-node mm-node--${node.type} mm-node--depth-${Math.min(depth, 3)}`}>
-      <div
-        className={`mm-node-label ${hasChildren ? 'mm-node-label--clickable' : ''} ${expanded ? 'mm-node-label--expanded' : ''}`}
-        onClick={() => hasChildren && setExpanded(e => !e)}
-        style={{ fontSize: typeSizes[node.type] || 13, borderColor: typeColors[node.type] || 'var(--accent-blue)' }}
-        role={hasChildren ? 'button' : undefined}
-        tabIndex={hasChildren ? 0 : undefined}
-        onKeyDown={e => e.key === 'Enter' && hasChildren && setExpanded(x => !x)}
+      <button
+        type="button"
+        className={`mm-node-label ${hasChildren ? 'mm-node-label--clickable' : ''} ${expanded ? 'mm-node-label--expanded' : ''} ${selectedId === node.id ? 'mm-node-label--selected' : ''}`}
+        onClick={selectNode}
+        style={{ fontSize: typeSizes[node.type] || 13, borderColor: meta.color }}
         aria-expanded={hasChildren ? expanded : undefined}
       >
-        <span className={`mm-node-dot mm-node-dot--${node.type}`} style={{ background: typeColors[node.type] }} />
-        {node.label}
-        {hasChildren && <span className="mm-expand-icon">{expanded ? ' ▾' : ' ▸'}</span>}
-      </div>
+        <span className={`mm-node-dot mm-node-dot--${node.type}`} style={{ background: meta.color }} />
+        <span>{node.label}</span>
+        {hasChildren && <span className="mm-expand-icon">{expanded ? '▾' : '▸'}</span>}
+      </button>
 
       {hasChildren && expanded && (
         <div className="mm-children">
-          {node.children.map(child => (
-            <MapNode key={child.id} node={child} depth={depth + 1} />
+          {node.children.map((child) => (
+            <MapNode key={child.id} node={child} depth={depth + 1} selectedId={selectedId} onSelect={onSelect} />
           ))}
         </div>
       )}
@@ -43,23 +51,23 @@ function MapNode({ node, depth = 0 }) {
 
 export default function MindMap({ data }) {
   const [allExpanded, setAllExpanded] = useState(false);
+  const [selectedNode, setSelectedNode] = useState(data?.root || null);
 
-  if (!data || !data.root) return null;
+  if (!data?.root) return null;
 
-  const exportSVG = () => {
-    // Simple text export since SVG generation needs DOM measurement
+  const exportText = () => {
     const lines = [];
     const traverse = (node, depth) => {
-      lines.push('  '.repeat(depth) + '• ' + node.label);
-      (node.children || []).forEach(c => traverse(c, depth + 1));
+      lines.push(`${'  '.repeat(depth)}- ${node.label}: ${getExplanation(node, data.description)}`);
+      (node.children || []).forEach((child) => traverse(child, depth + 1));
     };
     traverse(data.root, 0);
     const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `study-map-${data.root.label.toLowerCase().replace(/\s+/g, '-')}.txt`;
-    a.click();
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `study-map-${data.root.label.toLowerCase().replace(/\s+/g, '-')}.txt`;
+    anchor.click();
     URL.revokeObjectURL(url);
   };
 
@@ -71,22 +79,22 @@ export default function MindMap({ data }) {
           {data.description && <p className="mm-description">{data.description}</p>}
         </div>
         <div className="mm-actions">
-          <button onClick={() => setAllExpanded(e => !e)} className="mm-btn">
-            {allExpanded ? '➖ Collapse All' : '➕ Expand All'}
-          </button>
-          <button onClick={exportSVG} className="mm-btn">⬇️ Export</button>
+          <button onClick={() => setAllExpanded((value) => !value)} className="mm-btn">{allExpanded ? 'Collapse map' : 'Reset map'}</button>
+          <button onClick={exportText} className="mm-btn">Export</button>
         </div>
       </div>
 
-      <div className="mm-legend">
-        <span className="mm-legend-item mm-legend-item--root">📍 Root</span>
-        <span className="mm-legend-item mm-legend-item--topic">📂 Topic</span>
-        <span className="mm-legend-item mm-legend-item--subtopic">📄 Subtopic</span>
-        <span className="mm-legend-item mm-legend-item--skill">⭐ Skill</span>
-      </div>
+      {selectedNode && (
+        <section className="mm-topic-panel" aria-live="polite">
+          <span className={`mm-topic-type mm-topic-type--${selectedNode.type}`}>{TYPE_META[selectedNode.type]?.label || 'Topic'}</span>
+          <h4>{selectedNode.label}</h4>
+          <p>{getExplanation(selectedNode, data.description)}</p>
+          {selectedNode.children?.length > 0 && <span className="mm-topic-related">{selectedNode.children.length} related {selectedNode.children.length === 1 ? 'item' : 'items'}</span>}
+        </section>
+      )}
 
       <div className="mm-tree" key={allExpanded}>
-        <MapNode node={data.root} depth={0} />
+        <MapNode node={data.root} selectedId={selectedNode?.id} onSelect={setSelectedNode} />
       </div>
     </div>
   );

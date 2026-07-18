@@ -47,7 +47,7 @@ export function buildSourcePreview({ subject, year, topic, country, language, st
       study_notes: { title: `Source notes: ${topic}`, subtitle: `${subject} | ${year}`, grade_band_label: year, sections: [{ heading: 'Extracted source', content: extractedText.slice(0, 1600), key_points: excerpts }] },
       mock_exam: { title: `Source review: ${topic}`, exam_board: 'Teacher-supplied material', format_style: 'Teacher review', duration_minutes: 15, total_marks: 0, grade_band: year, questions: [] },
       cloze_passage: { title: `Source reading: ${topic}`, passage: extractedText.slice(0, 600), blanks: [] },
-      study_map: { title: `Source map: ${topic}`, description: 'Source excerpts for teacher review.', root: { id: 'root', label: topic, type: 'root', children: [] } },
+      study_map: { title: `Source map: ${topic}`, description: 'Source excerpts for teacher review.', root: { id: 'root', label: topic, description: 'This map contains teacher-supplied source material only. Review each source excerpt before using it in class.', type: 'root', children: [] } },
       study_schedule: { title: `Source review: ${topic}`, persona: studentPersona, total_weeks: 1, total_lessons: 1, overview: 'Review the supplied source before use.', schedule: [], differentiation: {} },
     },
     teaching_insights: { misconceptions: [], teaching_tips: ['Review the source extract and select age-appropriate evidence before teaching.'], daily_examples: [], intervention_strategy: 'Teacher review required.', extension_activity: 'Use the source to create a classroom discussion prompt.', estimated_class_difficulty: 'teacher review required', time_estimate_minutes: 15, differentiation_note: 'Adapt the source to the selected class profile.' },

@@ -140,6 +140,7 @@ const examQuestionSchema = z.object({
 const studyMapNodeSchema = z.object({
   id: z.string(),
   label: z.string(),
+  description: z.string().max(500).optional().default(''),
   type: z.enum(['root', 'topic', 'subtopic', 'skill']),
   completed: z.boolean().optional().default(false),
   children: z.array(z.lazy(() => studyMapNodeSchema)).optional().default([]),

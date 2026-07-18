@@ -705,3 +705,11 @@
   .sch-diff-grid { grid-template-columns: 1fr; }
   .flashcard-header { flex-direction: column; align-items: flex-start; }
 }
+
+.mm-topic-panel { border: 1px solid #bfdbfe; border-radius: 8px; background: #eff6ff; margin-bottom: 16px; padding: 14px 16px; }
+.mm-topic-panel h4 { color: var(--text-primary); font-size: 15px; margin: 6px 0; }
+.mm-topic-panel p { color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin: 0; }
+.mm-topic-type, .mm-topic-related { display: inline-block; color: var(--blue); font-size: 11px; font-weight: 700; }
+.mm-topic-related { color: var(--text-secondary); margin-top: 8px; }
+.mm-node-label { appearance: none; cursor: pointer; font-family: inherit; text-align: left; }
+.mm-node-label--selected { background: var(--blue-light); box-shadow: 0 0 0 2px rgba(79,110,247,.18); }

@@ -218,7 +218,7 @@ Return this EXACT JSON structure (no extra text):
           "label": "Sub-topic or skill",
           "type": "topic",
           "children": [
-            { "id": "t1s1", "label": "Specific concept", "type": "subtopic", "children": [] }
+            { "id": "t1s1", "label": "Specific concept", "description": "A clear explanation of this concept in ${language}", "type": "subtopic", "children": [] }
           ]
         }
       ]
@@ -254,6 +254,7 @@ CRITICAL:
 - Generate exactly ${gradeBandInfo.band === 'primary' ? '6' : '10'} mock exam questions
 - Generate exactly 6 cloze blanks
 - Study map must have at least 3 branches from root
+- Every study-map node must include a concise, accurate description for the clickable topic panel
 - Study schedule must have at least 6 day entries`;
 };
 

@@ -15,12 +15,13 @@ import { runStudyMaterialsGenerator } from './agents/studyMaterialsGenerator.js'
 import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
 import { buildSourcePreview } from './demo/sourcePreview.js';
+import { AI_PROVIDER, GPT_MODEL } from './openai.js';
 import { generateRequestSchema, performanceRequestSchema, parseRequest } from './validators/requestSchemas.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const DEMO_MODE = process.env.DEMO_MODE !== 'false'; // default: always demo
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4.1-mini';
+const LIVE_MODEL = GPT_MODEL;
 
 app.use(helmet({
   contentSecurityPolicy: false,
@@ -65,8 +66,8 @@ app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     mode: DEMO_MODE ? 'DEMO' : 'LIVE',
-    model: DEMO_MODE ? 'demo-cache' : OPENAI_MODEL,
-    provider: DEMO_MODE ? 'none (demo)' : 'OpenAI',
+    model: DEMO_MODE ? 'demo-cache' : LIVE_MODEL,
+    provider: DEMO_MODE ? 'none (demo)' : AI_PROVIDER === 'groq' ? 'Groq' : 'OpenAI',
     agents: 5,
     timestamp: new Date().toISOString(),
   });
@@ -184,13 +185,13 @@ app.post('/api/generate', async (req, res) => {
       agent_calls: agentCalls,
       resources_created: 10,
       estimated_time_saved_minutes: 210,
-      model: OPENAI_MODEL,
+      model: LIVE_MODEL,
       source_confidence: blueprint.confidenceLevel || 'general',
     };
 
     res.json({
       generation_id: generationId,
-      model: OPENAI_MODEL,
+      model: LIVE_MODEL,
       created_at: new Date().toISOString(),
       status: 'complete',
       subject, year, topic, country, language, studentPersona,
@@ -276,7 +277,7 @@ export default app;
 // Only start the HTTP server when NOT running inside Vercel serverless
 if (process.env.VERCEL !== '1') {
   app.listen(PORT, () => {
-    const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${OPENAI_MODEL}`;
+    const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${AI_PROVIDER} / ${LIVE_MODEL}`;
     console.log(`\n🚀 EduForge AI — The AI Teaching Operating System`);
     console.log(`   http://localhost:${PORT} | ${mode} | 5 Agents`);
     console.log(`   Health: http://localhost:${PORT}/api/health\n`);
