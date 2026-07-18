@@ -255,8 +255,8 @@ function selectMatchingDemo({ subject, year, topic, country, language }) {
   const normalizedSubject = subject.toLowerCase();
   const normalizedTopic = topic.toLowerCase();
   const isMatter = normalizedTopic.includes('state') || normalizedTopic.includes('jirim') || normalizedTopic.includes('matter');
-  if ((country === 'Malaysia' || language === 'Bahasa Melayu') && ['sains', 'science'].includes(normalizedSubject) && /^(year|tahun) 4$/i.test(year) && isMatter) return DEMO_RESPONSES.malaysia;
-  if (country === 'United Kingdom' && normalizedSubject === 'history' && /^year 8$/i.test(year) && normalizedTopic.includes('norman')) return DEMO_RESPONSES.uk;
+  if ((country === 'Malaysia' || language === 'Bahasa Melayu') && ['sains', 'science'].includes(normalizedSubject) && /^(form|tingkatan) 1$/i.test(year) && isMatter) return DEMO_RESPONSES.malaysia;
+  if (country === 'United Kingdom' && normalizedSubject === 'history' && /^year (10|11)$/i.test(year) && normalizedTopic.includes('norman')) return DEMO_RESPONSES.uk;
   if (normalizedSubject === 'science' && /^grade 5$/i.test(year) && isMatter) return DEMO_RESPONSES.universal;
   return null;
 }

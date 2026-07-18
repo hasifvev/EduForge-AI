@@ -27,8 +27,8 @@ const UNIVERSAL_DEMO = {
       'Water vapour fogging up a cold window in winter',
       'Steam rising from a hot cup of coffee',
     ],
-    curriculum_alignment: 'NGSS 5-PS1-1 / Common Core Science Grade 5',
-    curriculum_source: 'Common Core Science (USA)',
+    curriculum_alignment: 'NGSS 5-PS1-1',
+    curriculum_source: 'Next Generation Science Standards (NGSS)',
     confidenceLevel: 'high',
     experience_design: {
       primary_activity: 'matching',
@@ -139,8 +139,8 @@ const MALAYSIA_DEMO = {
   ...UNIVERSAL_DEMO,
   lesson: {
     ...UNIVERSAL_DEMO.lesson,
-    curriculum_alignment: 'KSSR Sains Tahun 4 — Tema: Sains Hayat',
-    curriculum_source: 'KSSR Malaysia',
+    curriculum_alignment: 'KSSM Sains Tingkatan 1 — Jirim',
+    curriculum_source: 'KSSM Malaysia',
     confidenceLevel: 'high',
     experience_design: {
       ...UNIVERSAL_DEMO.lesson.experience_design,
@@ -179,8 +179,8 @@ const UK_DEMO = {
       'Evaluate how the Norman Conquest changed England',
     ],
     key_concepts: ['Norman Conquest', 'Battle of Hastings', 'William the Conqueror', 'Harold Godwinson', 'Feudal System', 'Domesday Book', '1066', 'Anglo-Saxon England'],
-    curriculum_alignment: 'KS3 History — National Curriculum: Britain, 1066–1509',
-    curriculum_source: 'UK National Curriculum (KS3)',
+    curriculum_alignment: 'AQA GCSE History — Norman England, c1066-c1100',
+    curriculum_source: 'AQA GCSE History',
     confidenceLevel: 'high',
     summary: 'Students examine the dramatic events of 1066 — one of the most significant dates in English history. The Norman Conquest fundamentally changed the English language, culture, feudal structure, and architecture.',
     real_world_connections: [
@@ -212,7 +212,7 @@ UNIVERSAL_DEMO.study_materials = {
   },
   study_notes: {
     title: 'States of Matter — Study Notes',
-    subtitle: 'Science | Grade 5 | Common Core',
+    subtitle: 'Science | Grade 5 | NGSS',
     grade_band_label: 'Primary / Elementary',
     sections: [
       { heading: '1. The Three States of Matter', content: 'All matter exists as a solid, liquid, or gas. The difference comes down to how particles (tiny building blocks) are arranged and how fast they move.', key_points: ['Solid: fixed shape, fixed volume, particles vibrate in place', 'Liquid: no fixed shape, fixed volume, particles flow freely', 'Gas: no fixed shape, no fixed volume, particles move rapidly', 'The same substance can exist in all 3 states (e.g. water = ice / water / steam)'] },
@@ -223,7 +223,7 @@ UNIVERSAL_DEMO.study_materials = {
   },
   mock_exam: {
     title: 'States of Matter — Practice Assessment',
-    exam_board: 'Common Core Science (USA)',
+    exam_board: 'Next Generation Science Standards (NGSS)',
     format_style: 'Primary / Elementary Practice Paper',
     duration_minutes: 45,
     total_marks: 30,

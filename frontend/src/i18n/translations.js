@@ -17,7 +17,9 @@ export const translations = {
     upload_limit_title: 'This file is too large to upload',
     upload_limit_notice: '{name} is above the 4 MB upload limit.',
     upload_limit_search: 'Search for material',
-    field_material_link: 'Material link (reference only)',
+    field_material_link: 'Material link',
+    demo_scenarios_label: 'Verified demo scenarios',
+    demo_scenarios: { ngss: 'Grade 5 Science: States of Matter', kssm: 'Form 1 Sains: Keadaan Jirim', aqa: 'Year 10 History: Norman Conquest' },
     material_link_placeholder: 'Public PDF, TXT, or web page link',
     material_search_label: 'Find exact curriculum material',
 
@@ -186,7 +188,9 @@ export const translations = {
     upload_limit_title: 'Fail ini terlalu besar untuk dimuat naik',
     upload_limit_notice: '{name} melebihi had muat naik 4 MB.',
     upload_limit_search: 'Cari bahan',
-    field_material_link: 'Pautan bahan (rujukan sahaja)',
+    field_material_link: 'Pautan bahan',
+    demo_scenarios_label: 'Senario demo disahkan',
+    demo_scenarios: { ngss: 'Gred 5 Sains: States of Matter', kssm: 'Tingkatan 1 Sains: Keadaan Jirim', aqa: 'Tahun 10 Sejarah: Norman Conquest' },
     material_link_placeholder: 'Pautan PDF, TXT atau laman web awam',
     material_search_label: 'Cari bahan kurikulum yang tepat',
 

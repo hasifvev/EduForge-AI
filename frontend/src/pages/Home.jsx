@@ -13,6 +13,11 @@ const PERSONAS = [
   { id: 'Gifted & Talented', emoji: '🚀', label_key: 'persona_gifted' },
   { id: 'SEN Support', emoji: '💚', label_key: 'persona_sen' },
 ];
+const DEMO_SCENARIOS = [
+  { id: 'ngss', countryCode: 'US', subject: 'Science', year: 'Grade 5', topic: 'States of Matter', language: 'English', curriculum: 'NGSS 5-PS1-1' },
+  { id: 'kssm', countryCode: 'MY', subject: 'Sains', year: 'Tingkatan 1', topic: 'Keadaan Jirim', language: 'Bahasa Melayu', curriculum: 'KSSM Malaysia' },
+  { id: 'aqa', countryCode: 'GB', subject: 'History', year: 'Year 10', topic: 'Norman Conquest 1066', language: 'English', curriculum: 'AQA GCSE History' },
+];
 
 export default function Home() {
   const { t } = useLang();
@@ -48,6 +53,12 @@ export default function Home() {
 
   const handlePersonaSelect = (personaId) => {
     setForm(f => ({ ...f, studentPersona: personaId }));
+  };
+  const loadDemoScenario = (scenario) => {
+    const country = t.countries.find((item) => item.code === scenario.countryCode);
+    setSelectedCountry(country || null);
+    setFile(null);
+    setForm((current) => ({ ...current, subject: scenario.subject, year: scenario.year, topic: scenario.topic, language: scenario.language, country: country?.name || '', curriculumStandard: scenario.curriculum, objectives: '', materialUrl: '' }));
   };
 
   const handleGenerate = useCallback((e) => {
@@ -93,7 +104,11 @@ export default function Home() {
             <div key={i} className="hero-agent-pill">{a}</div>
           ))}
         </div>
-      </section>
+        <div className="demo-scenario-row" aria-label={t.demo_scenarios_label}>
+          {DEMO_SCENARIOS.map((scenario) => (
+            <button key={scenario.id} type="button" className="demo-scenario-btn" onClick={() => loadDemoScenario(scenario)}>{t.demo_scenarios[scenario.id]}</button>
+          ))}
+        </div>      </section>
 
       {/* ── Form ────────────────────────────────────────────────────────── */}
       <section className="form-section">
