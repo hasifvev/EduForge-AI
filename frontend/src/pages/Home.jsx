@@ -4,7 +4,7 @@ import FileUploadZone from '../components/FileUploadZone.jsx';
 import GenerationProgress from '../components/GenerationProgress.jsx';
 import { useGeneration } from '../hooks/useGeneration.js';
 import Dashboard from './Dashboard.jsx';
-import { buildMaterialSearchUrl, getCurriculumMapping, getSubjectsForCountry } from '../utils/curriculumMapping.js';
+import { buildMaterialSearchUrl, getCurriculumMapping, getSubjectsForCountry, getTopicSuggestions } from '../utils/curriculumMapping.js';
 
 const PERSONAS = [
   { id: 'Beginner', emoji: '🌱', label_key: 'persona_beginner' },
@@ -76,6 +76,7 @@ export default function Home() {
   const materialSearchUrl = buildMaterialSearchUrl({ countryCode: selectedCountry?.code, country: form.country, subject: form.subject, year: form.year, topic: form.topic });
 
   const availableSubjects = getSubjectsForCountry(selectedCountry?.code, t.subjects);
+  const topicSuggestions = form.subject && form.year ? getTopicSuggestions(selectedCountry?.code, form.subject, form.year) : [];
 
   const currentGrades = selectedCountry
     ? (t.gradeSystems[selectedCountry.gradeSystem] || t.gradeSystems.us)
@@ -177,7 +178,7 @@ export default function Home() {
           <div className="form-grid">
             <div className="field-group">
               <label className="field-label">{t.field_subject}</label>
-              <select className="field-select" value={form.subject} onChange={set('subject')} required>
+              <select className="field-select" value={form.subject} onChange={(event) => setForm((current) => ({ ...current, subject: event.target.value, topic: '' }))} required>
                 <option value="">—</option>
                 {availableSubjects.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -185,7 +186,7 @@ export default function Home() {
             <div className="field-group">
               <label className="field-label">{t.field_year}</label>
               {currentGrades.length > 0 ? (
-                <select className="field-select" value={form.year} onChange={set('year')} required>
+                <select className="field-select" value={form.year} onChange={(event) => setForm((current) => ({ ...current, year: event.target.value, topic: '' }))} required>
                   <option value="">—</option>
                   {currentGrades.map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
@@ -209,8 +210,17 @@ export default function Home() {
               value={form.topic}
               onChange={set('topic')}
               placeholder={t.topic_placeholder}
+              list="topic-suggestions"
               required
             />
+            <datalist id="topic-suggestions">
+              {topicSuggestions.map((topic) => <option key={topic} value={topic} />)}
+            </datalist>
+            {topicSuggestions.length > 0 && (
+              <div className="topic-suggestions" aria-label={t.topic_suggestions_label}>
+                {topicSuggestions.map((topic) => <button key={topic} type="button" onClick={() => setForm((current) => ({ ...current, topic }))}>{topic}</button>)}
+              </div>
+            )}
           </div>
 
           {/* Student Persona */}
