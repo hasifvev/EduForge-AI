@@ -26,7 +26,17 @@ function detectGradeBand(year) {
 }
 
 // ─── Exam Style by Country + Grade Band ──────────────────────────────────────
-function getExamStyle(country, gradeBand) {
+function getExamStyle(country, gradeBand, curriculumAlignment = '', curriculumSource = '') {
+  const curriculum = `${curriculumAlignment} ${curriculumSource}`.toLowerCase();
+  if (country === 'United States' && curriculum.includes('ngss')) {
+    const formats = {
+      primary: { board: 'Next Generation Science Standards (NGSS)', format: 'Grade 3–5 NGSS Performance Task', duration: 40, totalMarks: 30 },
+      lower_secondary: { board: 'Next Generation Science Standards (NGSS)', format: 'Middle School NGSS Performance Task', duration: 60, totalMarks: 50 },
+      upper_secondary: { board: 'Next Generation Science Standards (NGSS)', format: 'High School NGSS Performance Task', duration: 90, totalMarks: 80 },
+      pre_university: { board: 'Next Generation Science Standards (NGSS)', format: 'Advanced Science Performance Task', duration: 120, totalMarks: 100 },
+    };
+    return formats[gradeBand] || formats.lower_secondary;
+  }
   const styles = {
     Malaysia: {
       primary: { board: 'Malaysia MOE', format: 'UPSR / Penilaian Darjah Format (Primary)', duration: 60, totalMarks: 40 },
@@ -293,7 +303,7 @@ function normalizeStudyMaterials(materials) {
 // ─── Main Agent ───────────────────────────────────────────────────────────────
 export async function runStudyMaterialsGenerator({ subject, year, topic, language, country, studentPersona, blueprint }) {
   const gradeBandInfo = detectGradeBand(year);
-  const examStyle = getExamStyle(country, gradeBandInfo.band);
+  const examStyle = getExamStyle(country, gradeBandInfo.band, blueprint.curriculum_alignment, blueprint.curriculum_source);
 
   return withRetry(
     async () => {
