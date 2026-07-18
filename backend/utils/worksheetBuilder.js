@@ -1,3 +1,11 @@
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 function getAssessmentProfile({ country = '', year = '', curriculumStandard = '', curriculumSource = '', subject = '' }) {
   const context = [country, year, curriculumStandard, curriculumSource, subject].join(' ').toLowerCase();
   const earlyYears = /(kindergarten|reception|foundation|preschool|pre-primary|nursery|prasekolah)/.test(context);
@@ -60,7 +68,7 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
+  <title>${escapeHtml(title)}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b; background: #fff; padding: 40px; max-width: 800px; margin: 0 auto; }
@@ -86,20 +94,20 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
 <body>
   <div class="header">
     <div class="score-box">${labels.score}: _____ / ${items.length}</div>
-    <h1>${title}</h1>
-    <div class="meta">${labels.subject}: ${subject} | ${labels.year}: ${year}</div>
-    <div class="meta">Framework: ${assessment.framework} | Assessment focus: ${assessment.focus}</div>
+    <h1>${escapeHtml(title)}</h1>
+    <div class="meta">${labels.subject}: ${escapeHtml(subject)} | ${labels.year}: ${escapeHtml(year)}</div>
+    <div class="meta">Framework: ${escapeHtml(assessment.framework)} | Assessment focus: ${escapeHtml(assessment.focus)}</div>
     <div class="school-info">
       <div class="info-row"><span class="info-label">${labels.name}:</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-label">${labels.class}:</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-label">${labels.date}:</span><span class="info-line"></span></div>
     </div>
   </div>
-  ${objectives.length ? `<div class="objectives"><h3>${labels.objectives}</h3><ul>${objectives.map(o => `<li>${o}</li>`).join('')}</ul></div>` : ''}
-  ${instructions ? `<div class="instructions-box"><strong>${labels.instructions}:</strong> ${instructions}</div>` : ''}
+  ${objectives.length ? `<div class="objectives"><h3>${labels.objectives}</h3><ul>${objectives.map(o => `<li>${escapeHtml(o)}</li>`).join('')}</ul></div>` : ''}
+  ${instructions ? `<div class="instructions-box"><strong>${labels.instructions}:</strong> ${escapeHtml(instructions)}</div>` : ''}
   ${items.map((item, i) => `
   <div class="question">
-    <p><span class="question-num">${i + 1}.</span> ${item.question}</p>
+    <p><span class="question-num">${i + 1}.</span> ${escapeHtml(item.question)}</p>
     <div class="answer-line"></div>
   </div>`).join('')}
 </body>
@@ -109,7 +117,7 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
 <html lang="${isBM ? 'ms' : 'en'}">
 <head>
   <meta charset="UTF-8">
-  <title>${labels.answerKey} — ${topic}</title>
+  <title>${labels.answerKey} — ${escapeHtml(topic)}</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b; background: #fff; padding: 40px; max-width: 800px; margin: 0 auto; }
@@ -125,14 +133,14 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
 <body>
   <div class="banner">⚠ ${labels.teacherOnly}</div>
   <h1>${labels.answerKey}</h1>
-  <div class="meta">${labels.subject}: ${subject} | ${labels.year}: ${year} | ${labels.topic}: ${topic}</div>
-  <div class="meta">Framework: ${assessment.framework} | Assessment focus: ${assessment.focus}</div>
+  <div class="meta">${labels.subject}: ${escapeHtml(subject)} | ${labels.year}: ${escapeHtml(year)} | ${labels.topic}: ${escapeHtml(topic)}</div>
+  <div class="meta">Framework: ${escapeHtml(assessment.framework)} | Assessment focus: ${escapeHtml(assessment.focus)}</div>
   ${items.map((item, i) => `
   <div class="answer-item">
     <span class="num">${i + 1}.</span>
     <div>
-      <div style="font-size:13px;color:#64748b;">${item.question}</div>
-      <div class="answer">→ ${item.answer}</div>
+      <div style="font-size:13px;color:#64748b;">${escapeHtml(item.question)}</div>
+      <div class="answer">→ ${escapeHtml(item.answer)}</div>
     </div>
   </div>`).join('')}
 </body>

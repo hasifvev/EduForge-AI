@@ -38,22 +38,42 @@ const apiLimiter = rateLimit({
   legacyHeaders: false,
 });
 
+const generationLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  limit: DEMO_MODE ? 12 : 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Generation limit reached. Please wait a few minutes before trying again.' },
+});
+
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 4 * 1024 * 1024 } });
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
-// Allow localhost (dev) + any Vercel deployment (*.vercel.app) + custom domain
+// Allow local development, the configured canonical frontend, and an optional preview policy.
 const allowVercelPreviews = process.env.ALLOW_VERCEL_PREVIEWS === 'true';
+
+function normalizeOrigin(value) {
+  if (!value) return '';
+  try {
+    return new URL(value).origin;
+  } catch {
+    return '';
+  }
+}
 
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  process.env.FRONTEND_URL,
+  normalizeOrigin(process.env.FRONTEND_URL),
+  normalizeOrigin(process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : ''),
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
-    // Allow no-origin (curl, Postman) + allowed list + any vercel.app domain
-    if (!origin || allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) {
+    const isAllowedOrigin = !origin || allowedOrigins.includes(origin);
+    const isAllowedPreview = allowVercelPreviews && Boolean(origin) && /\.vercel\.app$/.test(origin);
+
+    if (isAllowedOrigin || isAllowedPreview) {
       cb(null, true);
     } else {
       cb(new Error('Not allowed by CORS'));
@@ -102,7 +122,7 @@ app.post('/api/extract-url', async (req, res) => {
   }
 });
 // ─── Main Generation ──────────────────────────────────────────────────────────
-app.post('/api/generate', async (req, res) => {
+app.post('/api/generate', generationLimiter, async (req, res) => {
   let payload;
   try {
     payload = parseRequest(generateRequestSchema, req.body);
@@ -260,6 +280,21 @@ app.post('/api/analyze-performance', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// ─── Request Error Handling ──────────────────────────────────────────────────
+app.use((err, _req, res, next) => {
+  if (res.headersSent) return next(err);
+
+  if (err?.message === 'Not allowed by CORS') {
+    return res.status(403).json({ error: 'Origin is not allowed.' });
+  }
+  if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({ error: 'Uploaded files must be 4 MB or smaller.' });
+  }
+
+  console.error('Request error:', err?.message || err);
+  return res.status(500).json({ error: 'Request could not be processed.' });
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

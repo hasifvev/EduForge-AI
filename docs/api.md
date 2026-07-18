@@ -116,4 +116,9 @@ The exact analysis varies by mode and configured provider.
 | `429` | Rate limit reached |
 | `500` | Provider, agent, parsing, or OCR failure |
 
-The API rate limit is 60 requests/minute/IP in demo mode and 20 requests/minute/IP in live mode.
+The API rate limit is 60 requests/minute/IP in demo mode and 20 requests/minute/IP in live mode. The costlier /generate endpoint is additionally limited to 12 requests/5 minutes/IP in demo mode and 3 requests/5 minutes/IP in live mode.
+
+### CORS configuration
+
+- FRONTEND_URL can be set to the production frontend origin.
+- ALLOW_VERCEL_PREVIEWS=true permits browser API calls from Vercel preview deployments. Keep it unset in production unless preview testing needs it.

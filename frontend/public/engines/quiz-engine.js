@@ -11,6 +11,11 @@
 
 const EduForgeQuiz = (() => {
   let state = { config: null, current: 0, score: 0, answers: [], started: false };
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[char]));
+  }
 
   function init(config) {
     state = { config, current: 0, score: 0, answers: [], started: true };
@@ -31,12 +36,12 @@ const EduForgeQuiz = (() => {
 
     app.innerHTML = `
       <div class="quiz-header">
-        <h2 class="quiz-title">${state.config.title}</h2>
+        <h2 class="quiz-title">${escapeHtml(state.config.title)}</h2>
         <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
         <div class="progress-text">${state.current + 1} / ${q.length}</div>
       </div>
       <div class="question-card">
-        <p class="question-text">${question.question}</p>
+        <p class="question-text">${escapeHtml(question.question)}</p>
         <div class="options-grid">
           ${question.options.map((opt, i) => `
             <button class="option-btn" id="opt-${i}" onclick="EduForgeQuiz.select(${i})">
@@ -68,7 +73,7 @@ const EduForgeQuiz = (() => {
       <div class="feedback-icon">${isCorrect ? '✓' : '✗'}</div>
       <div class="feedback-text">
         <strong>${isCorrect ? 'Betul! / Correct!' : 'Salah. / Incorrect.'}</strong>
-        <p>${question.explanation}</p>
+        <p>${escapeHtml(question.explanation)}</p>
       </div>
       <button class="next-btn" onclick="EduForgeQuiz.next()">
         ${state.current + 1 < state.config.questions.length ? 'Seterusnya / Next →' : 'Lihat Keputusan / See Results'}
@@ -101,7 +106,7 @@ const EduForgeQuiz = (() => {
         <div class="results-bar">
           <div class="results-fill" style="width:0%" id="res-fill"></div>
         </div>
-        <p class="results-sub">${state.config.title}</p>
+        <p class="results-sub">${escapeHtml(state.config.title)}</p>
         <button class="retry-btn" onclick="EduForgeQuiz.restart()">Cuba Semula / Try Again</button>
       </div>
     `;

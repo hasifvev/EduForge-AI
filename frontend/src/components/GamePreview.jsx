@@ -52,14 +52,31 @@ const GAME_STYLES = `
   @keyframes fadeIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 `;
 
+function escapeDocumentText(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function serializeConfig(config) {
+  return JSON.stringify(config)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+}
 function buildQuizHTML(engineConfig) {
-  const configJson = JSON.stringify(engineConfig);
+  const configJson = serializeConfig(engineConfig);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${engineConfig.title}</title>
+  <title>${escapeDocumentText(engineConfig.title)}</title>
   <style>${GAME_STYLES}</style>
 </head>
 <body>
@@ -71,31 +88,31 @@ function buildQuizHTML(engineConfig) {
 }
 
 function buildMemoryHTML(engineConfig) {
-  const configJson = JSON.stringify(engineConfig);
+  const configJson = serializeConfig(engineConfig);
   return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' +
-    engineConfig.title +
+    escapeDocumentText(engineConfig.title) +
     '</title><style>' + GAME_STYLES +
     '</style></head><body><div id="matching-app"></div><script src="' + window.location.origin +
     '/engines/memory-engine.js"></script><script>EduForgeMemory.init(' + configJson +
     ');</script></body></html>';
 }
 function buildTermSprintHTML(engineConfig) {
-  const configJson = JSON.stringify(engineConfig);
+  const configJson = serializeConfig(engineConfig);
   return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' +
-    engineConfig.title +
+    escapeDocumentText(engineConfig.title) +
     '</title><style>' + GAME_STYLES +
     '</style></head><body><div id="matching-app"></div><script src="' + window.location.origin +
     '/engines/term-sprint-engine.js"></script><script>EduForgeTermSprint.init(' + configJson +
     ');</script></body></html>';
 }
 function buildMatchingHTML(engineConfig) {
-  const configJson = JSON.stringify(engineConfig);
+  const configJson = serializeConfig(engineConfig);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${engineConfig.title}</title>
+  <title>${escapeDocumentText(engineConfig.title)}</title>
   <style>${GAME_STYLES}</style>
 </head>
 <body>
@@ -141,7 +158,7 @@ export default function GamePreview({ type, engineConfig, onClose }) {
           src={url}
           className="preview-frame"
           title={engineConfig.title}
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts"
         />
       </div>
     </div>

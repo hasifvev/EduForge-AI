@@ -11,6 +11,11 @@
 
 const EduForgeMatching = (() => {
   let state = { config: null, matched: {}, dragging: null, complete: false };
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[char]));
+  }
 
   function init(config) {
     // Shuffle definitions
@@ -31,8 +36,8 @@ const EduForgeMatching = (() => {
 
     app.innerHTML = `
       <div class="match-header">
-        <h2 class="match-title">${title}</h2>
-        <p class="match-instruction">${instruction}</p>
+        <h2 class="match-title">${escapeHtml(title)}</h2>
+        <p class="match-instruction">${escapeHtml(instruction)}</p>
         <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
         <div class="progress-text">${matchedCount} / ${pairs.length} dipadankan / matched</div>
       </div>
@@ -42,7 +47,7 @@ const EduForgeMatching = (() => {
           ${pairs.map(p => `
             <div class="term-item ${state.matched[p.id] ? 'term-matched' : ''}" 
                  id="term-${p.id}">
-              ${p.term}
+              ${escapeHtml(p.term)}
               ${state.matched[p.id] ? '<span class="match-tick">✓</span>' : ''}
             </div>`).join('')}
         </div>
@@ -59,7 +64,7 @@ const EduForgeMatching = (() => {
                    ondragend="EduForgeMatching.dragEnd()"
                    onclick="EduForgeMatching.tapSelect(${p.id})"
                  ` : ''}>
-              ${p.definition}
+              ${escapeHtml(p.definition)}
               ${isMatched ? '<span class="match-tick">✓</span>' : ''}
             </div>`;
           }).join('')}
@@ -142,7 +147,7 @@ const EduForgeMatching = (() => {
           <div class="score-num">${total}/${total}</div>
           <div class="score-pct">100%</div>
         </div>
-        <p class="results-sub">${state.config.title}</p>
+        <p class="results-sub">${escapeHtml(state.config.title)}</p>
         <button class="retry-btn" onclick="EduForgeMatching.restart()">Cuba Semula / Try Again</button>
       </div>
     `;

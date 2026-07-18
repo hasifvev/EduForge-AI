@@ -7,10 +7,25 @@ const MAX_REMOTE_BYTES = 2 * 1024 * 1024;
 const MAX_EXTRACTED_TEXT_CHARS = 6000;
 
 function isPrivateAddress(address) {
-  if (net.isIP(address) === 4) {
-    return /^(127\.|10\.|0\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(address);
+  const normalized = String(address || '').toLowerCase();
+
+  // IPv4-mapped IPv6 addresses must receive the same protections as IPv4.
+  if (normalized.startsWith('::ffff:')) return isPrivateAddress(normalized.slice(7));
+
+  if (net.isIP(normalized) === 4) {
+    const [first, second] = normalized.split('.').map(Number);
+    return first === 0 || first === 10 || first === 127 ||
+      (first === 100 && second >= 64 && second <= 127) ||
+      (first === 169 && second === 254) ||
+      (first === 172 && second >= 16 && second <= 31) ||
+      (first === 192 && (second === 0 || second === 168)) ||
+      (first === 198 && (second === 18 || second === 19)) ||
+      first >= 224;
   }
-  return address === '::1' || address.startsWith('fc') || address.startsWith('fd') || address.startsWith('fe80');
+
+  return normalized === '::' || normalized === '::1' ||
+    normalized.startsWith('fc') || normalized.startsWith('fd') ||
+    normalized.startsWith('fe80') || normalized.startsWith('ff');
 }
 
 async function validateRemoteUrl(value) {
