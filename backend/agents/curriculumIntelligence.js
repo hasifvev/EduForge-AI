@@ -1,4 +1,4 @@
-import { openai, GPT_MODEL } from '../openai.js';
+import { openai, GPT_MODEL, MODEL_MAX_TOKENS } from '../openai.js';
 import { withRetry } from '../utils/retry.js';
 import { formatUntrustedLessonMaterial } from '../utils/promptSecurity.js';
 import { blueprintSchema } from '../validators/schemas.js';
@@ -53,6 +53,7 @@ export async function runCurriculumIntelligence(context) {
     async () => {
       const res = await openai.chat.completions.create({
         model: GPT_MODEL,
+        max_tokens: MODEL_MAX_TOKENS,
         temperature: 0.4,
         response_format: { type: 'json_object' },
         messages: [

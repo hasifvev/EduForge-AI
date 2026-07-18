@@ -1,4 +1,4 @@
-import { openai, GPT_MODEL } from '../openai.js';
+import { openai, GPT_MODEL, MODEL_MAX_TOKENS } from '../openai.js';
 import { withRetry } from '../utils/retry.js';
 import { gameContentSchema } from '../validators/schemas.js';
 
@@ -83,6 +83,7 @@ export async function runContentGenerator({ subject, year, topic, language, coun
     async () => {
       const res = await openai.chat.completions.create({
         model: GPT_MODEL,
+        max_tokens: MODEL_MAX_TOKENS,
         temperature: 0.6,
         response_format: { type: 'json_object' },
         messages: [

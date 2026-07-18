@@ -18,4 +18,5 @@ export const GPT_MODEL = AI_PROVIDER === 'groq'
   : AI_PROVIDER === 'custom'
     ? (process.env.AI_MODEL || '')
     : (process.env.OPENAI_MODEL || 'gpt-4.1-mini');
+export const MODEL_MAX_TOKENS = Number(process.env.AI_MAX_TOKENS || (AI_PROVIDER === 'custom' ? 4096 : 0)) || undefined;
 export const CODEX_MODEL = GPT_MODEL;
