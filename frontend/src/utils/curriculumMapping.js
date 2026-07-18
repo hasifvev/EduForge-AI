@@ -1,3 +1,5 @@
+import { getLearningStage, getRegionProfile, getSubjectsForGrade, topicPathwayFor } from './curriculumCatalog.js';
+
 const MALAYSIA_SUBJECTS = {
   Science: 'Sains', Mathematics: 'Matematik', English: 'Bahasa Inggeris',
   History: 'Sejarah', Geography: 'Geografi', Biology: 'Biologi', Chemistry: 'Kimia',
@@ -108,18 +110,20 @@ export function getTopicSuggestions(countryCode, subject, year) {
     if (subject === 'Matematik') return ['Nombor dan operasi', 'Algebra', 'Geometri', 'Sukatan dan ukuran', 'Statistik dan kebarangkalian'];
     if (subject === 'Sains') return ['Penyiasatan saintifik', 'Sel sebagai unit kehidupan', 'Jirim', 'Daya dan gerakan', 'Bumi dan angkasa'];
   }
-  return categoryTopics(subject, year) || GENERAL_TOPICS[subject] || ['Core concepts', 'Vocabulary and understanding', 'Application', 'Problem solving', 'Review and assessment'];
+  return topicPathwayFor(subject, year) || categoryTopics(subject, year) || GENERAL_TOPICS[subject] || ['Core concepts', 'Vocabulary and understanding', 'Application', 'Problem solving', 'Review and assessment'];
 }
-export function getSubjectsForCountry(countryCode, fallbackSubjects) {
-  return COUNTRY_SUBJECTS[countryCode] || fallbackSubjects;
+export function getSubjectsForCountry(countryCode, fallbackSubjects, year = '') {
+  return getSubjectsForGrade(countryCode, year, COUNTRY_SUBJECTS[countryCode] || fallbackSubjects);
 }
 export function getCurriculumMapping(countryCode, subject, year) {
   const isMalaysia = countryCode === 'MY';
   const isPrimary = /^(Year|Tahun) [1-6]$/.test(year || '');
-  const framework = isMalaysia ? (isPrimary ? 'KSSR Semakan 2017' : 'KSSM') : (COUNTRY_FRAMEWORKS[countryCode] || '');
+  const profile = getRegionProfile(countryCode);
+  const isEarly = getLearningStage(year) === 'early';
+  const framework = isMalaysia ? (isEarly ? 'KSPK' : isPrimary ? 'KSSR Semakan 2017' : 'KSSM') : (profile?.framework || COUNTRY_FRAMEWORKS[countryCode] || '');
   const mappedSubject = isMalaysia ? (MALAYSIA_SUBJECTS[subject] || subject) : subject;
 
-  return { framework, subject: mappedSubject, grade: year };
+  return { framework, subject: mappedSubject, grade: year, sourceUrl: profile?.sourceUrl || '', sourceLabel: profile?.sourceLabel || '' };
 }
 
 export function buildMaterialSearchUrl({ countryCode, country, subject, year, topic }) {

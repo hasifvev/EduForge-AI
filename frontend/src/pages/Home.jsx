@@ -5,6 +5,7 @@ import GenerationProgress from '../components/GenerationProgress.jsx';
 import { useGeneration } from '../hooks/useGeneration.js';
 import Dashboard from './Dashboard.jsx';
 import { buildMaterialSearchUrl, getCurriculumMapping, getSubjectsForCountry, getTopicSuggestions } from '../utils/curriculumMapping.js';
+import { WORLD_LANGUAGE_OPTIONS } from '../utils/curriculumCatalog.js';
 
 const PERSONAS = [
   { id: 'Beginner', emoji: '🌱', label_key: 'persona_beginner' },
@@ -47,6 +48,8 @@ export default function Home() {
       ...f,
       country: country.name,
       curriculumStandard: country.curriculum,
+      subject: '',
+      topic: '',
       year: '', // reset grade when country changes
     }));
   };
@@ -75,7 +78,7 @@ export default function Home() {
   const curriculumMapping = getCurriculumMapping(selectedCountry?.code, form.subject, form.year);
   const materialSearchUrl = buildMaterialSearchUrl({ countryCode: selectedCountry?.code, country: form.country, subject: form.subject, year: form.year, topic: form.topic });
 
-  const availableSubjects = getSubjectsForCountry(selectedCountry?.code, t.subjects);
+  const availableSubjects = getSubjectsForCountry(selectedCountry?.code, t.subjects, form.year);
   const topicSuggestions = form.subject && form.year ? getTopicSuggestions(selectedCountry?.code, form.subject, form.year) : [];
 
   const currentGrades = selectedCountry
@@ -162,7 +165,10 @@ export default function Home() {
               </div>
             )}
             {selectedCountry && form.subject && form.year && curriculumMapping.framework && (
-              <div className="curriculum-map">{curriculumMapping.framework} · {curriculumMapping.subject} · {curriculumMapping.grade}</div>
+              <>
+                <div className="curriculum-map">{curriculumMapping.framework} · {curriculumMapping.subject} · {curriculumMapping.grade}</div>
+                {curriculumMapping.sourceUrl && <a className="curriculum-source-link" href={curriculumMapping.sourceUrl} target="_blank" rel="noreferrer">{t.curriculum_source_link || 'Official curriculum guide'}</a>}
+              </>
             )}
             {!selectedCountry && (
               <input
@@ -186,7 +192,7 @@ export default function Home() {
             <div className="field-group">
               <label className="field-label">{t.field_year}</label>
               {currentGrades.length > 0 ? (
-                <select className="field-select" value={form.year} onChange={(event) => setForm((current) => ({ ...current, year: event.target.value, topic: '' }))} required>
+                <select className="field-select" value={form.year} onChange={(event) => setForm((current) => ({ ...current, year: event.target.value, subject: '', topic: '' }))} required>
                   <option value="">—</option>
                   {currentGrades.map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
@@ -256,6 +262,16 @@ export default function Home() {
                   </button>
                 ))}
               </div>
+              <input
+                className="field-input field-input-sm"
+                value={form.language}
+                onChange={set('language')}
+                placeholder={t.language_any_placeholder || 'Any language'}
+                list="world-language-options"
+              />
+              <datalist id="world-language-options">
+                {WORLD_LANGUAGE_OPTIONS.map((language) => <option key={language} value={language} />)}
+              </datalist>
             </div>
             <div className="field-group">
               <label className="field-label">{t.field_curriculum}</label>

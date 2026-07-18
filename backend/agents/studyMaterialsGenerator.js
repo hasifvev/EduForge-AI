@@ -232,7 +232,7 @@ Return this EXACT JSON structure (no extra text):
           "label": "Sub-topic or skill",
           "type": "topic",
           "children": [
-            { "id": "t1s1", "label": "Specific concept", "description": "A clear explanation of this concept in ${language}", "type": "subtopic", "children": [] }
+            { "id": "t1s1", "label": "Specific concept", "description": "A clear explanation of this concept in ${language}", "learning_goal": "What the learner can do after studying it", "example": "A brief age-appropriate example", "check_question": "One short self-check question", "type": "subtopic", "children": [{ "id": "t1s1k1", "label": "Practice skill", "description": "A small, observable skill that builds mastery", "learning_goal": "What to practise", "example": "A short model or context", "check_question": "A quick retrieval question", "type": "skill", "children": [] }] }
           ]
         }
       ]
@@ -268,8 +268,8 @@ CRITICAL:
 - Generate exactly ${counts.sections} study note sections
 - Generate exactly ${counts.questions} mock exam questions
 - Generate exactly ${counts.blanks} cloze blanks
-- Study map must have at least 3 branches from root
-- Every study-map node must include a concise, accurate description for the clickable topic panel
+- Study map must have 3-5 branches from root and 3-4 levels: root -> strand -> concept -> practice skill
+- Every study-map node must include a concise, accurate description, learning_goal, example, and check_question for the clickable learning panel
 - Study schedule must have at least ${counts.days} day entries`;
 };
 

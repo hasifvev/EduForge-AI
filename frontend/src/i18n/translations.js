@@ -138,7 +138,7 @@ export const translations = {
       { code: 'MY', name: 'Malaysia', flag: '🇲🇾', curriculum: 'KSSR / KSSM', gradeSystem: 'malaysian' },
       { code: 'US', name: 'United States', flag: '🇺🇸', curriculum: 'State standards / NGSS', gradeSystem: 'us' },
       { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', curriculum: 'National Curriculum', gradeSystem: 'uk' },
-      { code: 'AU', name: 'Australia', flag: '🇦🇺', curriculum: 'Australian Curriculum', gradeSystem: 'uk' },
+      { code: 'AU', name: 'Australia', flag: '🇦🇺', curriculum: 'Australian Curriculum', gradeSystem: 'australian' },
       { code: 'SG', name: 'Singapore', flag: '🇸🇬', curriculum: 'MOE Singapore', gradeSystem: 'sg' },
       { code: 'IN', name: 'India', flag: '🇮🇳', curriculum: 'CBSE / ICSE', gradeSystem: 'india' },
       { code: 'INTL', name: 'International / IB', flag: '🌍', curriculum: 'IB / Cambridge', gradeSystem: 'ib' },
@@ -146,12 +146,13 @@ export const translations = {
 
     // Grade systems
     gradeSystems: {
-      malaysian: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5'],
+      malaysian: ['Prasekolah', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5'],
       us: ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
-      uk: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12', 'Year 13'],
-      sg: ['Primary 1', 'Primary 2', 'Primary 3', 'Primary 4', 'Primary 5', 'Primary 6', 'Secondary 1', 'Secondary 2', 'Secondary 3', 'Secondary 4', 'JC 1', 'JC 2'],
-      india: ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
-      ib: ['Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
+      uk: ['Reception', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12', 'Year 13'],
+      australian: ['Foundation', 'Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12'],
+      sg: ['Nursery 1', 'Nursery 2', 'Kindergarten 1', 'Kindergarten 2', 'Primary 1', 'Primary 2', 'Primary 3', 'Primary 4', 'Primary 5', 'Primary 6', 'Secondary 1', 'Secondary 2', 'Secondary 3', 'Secondary 4', 'JC 1', 'JC 2'],
+      india: ['Pre-primary', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
+      ib: ['Early Years', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'],
       custom: [],
     },
 
@@ -160,6 +161,8 @@ export const translations = {
 
     // Languages (chips)
     languages: ['English', 'Bahasa Melayu', 'Mandarin', 'French', 'Spanish', 'Arabic', 'Tamil', 'Hindi'],
+    language_any_placeholder: 'Any language',
+    curriculum_source_link: 'Official curriculum guide',
 
     // Difficulty
     difficulty_easy: 'Easy',
@@ -310,7 +313,7 @@ export const translations = {
       { code: 'MY', name: 'Malaysia', flag: '🇲🇾', curriculum: 'KSSR / KSSM', gradeSystem: 'malaysian' },
       { code: 'US', name: 'Amerika Syarikat', flag: '🇺🇸', curriculum: 'Standard negeri / NGSS', gradeSystem: 'us' },
       { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', curriculum: 'National Curriculum', gradeSystem: 'uk' },
-      { code: 'AU', name: 'Australia', flag: '🇦🇺', curriculum: 'Australian Curriculum', gradeSystem: 'uk' },
+      { code: 'AU', name: 'Australia', flag: '🇦🇺', curriculum: 'Australian Curriculum', gradeSystem: 'australian' },
       { code: 'SG', name: 'Singapura', flag: '🇸🇬', curriculum: 'MOE Singapura', gradeSystem: 'sg' },
       { code: 'IN', name: 'India', flag: '🇮🇳', curriculum: 'CBSE / ICSE', gradeSystem: 'india' },
       { code: 'INTL', name: 'Antarabangsa / IB', flag: '🌍', curriculum: 'IB / Cambridge', gradeSystem: 'ib' },
@@ -318,12 +321,13 @@ export const translations = {
 
     // Grade systems (same)
     gradeSystems: {
-      malaysian: ['Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5', 'Tahun 6', 'Tingkatan 1', 'Tingkatan 2', 'Tingkatan 3', 'Tingkatan 4', 'Tingkatan 5'],
+      malaysian: ['Prasekolah', 'Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5', 'Tahun 6', 'Tingkatan 1', 'Tingkatan 2', 'Tingkatan 3', 'Tingkatan 4', 'Tingkatan 5'],
       us: ['Kindergarten', 'Gred 1', 'Gred 2', 'Gred 3', 'Gred 4', 'Gred 5', 'Gred 6', 'Gred 7', 'Gred 8', 'Gred 9', 'Gred 10', 'Gred 11', 'Gred 12'],
-      uk: ['Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5', 'Tahun 6', 'Tahun 7', 'Tahun 8', 'Tahun 9', 'Tahun 10', 'Tahun 11', 'Tahun 12', 'Tahun 13'],
-      sg: ['Darjah 1', 'Darjah 2', 'Darjah 3', 'Darjah 4', 'Darjah 5', 'Darjah 6', 'Menengah 1', 'Menengah 2', 'Menengah 3', 'Menengah 4', 'JC 1', 'JC 2'],
-      india: ['Gred 1', 'Gred 2', 'Gred 3', 'Gred 4', 'Gred 5', 'Gred 6', 'Gred 7', 'Gred 8', 'Gred 9', 'Gred 10', 'Gred 11', 'Gred 12'],
-      ib: ['Gred 1', 'Gred 2', 'Gred 3', 'Gred 4', 'Gred 5', 'Gred 6', 'Gred 7', 'Gred 8', 'Gred 9', 'Gred 10', 'Gred 11', 'Gred 12'],
+      uk: ['Reception', 'Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5', 'Tahun 6', 'Tahun 7', 'Tahun 8', 'Tahun 9', 'Tahun 10', 'Tahun 11', 'Tahun 12', 'Tahun 13'],
+      australian: ['Foundation', 'Tahun 1', 'Tahun 2', 'Tahun 3', 'Tahun 4', 'Tahun 5', 'Tahun 6', 'Tahun 7', 'Tahun 8', 'Tahun 9', 'Tahun 10', 'Tahun 11', 'Tahun 12'],
+      sg: ['Nurseri 1', 'Nurseri 2', 'Tadika 1', 'Tadika 2', 'Darjah 1', 'Darjah 2', 'Darjah 3', 'Darjah 4', 'Darjah 5', 'Darjah 6', 'Menengah 1', 'Menengah 2', 'Menengah 3', 'Menengah 4', 'JC 1', 'JC 2'],
+      india: ['Pra-sekolah', 'Gred 1', 'Gred 2', 'Gred 3', 'Gred 4', 'Gred 5', 'Gred 6', 'Gred 7', 'Gred 8', 'Gred 9', 'Gred 10', 'Gred 11', 'Gred 12'],
+      ib: ['Awal Kanak-kanak', 'Gred 1', 'Gred 2', 'Gred 3', 'Gred 4', 'Gred 5', 'Gred 6', 'Gred 7', 'Gred 8', 'Gred 9', 'Gred 10', 'Gred 11', 'Gred 12'],
       custom: [],
     },
 
@@ -332,6 +336,8 @@ export const translations = {
 
     // Languages
     languages: ['Bahasa Melayu', 'English', 'Mandarin', 'Bahasa Arab', 'Tamil', 'Hindi', 'French', 'Spanish'],
+    language_any_placeholder: 'Mana-mana bahasa',
+    curriculum_source_link: 'Panduan kurikulum rasmi',
 
     // Difficulty
     difficulty_easy: 'Mudah',

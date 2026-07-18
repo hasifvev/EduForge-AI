@@ -816,3 +816,32 @@
   .mm-graph-node--root { width: 164px; min-height: 88px; }
   .mm-graph-node--root strong { font-size: 15px; }
 }
+
+/* Deep interactive knowledge map */
+.mm-learning-panel {
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #f8fbff;
+  margin-bottom: 16px;
+  padding: 16px;
+}
+.mm-learning-heading h4 { color: var(--text-primary); font-size: 17px; margin: 5px 0; }
+.mm-learning-heading p { color: var(--text-secondary); font-size: 13.5px; line-height: 1.6; margin: 0; }
+.mm-learning-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.mm-learning-grid > div { border-left: 3px solid var(--blue); padding: 8px 10px; background: var(--bg); min-width: 0; }
+.mm-learning-grid span { color: var(--blue); font-size: 11px; font-weight: 700; }
+.mm-learning-grid p { color: var(--text-secondary); font-size: 12.5px; line-height: 1.5; margin: 4px 0 0; overflow-wrap: anywhere; }
+.mm-master-btn { margin-top: 14px; border: 1px solid var(--blue); border-radius: 6px; background: var(--blue); color: #fff; cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 700; padding: 7px 12px; }
+.mm-master-btn--done { background: #15803d; border-color: #15803d; }
+.mm-graph-canvas { min-width: 920px; min-height: 610px; aspect-ratio: 3 / 2; }
+.mm-graph-node { width: 138px; min-height: 50px; }
+.mm-graph-node--strand { width: 156px; min-height: 62px; }
+.mm-graph-node--concept { width: 146px; min-height: 54px; }
+.mm-graph-node--skill { width: 126px; min-height: 46px; }
+.mm-graph-node--mastered { border-left-color: #15803d; }
+.mm-graph-node--mastered .mm-graph-node-type { color: #15803d; }
+.mm-graph-node--root { width: 188px; min-height: 104px; }
+@media (max-width: 640px) {
+  .mm-learning-grid { grid-template-columns: 1fr; }
+  .mm-graph-canvas { min-width: 860px; min-height: 575px; }
+}
