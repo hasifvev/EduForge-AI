@@ -64,7 +64,7 @@ function buildQuizHTML(engineConfig) {
 </head>
 <body>
   <div id="quiz-app"></div>
-  <script src="/engines/quiz-engine.js"><\/script>
+  <script src="${window.location.origin}/engines/quiz-engine.js"><\/script>
   <script>EduForgeQuiz.init(${configJson});<\/script>
 </body>
 </html>`;
@@ -82,7 +82,7 @@ function buildMatchingHTML(engineConfig) {
 </head>
 <body>
   <div id="matching-app"></div>
-  <script src="/engines/matching-engine.js"><\/script>
+  <script src="${window.location.origin}/engines/matching-engine.js"><\/script>
   <script>EduForgeMatching.init(${configJson});<\/script>
 </body>
 </html>`;
