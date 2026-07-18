@@ -71,8 +71,15 @@ Return this EXACT JSON:
   "blooms_levels_missing": ["Evaluate", "Create"]
 }
 
-Be rigorous. Scores below 70 are fine if the content has genuine gaps. Judges expect honesty.`;
+Be rigorous. Return 1-5 strengths and at most 4 weaknesses. Scores below 70 are fine if the content has genuine gaps. Judges expect honesty.`;
 
+function normalizeLessonEvaluation(evaluation) {
+  return {
+    ...evaluation,
+    strengths: Array.isArray(evaluation?.strengths) ? evaluation.strengths.slice(0, 5) : evaluation?.strengths,
+    weaknesses: Array.isArray(evaluation?.weaknesses) ? evaluation.weaknesses.slice(0, 4) : evaluation?.weaknesses,
+  };
+}
 export async function runLessonEvaluator({ subject, year, topic, language, studentPersona, blueprint, gameContent, teachingInsights }) {
   return withRetry(
     async () => {
@@ -87,7 +94,7 @@ export async function runLessonEvaluator({ subject, year, topic, language, stude
         ],
       });
       const raw = res.choices[0].message.content;
-      return evaluatorSchema.parse(JSON.parse(raw));
+      return evaluatorSchema.parse(normalizeLessonEvaluation(JSON.parse(raw)));
     },
     { agentName: 'Lesson Evaluator', maxRetries: 2 }
   );
