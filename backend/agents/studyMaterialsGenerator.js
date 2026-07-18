@@ -253,6 +253,7 @@ Return this EXACT JSON structure (no extra text):
 }
 
 CRITICAL:
+- Each mock_exam question_type must be exactly one of: mcq, short_answer, structured, essay, fill_blank
 - Generate exactly ${counts.flashcards} flashcards
 - Generate exactly ${counts.sections} study note sections
 - Generate exactly ${counts.questions} mock exam questions
@@ -262,6 +263,33 @@ CRITICAL:
 - Study schedule must have at least ${counts.days} day entries`;
 };
 
+// Normalise provider-specific assessment labels to the renderer's stable types.
+const VALID_QUESTION_TYPES = new Set(['mcq', 'short_answer', 'structured', 'essay', 'fill_blank']);
+
+function normalizeQuestionType(value) {
+  const normalized = String(value || '').trim().toLowerCase().replace(/[\s-]+/g, '_');
+  if (VALID_QUESTION_TYPES.has(normalized)) return normalized;
+  if (/(multiple|choice|selection|true_false)/.test(normalized)) return 'mcq';
+  if (/(fill|cloze|gap|completion)/.test(normalized)) return 'fill_blank';
+  if (/(essay|extended|composition)/.test(normalized)) return 'essay';
+  if (/(structured|problem_solving|calculation)/.test(normalized)) return 'structured';
+  return 'short_answer';
+}
+
+function normalizeStudyMaterials(materials) {
+  const questions = materials?.mock_exam?.questions;
+  if (!Array.isArray(questions)) return materials;
+  return {
+    ...materials,
+    mock_exam: {
+      ...materials.mock_exam,
+      questions: questions.map((question) => ({
+        ...question,
+        question_type: normalizeQuestionType(question.question_type),
+      })),
+    },
+  };
+}
 // ─── Main Agent ───────────────────────────────────────────────────────────────
 export async function runStudyMaterialsGenerator({ subject, year, topic, language, country, studentPersona, blueprint }) {
   const gradeBandInfo = detectGradeBand(year);
@@ -280,7 +308,7 @@ export async function runStudyMaterialsGenerator({ subject, year, topic, languag
         ],
       });
       const raw = res.choices[0].message.content;
-      return studyMaterialsSchema.parse(JSON.parse(raw));
+      return studyMaterialsSchema.parse(normalizeStudyMaterials(JSON.parse(raw)));
     },
     { agentName: 'Study Materials Generator', maxRetries: 2 }
   );
