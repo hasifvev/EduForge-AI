@@ -67,7 +67,7 @@ app.get('/api/health', (_req, res) => {
     status: 'ok',
     mode: DEMO_MODE ? 'DEMO' : 'LIVE',
     model: DEMO_MODE ? 'demo-cache' : LIVE_MODEL,
-    provider: DEMO_MODE ? 'none (demo)' : AI_PROVIDER === 'groq' ? 'Groq' : 'OpenAI',
+    provider: DEMO_MODE ? 'none (demo)' : AI_PROVIDER === 'groq' ? 'Groq' : AI_PROVIDER === 'custom' ? 'Custom OpenAI-compatible' : 'OpenAI',
     agents: 5,
     timestamp: new Date().toISOString(),
   });
