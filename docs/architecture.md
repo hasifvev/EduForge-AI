@@ -6,7 +6,7 @@
 
 ## Overview
 
-EduForge AI is a **multi-agent AI pipeline** where each agent has a single, well-defined responsibility. Agents run **sequentially** — each agent receives the output of all previous agents as context, building progressively richer understanding of the lesson.
+EduForge AI is a **multi-agent AI pipeline** where each named agent has a single, well-defined responsibility. Curriculum Intelligence and Experience Designer run first; content, study materials, and teaching insights then run in parallel; Lesson Evaluator runs after the required outputs are available.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -396,32 +396,46 @@ window.parent.postMessage({
 
 ---
 
-## Demo Mode Architecture
+## Runtime Modes and Providers
 
 ```
-DEMO_MODE=true (default)
-  │
-  ├─ /api/generate request arrives
-  ├─ 2.5s artificial delay (animation plays)
-  ├─ Check country/language hint:
-  │     Malaysia / Bahasa Melayu → DEMO_RESPONSES.malaysia
-  │     United Kingdom           → DEMO_RESPONSES.uk
-  │     Everything else          → DEMO_RESPONSES.universal
-  └─ Return pre-built response (no AI call)
+DEMO_MODE=true
+  └─ Cached demo responses; uploaded/extracted source text can use source-preview mode
 
 DEMO_MODE=false
-  └─ Full 5-agent pipeline runs via the OpenAI API
+  └─ Full five-stage workflow via one configured provider:
+       OpenAI | Groq | custom OpenAI-compatible endpoint
 ```
+
+The custom provider path uses `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL`. Provider secrets are server-only environment variables.
+
+## Curriculum and Learning Atlas
+
+The frontend maintains a grade-aware planning catalog for Malaysia, United States, United Kingdom, Australia, Singapore, India, and International/IB. It selects early-years, primary, lower-secondary, or upper-secondary subjects and starter topics from the selected grade.
+
+Study-material output contains a nested Learning Atlas:
+
+```
+lesson core
+  -> learning strand
+    -> key concept
+      -> practice skill
+```
+
+Nodes may contain a description, learning goal, example, and quick-check question. The interface renders a focus-first atlas: a high-level strand overview followed by the selected concept and practice pathway.
 
 ---
 
-## Security Notes
+## Ingestion and Security Notes
 
-- `.env` is in `.gitignore` — API keys never committed
-- CORS restricted to `FRONTEND_URL` env variable
-- File upload: max 4MB, only PDF + TXT allowed
-- No user data stored server-side — stateless pipeline
-- All AI output validated through Zod before returning to client
+- `.env` is ignored; API keys must remain server-only.
+- Uploads are limited to 4 MB and accept PDF, TXT, PNG, JPG, and WEBP.
+- Public URL ingestion supports HTML, text, PDF, and images up to 2 MB; private-network targets and unsafe redirects are rejected.
+- Uploaded/source text is bounded and wrapped as untrusted material before curriculum prompting.
+- HTML used by print/download views is escaped before insertion.
+- API requests are rate-limited. The deployed CORS policy allows configured local/custom origins and Vercel deployment origins.
+- No user lesson content is persisted by this application; the runtime is stateless.
+- Structured agent output is parsed through Zod before it reaches the client.
 
 ---
 

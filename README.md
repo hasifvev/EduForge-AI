@@ -1,248 +1,152 @@
-# EduForge AI 🎓
+# EduForge AI
 
-> **The AI Teaching Operating System** — Any teacher, any subject, any country.
-> Built for OpenAI Build Week 2026 🏆
+> An AI teaching workspace that turns a curriculum-aligned lesson brief into an interactive lesson package.
 
-[![OpenAI Build Week](https://img.shields.io/badge/OpenAI-Build%20Week%202026-412991?style=flat-square)](https://openai.devpost.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Demo Mode](https://img.shields.io/badge/Demo-No%20API%20Key%20Required-22c55e?style=flat-square)](#demo-mode)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Try%20EduForge%20AI-2563eb?style=flat-square)](https://edu-forge-ai-weld.vercel.app)
+Built for OpenAI Build Week 2026. Live app: [edu-forge-ai-weld.vercel.app](https://edu-forge-ai-weld.vercel.app)
 
-**Live demo:** [edu-forge-ai-weld.vercel.app](https://edu-forge-ai-weld.vercel.app)
+## What It Does
 
----
+EduForge creates a lesson package from a subject, grade/year, topic, country/region, language, learner profile, and optional source material. The package includes:
 
-## The Problem
+- Interactive multiple-choice quiz and matching activity
+- Printable worksheet and answer key
+- Study notes, flashcards, cloze passage, mock exam, and study schedule
+- A four-level Learning Atlas: lesson core -> learning strand -> concept -> practice skill
+- Teaching insights and a Bloom's-taxonomy self-evaluation
 
-Teachers worldwide spend **2–3 hours per lesson** manually creating quizzes, worksheets, and activities. That's time stolen from actual teaching.
+The generation flow has five named agent stages: Curriculum Intelligence, Experience Designer, Content Generator, Teacher Assistant, and Lesson Evaluator. Some stages make parallel model calls; the health endpoint reports the five product-level agent stages.
 
-EduForge AI gives it back — **in under 60 seconds**.
+## Curriculum and Grade Support
 
----
+The interface has grade-aware subject and topic paths for these currently supported regions:
 
-## The Solution
+| Region | Framework shown in app | Early-years entry |
+|---|---|---|
+| Malaysia | KSPK, KSSR Semakan 2017, KSSM | Prasekolah |
+| United States | State standards / NGSS | Kindergarten |
+| United Kingdom | National Curriculum for England | Reception |
+| Australia | Australian Curriculum v9.0 | Foundation |
+| Singapore | Singapore MOE Syllabus | Nursery / Kindergarten |
+| India | NCF-SE 2023 / CBSE | Pre-primary |
+| International / IB | IB PYP / MYP / DP | Early Years |
 
-A **5-agent AI pipeline** that thinks like a master teacher:
+The catalog changes available subjects and starter lesson pathways by learning stage: early years, primary, lower secondary, and upper secondary. It is a teacher-facing planning guide, not a replacement for a school, board, or state syllabus. Each supported region exposes an official curriculum-guide link in the form. See [curriculum sources](docs/curriculum-sources.md).
 
-```
-Teacher describes lesson topic
-        ↓
-🧠 Agent 1 — Curriculum Intelligence
-   Analyses objectives, detects misconceptions, aligns to curriculum
-        ↓
-🎨 Agent 2 — Experience Designer
-   Chooses optimal learning strategy (quiz-first vs. matching-first)
-   Explains pedagogical reasoning with confidence score
-        ↓
-✏️ Agent 3 — Content Generator
-   Creates questions, matching pairs, worksheet items
-   Calibrated to student persona (Beginner → Gifted & Talented)
-        ↓
-💡 Agent 4 — Teacher Assistant
-   Teaching tips, real-life examples, intervention strategy
-   Differentiation notes, time estimates
-        ↓
-⭐ Agent 5 — Lesson Evaluator (NEW)
-   AI reviews its own work — Bloom's Taxonomy scoring
-   Returns A/B/C/D grade + improvement suggestion
-        ↓
-Teacher gets 6 classroom-ready resources in one click
-```
+## Languages
 
----
+Quick chips provide common languages, and the **Any language** control accepts a custom language name. The underlying model is asked to generate in the language entered by the teacher; quality and script coverage depend on the configured provider and should be reviewed before class.
 
-## What You Get
+## Source Material Ingestion
 
-| Resource | Description |
-|----------|-------------|
-| 🎯 **Interactive MCQ Quiz** | 8–10 multiple-choice questions with instant feedback |
-| 🧩 **Drag-and-Drop Matching** | Vocabulary/concept matching game with touch support |
-| 📄 **Printable Worksheet** | Fill-in-the-blank activity, classroom-ready |
-| 🔑 **Answer Key** | Complete answers for teacher use |
-| 💡 **AI Teaching Insights** | Misconceptions, tips, examples, intervention strategy |
-| ⭐ **Lesson Quality Score** | Bloom's-aligned self-evaluation (Agent 5) |
+| Input | Limit | Handling |
+|---|---:|---|
+| Upload | 4 MB | PDF, TXT, PNG, JPG, WEBP |
+| Public link | 2 MB remote response | PDF, TXT, image, or public web page |
 
----
+Text is capped before it enters the model pipeline. Public links are checked for private-network targets and redirect destinations before they are fetched. Teachers should still verify that a source is appropriate for their class.
 
-## Global Support
-
-EduForge AI works for **any teacher, anywhere in the world**:
-
-| Country | Curriculum |
-|---------|-----------|
-| 🇲🇾 Malaysia | KSSR / KSSM |
-| 🇺🇸 United States | Common Core |
-| 🇬🇧 United Kingdom | National Curriculum (KS1–KS5) |
-| 🇦🇺 Australia | Australian Curriculum |
-| 🇸🇬 Singapore | MOE Singapore |
-| 🇮🇳 India | CBSE / ICSE |
-| 🌍 International | IB / Cambridge |
-
-**Student Personas:** Beginner · Mixed Ability · On-Level · Gifted & Talented · SEN Support
-
-**Languages:** English · Bahasa Melayu · Mandarin · French · Spanish · Arabic · Tamil · Hindi
-
----
-
-## Tech Stack
-
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Frontend | React 18 + Vite | UI framework |
-| Styling | Vanilla CSS | Design system |
-| Backend | Node.js + Express | API server |
-| AI Provider | OpenAI API | `gpt-4.1-mini` in live mode; cached responses in demo mode |
-| Validation | Zod | Schema validation for all 5 agents |
-| File Upload | multer + pdf-parse | PDF/TXT lesson extraction |
-
----
-
-## Quick Start
-
-### Option A — Demo Mode (No API Key Needed)
+## Run Locally
 
 ```bash
-git clone https://github.com/your-username/EduForge-AI.git
-cd EduForge-AI
+# Install frontend and backend dependencies
+cd frontend && npm install
+cd ../backend && npm install
 
-# Backend
-cd backend && npm install && node server.js
+# Terminal 1: backend
+node server.js
 
-# Frontend (new terminal)
-cd frontend && npm install && npm run dev
-
-# Open http://localhost:5173
-# DEMO_MODE is on by default — no API key needed!
+# Terminal 2: frontend
+cd ../frontend && npm run dev
 ```
 
-### Option B — Live Mode (OpenAI API)
+Open `http://localhost:5173`.
 
-```bash
-# 1. Create a project API key at https://platform.openai.com/api-keys
-# 2. Copy the example env file
-cp .env.example .env
+## AI Provider Configuration
 
-# 3. Edit .env and add your key:
-OPENAI_API_KEY=your_openai_project_key
+`DEMO_MODE` defaults to `true`. Set it to `false` only when a provider is configured.
+
+### OpenAI
+
+```dotenv
 DEMO_MODE=false
-
-# 4. Start both servers (same as above)
+AI_PROVIDER=openai
+OPENAI_API_KEY=your_project_key
+OPENAI_MODEL=gpt-4.1-mini
 ```
 
----
+### Groq
+
+```dotenv
+DEMO_MODE=false
+AI_PROVIDER=groq
+GROQ_API_KEY=your_key
+GROQ_MODEL=llama-3.3-70b-versatile
+```
+
+### OpenAI-compatible provider
+
+```dotenv
+DEMO_MODE=false
+AI_PROVIDER=custom
+AI_API_KEY=your_key
+AI_BASE_URL=https://provider.example/v1
+AI_MODEL=provider-model-id
+AI_MAX_TOKENS=4096
+```
+
+Never commit keys or place them in frontend variables. In Vercel, configure the same variables for the intended Production and Preview environments.
 
 ## Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `DEMO_MODE` | `true` | Set `false` to use live AI |
-| `OPENAI_API_KEY` | — | OpenAI project API key for live mode |
-| `OPENAI_MODEL` | `gpt-4.1-mini` | Model used in live mode |
-| `PORT` | `3001` | Backend server port |
-| `FRONTEND_URL` | `http://localhost:5173` | CORS allowed origin |
+| Variable | Purpose |
+|---|---|
+| `DEMO_MODE` | `true` uses cached demo responses; `false` enables the configured provider |
+| `AI_PROVIDER` | `openai`, `groq`, or `custom` |
+| `OPENAI_API_KEY`, `OPENAI_MODEL` | OpenAI provider configuration |
+| `GROQ_API_KEY`, `GROQ_MODEL` | Groq provider configuration |
+| `AI_API_KEY`, `AI_BASE_URL`, `AI_MODEL`, `AI_MAX_TOKENS` | Custom OpenAI-compatible provider configuration |
+| `PORT` | Backend port; defaults to `3001` |
+| `FRONTEND_URL` | Additional allowed frontend origin |
+| `ALLOW_VERCEL_PREVIEWS` | Enables Vercel preview-origin support when set to `true` |
 
----
+## API
 
-## Demo Mode
+See [API reference](docs/api.md) for the current endpoints and payloads.
 
-EduForge AI ships with **3 pre-built demo scenarios** — no API key required:
+- `GET /api/health`
+- `POST /api/extract`
+- `POST /api/extract-url`
+- `POST /api/generate`
+- `POST /api/analyze-performance`
 
-| Demo | Subject | Country | Curriculum |
-|------|---------|---------|-----------|
-| Universal | States of Matter (Science, Grade 5) | USA | Common Core |
-| Malaysia | Keadaan Jirim (Sains, Tahun 4) | Malaysia | KSSR |
-| UK | The Norman Conquest (History, Year 8) | UK | KS3 |
+## Project Layout
 
-Demo is automatically selected based on country chip selection.
-
-The deployed judge demo intentionally uses these cached responses so every feature can be explored without API billing or quota risk. Live mode is optional and requires an OpenAI Platform project with API billing enabled.
-
----
-
-## API Reference
-
-See [`docs/api.md`](docs/api.md) for full endpoint documentation.
-
-**Quick Reference:**
-
-```
-GET  /api/health         — Server status + mode
-POST /api/generate       — Main generation endpoint (5-agent pipeline)
-POST /api/extract        — Extract text from uploaded PDF/TXT
-POST /api/analyze-performance — Analyze quiz results
-```
-
----
-
-## Project Structure
-
-```
-EduForge-AI/
-├── backend/
-│   ├── agents/
-│   │   ├── curriculumIntelligence.js  # Agent 1 — Blueprint
-│   │   ├── experienceDesigner.js      # Agent 2 — Strategy
-│   │   ├── contentGenerator.js        # Agent 3 — Content
-│   │   ├── teacherAssistant.js        # Agent 4 — Insights
-│   │   └── lessonEvaluator.js         # Agent 5 — Quality Score
-│   ├── demo/
-│   │   └── demoCache.js               # 3 pre-built demo scenarios
-│   ├── utils/
-│   │   ├── retry.js                   # Exponential backoff retry
-│   │   ├── fileParser.js              # PDF/TXT extraction
-│   │   └── worksheetBuilder.js        # HTML worksheet generator
-│   ├── validators/
-│   │   └── schemas.js                 # Zod schemas for all 5 agents
-│   ├── openai.js                      # OpenAI API client
-│   └── server.js                      # Express API server
-├── frontend/
-│   ├── public/
-│   │   └── engines/
-│   │       ├── quiz-engine.js         # Self-contained MCQ game
-│   │       └── matching-engine.js     # Drag-and-drop matching game
-│   └── src/
-│       ├── components/
-│       │   ├── AIRationale.jsx        # Pedagogical reasoning panel
-│       │   ├── LessonQualityScore.jsx # Agent 5 score display
-│       │   ├── TeachingInsights.jsx   # Accordion insights panel
-│       │   ├── GenerationProgress.jsx # 5-agent progress screen
-│       │   ├── GamePreview.jsx        # Game modal wrapper
-│       │   └── FileUploadZone.jsx     # Drag-drop file upload
-│       ├── pages/
-│       │   ├── Home.jsx               # Main form with country/persona
-│       │   └── Dashboard.jsx          # Results + Magic Moment reveal
-│       ├── hooks/
-│       │   └── useGeneration.js       # API call + 5-step progress
-│       ├── context/
-│       │   └── LanguageContext.jsx    # EN/BM language switcher
-│       └── i18n/
-│           └── translations.js        # EN + BM full translations
-└── docs/
-    ├── architecture.md                # System design + data flow
-    ├── api.md                         # API endpoint reference
-    ├── agents.md                      # Each agent's prompt + output spec
-    └── codex-log.md                   # Codex contribution log
+```text
+backend/
+  agents/                 Five generation stages
+  demo/                   Cached scenarios and source-preview mode
+  utils/                  Parsing, URL safety, prompt safety, worksheets
+  validators/             Request and response schemas
+frontend/
+  src/components/         Learning Atlas, games, notes, schedules, exams
+  src/utils/              Grade-aware curriculum catalog and mappings
+docs/
+  api.md                  Current API contract
+  architecture.md         System architecture
+  curriculum-sources.md   Official curriculum source register
+  codex-log.md            Build history
 ```
 
----
+## Verification
 
-## Documentation
+Run the frontend build:
 
-| Doc | Description |
-|-----|-------------|
-| [Architecture](docs/architecture.md) | System design, data flow, agent pipeline diagram |
-| [API Reference](docs/api.md) | All endpoints, request/response schemas |
-| [Agent Guide](docs/agents.md) | Each agent's role, prompt design, output spec |
-| [Codex Log](docs/codex-log.md) | Game engines and infrastructure built by Codex |
+```bash
+npm run build
+```
 
----
+The curriculum catalog is validated against all supported locale, region, grade, subject, topic, and material-search combinations. Production health is available at `/api/health`.
 
-## Hackathon Context
+## Responsible Use
 
-**Event:** OpenAI Build Week 2026 — Education Track
-**Deadline:** July 21, 2026
-**Key Innovation:** AI self-evaluation (Agent 5 reviews Agents 1–4's work)
-
----
-
-*EduForge AI — Built with Codex and GPT-5.6 during development · OpenAI Build Week 2026 · For teachers worldwide*
+EduForge generates draft teaching resources. Teachers must check curriculum alignment, factual accuracy, cultural fit, accessibility, and assessment suitability before classroom use.
