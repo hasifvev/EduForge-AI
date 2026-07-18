@@ -6,7 +6,7 @@
 
 **Architecture:** Apply defense-in-depth in small vertical slices: dependency hygiene first, backend request protection second, AI prompt boundary hardening third, and frontend print-output escaping fourth. Keep demo mode working after each task and verify with targeted endpoint/build checks.
 
-**Tech Stack:** Node.js, Express, React 18, Vite, Zod, Groq-compatible OpenAI SDK, Vercel serverless.
+**Tech Stack:** Node.js, Express, React 18, Vite, Zod, OpenAI SDK, Vercel serverless.
 
 ---
 

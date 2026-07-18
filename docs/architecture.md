@@ -410,7 +410,7 @@ DEMO_MODE=true (default)
   └─ Return pre-built response (no AI call)
 
 DEMO_MODE=false
-  └─ Full 5-agent pipeline runs via Groq API
+  └─ Full 5-agent pipeline runs via the OpenAI API
 ```
 
 ---
@@ -419,7 +419,7 @@ DEMO_MODE=false
 
 - `.env` is in `.gitignore` — API keys never committed
 - CORS restricted to `FRONTEND_URL` env variable
-- File upload: max 10MB, only PDF + TXT allowed
+- File upload: max 4MB, only PDF + TXT allowed
 - No user data stored server-side — stateless pipeline
 - All AI output validated through Zod before returning to client
 

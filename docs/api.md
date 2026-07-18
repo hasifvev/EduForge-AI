@@ -31,14 +31,15 @@ Check server status, mode, and capabilities.
   "service": "EduForge AI — The AI Teaching Operating System",
   "mode": "DEMO",
   "agents": 5,
-  "model": "GPT-5.6 (Groq)",
+  "model": "demo-cache",
+  "provider": "none (demo)",
   "timestamp": "2026-07-16T16:21:06.000Z"
 }
 ```
 
 **Mode values:**
 - `DEMO` — running on pre-built cached responses, no API key needed
-- `LIVE` — making real Groq API calls
+- `LIVE` — making real OpenAI API calls using `OPENAI_MODEL`
 
 ---
 
@@ -294,8 +295,7 @@ Analyze quiz performance data sent from the game engine.
 
 ## Rate Limits
 
-In demo mode: no limits.
-In live mode (Groq free tier): ~30 requests/minute.
+Demo mode is rate-limited to 60 requests per minute per IP. Live mode is rate-limited to 20 requests per minute per IP.
 
 ---
 

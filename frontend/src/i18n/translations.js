@@ -18,7 +18,7 @@ export const translations = {
     upload_limit_notice: '{name} is above the 4 MB upload limit.',
     upload_limit_search: 'Search for material',
     field_material_link: 'Material link (reference only)',
-    material_link_placeholder: 'Saved with the lesson; link content is not imported',
+    material_link_placeholder: 'For your reference only; linked content is not imported',
 
     // Form fields
     field_country: 'Country / Region',
@@ -168,7 +168,7 @@ export const translations = {
     error_upload: 'File upload failed. Please try again.',
 
     // Footer
-    footer: 'Built with GPT-5.6 + Codex · OpenAI Build Week 2026 · Designed for teachers worldwide',
+    footer: 'Built with Codex and GPT-5.6 · OpenAI Build Week 2026 · Designed for teachers worldwide',
   },
 
   bm: {
@@ -336,6 +336,6 @@ export const translations = {
     error_upload: 'Muat naik fail gagal. Sila cuba lagi.',
 
     // Footer
-    footer: 'Dibina dengan GPT-5.6 + Codex · OpenAI Build Week 2026 · Direka untuk guru di seluruh dunia',
+    footer: 'Dibina dengan Codex dan GPT-5.6 · OpenAI Build Week 2026 · Direka untuk guru di seluruh dunia',
   },
 };

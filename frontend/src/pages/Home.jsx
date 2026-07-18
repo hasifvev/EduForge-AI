@@ -56,8 +56,7 @@ export default function Home() {
     }
     setFormError('');
     const lang = form.language || t.languages[0];
-    const objectives = [form.objectives, form.materialUrl ? 'Teacher reference material URL: ' + form.materialUrl : ''].filter(Boolean).join('\n');
-    generate({ ...form, objectives, language: lang, file });
+    generate({ ...form, language: lang, file });
   }, [form, file, generate, t]);
 
   const materialSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent([form.subject, form.year, form.topic, 'teaching material PDF'].filter(Boolean).join(' '));

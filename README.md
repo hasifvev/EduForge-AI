@@ -118,7 +118,7 @@ cd frontend && npm install && npm run dev
 ### Option B — Live Mode (OpenAI API)
 
 ```bash
-# 1. Get a free API key at https://console.groq.com
+# 1. Create a project API key at https://platform.openai.com/api-keys
 # 2. Copy the example env file
 cp .env.example .env
 
@@ -154,6 +154,8 @@ EduForge AI ships with **3 pre-built demo scenarios** — no API key required:
 | UK | The Norman Conquest (History, Year 8) | UK | KS3 |
 
 Demo is automatically selected based on country chip selection.
+
+The deployed judge demo intentionally uses these cached responses so every feature can be explored without API billing or quota risk. Live mode is optional and requires an OpenAI Platform project with API billing enabled.
 
 ---
 
@@ -191,7 +193,7 @@ EduForge-AI/
 │   │   └── worksheetBuilder.js        # HTML worksheet generator
 │   ├── validators/
 │   │   └── schemas.js                 # Zod schemas for all 5 agents
-│   ├── openai.js                      # Groq API client
+│   ├── openai.js                      # OpenAI API client
 │   └── server.js                      # Express API server
 ├── frontend/
 │   ├── public/
@@ -243,4 +245,4 @@ EduForge-AI/
 
 ---
 
-*EduForge AI — Built with GPT-5.6 + Codex · OpenAI Build Week 2026 · For teachers worldwide*
+*EduForge AI — Built with Codex and GPT-5.6 during development · OpenAI Build Week 2026 · For teachers worldwide*
