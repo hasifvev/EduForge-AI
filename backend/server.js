@@ -14,6 +14,7 @@ import { runLessonEvaluator } from './agents/lessonEvaluator.js';
 import { runStudyMaterialsGenerator } from './agents/studyMaterialsGenerator.js';
 import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
+import { buildSourcePreview } from './demo/sourcePreview.js';
 import { generateRequestSchema, performanceRequestSchema, parseRequest } from './validators/requestSchemas.js';
 
 const app = express();
@@ -74,9 +75,9 @@ app.get('/api/health', (_req, res) => {
 // ─── File Extraction ──────────────────────────────────────────────────────────
 app.post('/api/extract', upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded.' });
-  const allowed = ['application/pdf', 'text/plain'];
+  const allowed = ['application/pdf', 'text/plain', 'image/png', 'image/jpeg', 'image/webp'];
   if (!allowed.includes(req.file.mimetype)) {
-    return res.status(400).json({ error: 'Only PDF and TXT files are supported.' });
+    return res.status(400).json({ error: 'Only PDF, TXT, PNG, JPG, and WEBP files are supported.' });
   }
   try {
     const text = await extractFileText(req.file);
@@ -119,6 +120,14 @@ app.post('/api/generate', async (req, res) => {
   if (DEMO_MODE) {
     console.log(`\n🎭 [DEMO] ${subject} ${year} — ${topic} (${country || 'International'})`);
     await new Promise(r => setTimeout(r, 2500)); // let animation play
+
+    if (extractedText) {
+      return res.json({
+        ...buildSourcePreview({ subject, year, topic, country, language, studentPersona, extractedText }),
+        generation_id: `edf_source_${Date.now()}`,
+        created_at: new Date().toISOString(),
+      });
+    }
 
     const demo = selectMatchingDemo({ subject, year, topic, country, language });
     if (!demo) {

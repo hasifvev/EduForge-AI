@@ -1,4 +1,5 @@
 import pdfParse from 'pdf-parse/lib/pdf-parse.js';
+import { extractImageText } from './imageParser.js';
 
 const MAX_EXTRACTED_TEXT_CHARS = 6000;
 
@@ -21,6 +22,10 @@ export async function extractFileText(file) {
   if (file.mimetype === 'application/pdf') {
     const data = await pdfParse(file.buffer);
     return limitExtractedText(data.text);
+  }
+
+  if (['image/png', 'image/jpeg', 'image/webp'].includes(file.mimetype)) {
+    return limitExtractedText(await extractImageText(file.buffer));
   }
 
   throw new Error(`Unsupported file type: ${file.mimetype}`);

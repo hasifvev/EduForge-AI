@@ -1,6 +1,7 @@
 import dns from 'node:dns/promises';
 import net from 'node:net';
 import { extractFileText } from './fileParser.js';
+import { extractImageText } from './imageParser.js';
 
 const MAX_REMOTE_BYTES = 2 * 1024 * 1024;
 const MAX_EXTRACTED_TEXT_CHARS = 6000;
@@ -60,8 +61,11 @@ export async function extractUrlText(value) {
   if (contentType.includes('pdf') || url.pathname.toLowerCase().endsWith('.pdf')) {
     return extractFileText({ mimetype: 'application/pdf', buffer });
   }
+  if (contentType.startsWith('image/')) {
+    return extractImageText(buffer);
+  }
   if (!contentType.includes('text/') && !contentType.includes('html')) {
-    throw new Error('The link must point to a PDF, TXT, or public web page.');
+    throw new Error('The link must point to a PDF, TXT, image, or public web page.');
   }
   const text = htmlToText(buffer.toString('utf8'));
   if (text.length < 20) throw new Error('The linked page does not contain readable lesson text.');

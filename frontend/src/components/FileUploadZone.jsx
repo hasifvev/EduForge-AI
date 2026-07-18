@@ -26,8 +26,8 @@ export default function FileUploadZone({ onFileSelect, onFileTooLarge, selectedF
   const handleChange = (e) => selectFile(e.target.files[0]);
 
   const isValid = (file) => {
-    const allowed = ['application/pdf', 'text/plain'];
-    return allowed.includes(file.type) || file.name.endsWith('.txt') || file.name.endsWith('.pdf');
+    const allowed = ['application/pdf', 'text/plain', 'image/png', 'image/jpeg', 'image/webp'];
+    return allowed.includes(file.type) || file.name.endsWith('.txt') || file.name.endsWith('.pdf') || file.name.endsWith('.png') || file.name.endsWith('.jpg') || file.name.endsWith('.jpeg') || file.name.endsWith('.webp');
   };
 
   return (
@@ -44,7 +44,7 @@ export default function FileUploadZone({ onFileSelect, onFileTooLarge, selectedF
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,.txt"
+        accept=".pdf,.txt,.png,.jpg,.jpeg,.webp"
         onChange={handleChange}
         style={{ display: 'none' }}
       />

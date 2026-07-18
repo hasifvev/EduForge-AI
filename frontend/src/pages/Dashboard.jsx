@@ -34,7 +34,7 @@ export default function Dashboard({ result, onReset }) {
   const {
     lesson, resources, teaching_insights,
     lesson_evaluation, analytics, study_materials,
-    generation_id, created_at,
+    generation_id, created_at, source_preview, source_notice,
     subject, year, topic, country, studentPersona,
   } = result;
 
@@ -112,6 +112,8 @@ export default function Dashboard({ result, onReset }) {
           <button className="new-lesson-btn" onClick={onReset} id="new-lesson-btn">{t.new_lesson_btn}</button>
         </div>
       </div>
+
+      {source_preview && source_notice && <div className="source-preview-notice">{source_notice}</div>}
 
       {/* ── Analytics Bar ───────────────────────────────────────────────── */}
       {analytics && visibleCards >= 1 && (
