@@ -108,7 +108,8 @@ export default function Home() {
           {DEMO_SCENARIOS.map((scenario) => (
             <button key={scenario.id} type="button" className="demo-scenario-btn" onClick={() => loadDemoScenario(scenario)}>{t.demo_scenarios[scenario.id]}</button>
           ))}
-        </div>      </section>
+        </div>
+      </section>
 
       {/* ── Form ────────────────────────────────────────────────────────── */}
       <section className="form-section">
@@ -159,7 +160,8 @@ export default function Home() {
             )}
             {selectedCountry && form.subject && form.year && curriculumMapping.framework && (
               <div className="curriculum-map">{curriculumMapping.framework} · {curriculumMapping.subject} · {curriculumMapping.grade}</div>
-            )}            {!selectedCountry && (
+            )}
+            {!selectedCountry && (
               <input
                 className="field-input field-input-sm"
                 placeholder={t.country_other}
@@ -266,8 +268,19 @@ export default function Home() {
             />
           </div>
 
-          {formError && <div className="form-error">{formError}</div>}
-          {error && <div className="form-error">{t.error_generate}</div>}
+          {formError && <div className="form-error" role="alert">{formError}</div>}
+          {error && (
+            <div className="form-error" role="alert">
+              <div>{error}</div>
+              {error.includes('Demo mode only') && (
+                <div className="demo-error-actions">
+                  {DEMO_SCENARIOS.map((scenario) => (
+                    <button key={scenario.id} type="button" onClick={() => loadDemoScenario(scenario)}>{t.demo_scenarios[scenario.id]}</button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <button type="submit" className="generate-btn" id="generate-btn">
             <span className="generate-btn-icon">✦</span>
