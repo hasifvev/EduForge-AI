@@ -19,13 +19,16 @@ Rules:
    - Gifted: higher-order thinking, evaluation and synthesis questions
    - SEN Support: simple language, visual cues in question text, clear formatting
 6. Use real-life examples from the teacher's country/region
-7. Follow the exact resource counts requested in the user prompt`;
+7. Worksheet items must progress from recall to application and use the named curriculum framework only as a practice alignment, never as an official examination.
+8. Follow the exact resource counts requested in the user prompt`;
 
 const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => {
   const compactLive = process.env.DEMO_MODE === 'false';
-  const questionCount = compactLive ? 5 : 10;
-  const pairCount = compactLive ? 4 : 8;
-  const worksheetCount = compactLive ? 4 : 8;
+  // Keep live lessons substantial enough for a complete classroom activity.
+  // These counts remain within one structured response, so they do not add API calls.
+  const questionCount = compactLive ? 10 : 12;
+  const pairCount = compactLive ? 8 : 10;
+  const worksheetCount = compactLive ? 8 : 10;
   return `
 Create educational game content for this lesson.
 
@@ -66,9 +69,9 @@ Return this EXACT JSON (no extra text):
   },
   "worksheet": {
     "title": "Worksheet title in ${language}",
-    "instructions": "Fill-in-the-blank instructions in ${language}",
+    "instructions": "Mixed-format, curriculum-aligned practice instructions in ${language}",
     "items": [
-      { "id": 1, "question": "Fill-in-the-blank question in ${language}", "answer": "correct answer", "hint": "optional hint" }
+      { "id": 1, "question": "Grade-appropriate practice question in ${language}", "answer": "model answer", "hint": "optional hint" }
     ]
   }
 }

@@ -1,8 +1,36 @@
+function getAssessmentProfile({ country = '', year = '', curriculumStandard = '', curriculumSource = '', subject = '' }) {
+  const context = [country, year, curriculumStandard, curriculumSource, subject].join(' ').toLowerCase();
+  const earlyYears = /(kindergarten|reception|foundation|preschool|pre-primary|nursery|prasekolah)/.test(context);
+  const primary = earlyYears || /(year [1-6]|grade [1-6]|primary|tahun [1-6]|standard [1-6])/.test(context);
+
+  if (/malaysia|kssr|kssm/.test(context)) {
+    return { framework: earlyYears ? 'KSPK' : primary ? 'KSSR / PBD' : 'KSSM / PBD', focus: earlyYears ? 'guided observation and play-based evidence' : 'knowledge, skills, and application practice' };
+  }
+  if (/united states|ngss|common core|ccss/.test(context)) {
+    return { framework: /science|ngss/.test(context) ? 'NGSS performance expectations' : 'State / Common Core-aligned practice', focus: earlyYears ? 'developmentally appropriate demonstration' : 'evidence, reasoning, and application' };
+  }
+  if (/united kingdom|england|wales|scotland|northern ireland|gcse|ks[1-5]|national curriculum/.test(context)) {
+    return { framework: earlyYears ? 'EYFS' : 'UK National Curriculum / qualification practice', focus: earlyYears ? 'observation-led learning' : 'knowledge recall, explanation, and application' };
+  }
+  if (/australia|acara|naplan/.test(context)) {
+    return { framework: earlyYears ? 'Australian Curriculum Foundation' : 'Australian Curriculum-aligned practice', focus: earlyYears ? 'play-based evidence' : 'understanding, fluency, and reasoning' };
+  }
+  if (/singapore|moe/.test(context)) {
+    return { framework: 'Singapore MOE syllabus-aligned practice', focus: earlyYears ? 'guided exploration' : 'conceptual understanding and problem solving' };
+  }
+  if (/india|cbse|ncert/.test(context)) {
+    return { framework: earlyYears ? 'Foundational Stage / NEP practice' : 'NCERT / CBSE-aligned practice', focus: earlyYears ? 'foundational skills' : 'competency-based application' };
+  }
+  if (/international baccalaureate|ib|cambridge|igcse/.test(context)) {
+    return { framework: /ib/.test(context) ? 'IB inquiry-aligned practice' : 'Cambridge curriculum-aligned practice', focus: 'conceptual understanding, inquiry, and reflection' };
+  }
+  return { framework: curriculumStandard || curriculumSource || 'Teacher-selected curriculum framework', focus: 'grade-appropriate recall, explanation, and application' };
+}
 /**
  * Build printable worksheet and answer key HTML.
  * Bilingual support: English + Bahasa Melayu.
  */
-export function buildWorksheet({ blueprint, gameContent, subject, year, topic, language }) {
+export function buildWorksheet({ blueprint, gameContent, subject, year, topic, language, country, curriculumStandard }) {
   const isBM = language?.toLowerCase().includes('melayu') || language?.toLowerCase() === 'bm';
 
   const labels = {
@@ -22,9 +50,10 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
   };
 
   const items = gameContent?.worksheet?.items || [];
+  const assessment = getAssessmentProfile({ country, year, curriculumStandard, curriculumSource: blueprint?.curriculum_source, subject });
   const objectives = blueprint?.objectives || [];
   const title = gameContent?.worksheet?.title || `${topic} — ${labels.worksheet}`;
-  const instructions = gameContent?.worksheet?.instructions || '';
+  const instructions = gameContent?.worksheet?.instructions || ('Complete each item, moving from recall to application.');
 
   const worksheetHTML = `<!DOCTYPE html>
 <html lang="${isBM ? 'ms' : 'en'}">
@@ -59,6 +88,7 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
     <div class="score-box">${labels.score}: _____ / ${items.length}</div>
     <h1>${title}</h1>
     <div class="meta">${labels.subject}: ${subject} | ${labels.year}: ${year}</div>
+    <div class="meta">Framework: ${assessment.framework} | Assessment focus: ${assessment.focus}</div>
     <div class="school-info">
       <div class="info-row"><span class="info-label">${labels.name}:</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-label">${labels.class}:</span><span class="info-line"></span></div>
@@ -96,6 +126,7 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
   <div class="banner">⚠ ${labels.teacherOnly}</div>
   <h1>${labels.answerKey}</h1>
   <div class="meta">${labels.subject}: ${subject} | ${labels.year}: ${year} | ${labels.topic}: ${topic}</div>
+  <div class="meta">Framework: ${assessment.framework} | Assessment focus: ${assessment.focus}</div>
   ${items.map((item, i) => `
   <div class="answer-item">
     <span class="num">${i + 1}.</span>

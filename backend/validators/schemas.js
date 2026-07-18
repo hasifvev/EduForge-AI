@@ -57,18 +57,18 @@ export const gameContentSchema = z.object({
   quiz: z.object({
     type: z.literal('mcq'),
     title: z.string(),
-    questions: z.array(questionSchema).min(5).max(15),
+    questions: z.array(questionSchema).min(8).max(15),
   }),
   matching: z.object({
     type: z.literal('drag_drop'),
     title: z.string(),
     instruction: z.string(),
-    pairs: z.array(pairSchema).min(4).max(12),
+    pairs: z.array(pairSchema).min(6).max(15),
   }),
   worksheet: z.object({
     title: z.string(),
     instructions: z.string(),
-    items: z.array(worksheetItemSchema).min(4).max(15),
+    items: z.array(worksheetItemSchema).min(6).max(15),
   }).optional(),
 });
 

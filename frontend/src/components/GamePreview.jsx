@@ -70,6 +70,15 @@ function buildQuizHTML(engineConfig) {
 </html>`;
 }
 
+function buildMemoryHTML(engineConfig) {
+  const configJson = JSON.stringify(engineConfig);
+  return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>' +
+    engineConfig.title +
+    '</title><style>' + GAME_STYLES +
+    '</style></head><body><div id="matching-app"></div><script src="' + window.location.origin +
+    '/engines/memory-engine.js"></script><script>EduForgeMemory.init(' + configJson +
+    ');</script></body></html>';
+}
 function buildMatchingHTML(engineConfig) {
   const configJson = JSON.stringify(engineConfig);
   return `<!DOCTYPE html>
@@ -94,7 +103,9 @@ export default function GamePreview({ type, engineConfig, onClose }) {
 
   const html = type === 'quiz'
     ? buildQuizHTML(engineConfig)
-    : buildMatchingHTML(engineConfig);
+    : type === 'memory'
+      ? buildMemoryHTML(engineConfig)
+      : buildMatchingHTML(engineConfig);
 
   const blob = new Blob([html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
@@ -104,7 +115,7 @@ export default function GamePreview({ type, engineConfig, onClose }) {
       <div className="preview-modal">
         <div className="preview-toolbar">
           <span className="preview-label">
-            {type === 'quiz' ? '🎯' : '🧩'} {engineConfig.title}
+            {type === 'quiz' ? '🎯' : type === 'memory' ? '🧠' : '🧩'} {engineConfig.title}
           </span>
           <div className="preview-actions">
             <button className="preview-btn" onClick={() => setIsFullscreen(f => !f)}>

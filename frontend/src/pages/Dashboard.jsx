@@ -11,7 +11,7 @@ import ClozePassage from '../components/ClozePassage.jsx';
 import MindMap from '../components/MindMap.jsx';
 import StudySchedule from '../components/StudySchedule.jsx';
 
-const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', worksheet: '📄', answer_key: '🔑' };
+const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', memory: '🧠', worksheet: '📄', answer_key: '🔑' };
 
 function downloadHTML(html, filename) {
   const blob = new Blob([html], { type: 'text/html' });
@@ -45,7 +45,7 @@ export default function Dashboard({ result, onReset }) {
 
   // Magic Moment: reveal cards one by one
   useEffect(() => {
-    const total = 7; // analytics + 4 resource cards + quality + rationale
+    const total = 8; // analytics + 5 resource cards + quality + rationale
     let i = 0;
     const timer = setInterval(() => {
       i++;
@@ -69,9 +69,15 @@ export default function Dashboard({ result, onReset }) {
       description: lesson?.experience_design?.matching_focus,
     },
     {
+      key: 'memory', label: 'Memory Match', icon: RESOURCE_ICONS.memory,
+      count: resources.matching?.data?.pairs?.length, countLabel: t.pairs_count,
+      hasGame: true, gameType: 'memory', engineConfig: resources.matching?.engineConfig, html: null,
+      description: 'A second game mode for reinforcing the same key vocabulary.',
+    },
+    {
       key: 'worksheet', label: t.resource_worksheet, icon: RESOURCE_ICONS.worksheet,
       hasGame: false, html: resources.worksheet?.html,
-      description: 'Printable fill-in-the-blank activity',
+      description: 'Curriculum-aligned practice, from recall to application.',
     },
     {
       key: 'answer_key', label: t.resource_answerkey, icon: RESOURCE_ICONS.answer_key,
@@ -179,7 +185,7 @@ export default function Dashboard({ result, onReset }) {
                   <button
                     className="btn-play"
                     id={`btn-play-${res.key}`}
-                    onClick={() => setPreview({ type: res.key, engineConfig: res.engineConfig })}
+                    onClick={() => setPreview({ type: res.gameType || res.key, engineConfig: res.engineConfig })}
                   >
                     ▶ {t.btn_play}
                   </button>

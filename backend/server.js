@@ -165,15 +165,21 @@ app.post('/api/generate', async (req, res) => {
     const experienceDesign = await runExperienceDesigner({ ...context, blueprint });
     agentCalls++;
 
-    // Agents 3+4 — Content, Study Materials, Teacher Assistant + Worksheet (parallel)
+    // Agents 3+4 — Content, Study Materials and Teacher Assistant (parallel)
     console.log('  [3/5] Content Generator + Study Materials + Teacher Assistant (parallel)...');
-    const [gameContent, studyMaterials, teachingInsights, { worksheetHTML, answerKeyHTML }] = await Promise.all([
+    const [gameContent, studyMaterials, teachingInsights] = await Promise.all([
       runContentGenerator({ ...context, blueprint, experienceDesign }),
       runStudyMaterialsGenerator({ ...context, blueprint }),
       runTeacherAssistant({ ...context, blueprint, experienceDesign }),
-      Promise.resolve(buildWorksheet({ blueprint, gameContent: null, subject, year, topic, language })),
+
     ]);
     agentCalls += 3;
+
+    // Rendering is local and synchronous, but must happen after content exists.
+    // Previously this ran in parallel with generation and produced blank worksheets.
+    const { worksheetHTML, answerKeyHTML } = buildWorksheet({
+      blueprint, gameContent, subject, year, topic, language, country, curriculumStandard,
+    });
 
     // Agent 5 — Lesson Evaluator
     console.log('  [5/5] Lesson Evaluator...');
