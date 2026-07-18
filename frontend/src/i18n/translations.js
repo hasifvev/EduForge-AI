@@ -54,7 +54,7 @@ export const translations = {
     step1: 'Describe your lesson topic and class',
     step2: '5 AI agents analyse, design, and build your materials',
     step3: 'AI evaluates its own work with a quality score',
-    step4: 'You get classroom-ready resources in under a minute',
+    step4: 'You get classroom-ready resources in a few minutes',
 
     // Generation Progress — cinematic messages per agent
     progress_title: 'Building Your Lesson...',
@@ -136,7 +136,7 @@ export const translations = {
     // Countries (quick-select row)
     countries: [
       { code: 'MY', name: 'Malaysia', flag: '🇲🇾', curriculum: 'KSSR / KSSM', gradeSystem: 'malaysian' },
-      { code: 'US', name: 'United States', flag: '🇺🇸', curriculum: 'Common Core', gradeSystem: 'us' },
+      { code: 'US', name: 'United States', flag: '🇺🇸', curriculum: 'State standards / NGSS', gradeSystem: 'us' },
       { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', curriculum: 'National Curriculum', gradeSystem: 'uk' },
       { code: 'AU', name: 'Australia', flag: '🇦🇺', curriculum: 'Australian Curriculum', gradeSystem: 'uk' },
       { code: 'SG', name: 'Singapore', flag: '🇸🇬', curriculum: 'MOE Singapore', gradeSystem: 'sg' },
@@ -226,7 +226,7 @@ export const translations = {
     step1: 'Nyatakan tajuk pelajaran dan kelas anda',
     step2: '5 ejen AI menganalisis, mereka bentuk, dan membina bahan anda',
     step3: 'AI menilai kerjanya sendiri dengan skor kualiti',
-    step4: 'Anda mendapat bahan siap untuk kelas dalam masa kurang seminit',
+    step4: 'Anda mendapat bahan siap untuk kelas dalam beberapa minit',
 
     // Generation Progress
     progress_title: 'Membina Pelajaran Anda...',
@@ -308,7 +308,7 @@ export const translations = {
     // Countries (same structure)
     countries: [
       { code: 'MY', name: 'Malaysia', flag: '🇲🇾', curriculum: 'KSSR / KSSM', gradeSystem: 'malaysian' },
-      { code: 'US', name: 'Amerika Syarikat', flag: '🇺🇸', curriculum: 'Common Core', gradeSystem: 'us' },
+      { code: 'US', name: 'Amerika Syarikat', flag: '🇺🇸', curriculum: 'Standard negeri / NGSS', gradeSystem: 'us' },
       { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', curriculum: 'National Curriculum', gradeSystem: 'uk' },
       { code: 'AU', name: 'Australia', flag: '🇦🇺', curriculum: 'Australian Curriculum', gradeSystem: 'uk' },
       { code: 'SG', name: 'Singapura', flag: '🇸🇬', curriculum: 'MOE Singapura', gradeSystem: 'sg' },
