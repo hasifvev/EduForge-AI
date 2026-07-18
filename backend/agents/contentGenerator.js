@@ -19,9 +19,14 @@ Rules:
    - Gifted: higher-order thinking, evaluation and synthesis questions
    - SEN Support: simple language, visual cues in question text, clear formatting
 6. Use real-life examples from the teacher's country/region
-7. Generate exactly 10 MCQ questions, exactly 8 matching pairs, exactly 8 worksheet items`;
+7. Follow the exact resource counts requested in the user prompt`;
 
-const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => `
+const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => {
+  const compactLive = process.env.DEMO_MODE === 'false';
+  const questionCount = compactLive ? 5 : 10;
+  const pairCount = compactLive ? 4 : 8;
+  const worksheetCount = compactLive ? 4 : 8;
+  return `
 Create educational game content for this lesson.
 
 Context:
@@ -68,9 +73,10 @@ Return this EXACT JSON (no extra text):
   }
 }
 
-CRITICAL: Generate exactly 10 quiz questions, exactly 8 matching pairs, exactly 8 worksheet items.
+CRITICAL: Generate exactly ${questionCount} quiz questions, exactly ${pairCount} matching pairs, exactly ${worksheetCount} worksheet items.
 Adjust all difficulty to match ${studentPersona || 'On-Level'} persona.
 Use real-world examples from ${country || 'the student context'}.`;
+};
 
 export async function runContentGenerator({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) {
   return withRetry(

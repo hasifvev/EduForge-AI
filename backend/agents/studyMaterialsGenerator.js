@@ -133,6 +133,10 @@ Rules:
 // ─── Build Prompt ─────────────────────────────────────────────────────────────
 const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, gradeBandInfo, examStyle }) => {
   const toneGuide = getGradeToneGuide(gradeBandInfo.band);
+  const compactLive = process.env.DEMO_MODE === 'false';
+  const counts = compactLive
+    ? { flashcards: 6, sections: 2, questions: 4, blanks: 3, days: 4 }
+    : { flashcards: 12, sections: 4, questions: gradeBandInfo.band === 'primary' ? 6 : 10, blanks: 6, days: 6 };
 
   return `Generate comprehensive study materials for this lesson.
 
@@ -249,13 +253,13 @@ Return this EXACT JSON structure (no extra text):
 }
 
 CRITICAL:
-- Generate exactly 12 flashcards
-- Generate exactly 4 study note sections  
-- Generate exactly ${gradeBandInfo.band === 'primary' ? '6' : '10'} mock exam questions
-- Generate exactly 6 cloze blanks
+- Generate exactly ${counts.flashcards} flashcards
+- Generate exactly ${counts.sections} study note sections
+- Generate exactly ${counts.questions} mock exam questions
+- Generate exactly ${counts.blanks} cloze blanks
 - Study map must have at least 3 branches from root
 - Every study-map node must include a concise, accurate description for the clickable topic panel
-- Study schedule must have at least 6 day entries`;
+- Study schedule must have at least ${counts.days} day entries`;
 };
 
 // ─── Main Agent ───────────────────────────────────────────────────────────────
