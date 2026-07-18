@@ -18,7 +18,8 @@ export const translations = {
     upload_limit_notice: '{name} is above the 4 MB upload limit.',
     upload_limit_search: 'Search for material',
     field_material_link: 'Material link (reference only)',
-    material_link_placeholder: 'For your reference only; linked content is not imported',
+    material_link_placeholder: 'Public PDF, TXT, or web page link',
+    material_search_label: 'Find exact curriculum material',
 
     // Form fields
     field_country: 'Country / Region',
@@ -186,7 +187,8 @@ export const translations = {
     upload_limit_notice: '{name} melebihi had muat naik 4 MB.',
     upload_limit_search: 'Cari bahan',
     field_material_link: 'Pautan bahan (rujukan sahaja)',
-    material_link_placeholder: 'Disimpan bersama pelajaran; kandungan pautan tidak diimport',
+    material_link_placeholder: 'Pautan PDF, TXT atau laman web awam',
+    material_search_label: 'Cari bahan kurikulum yang tepat',
 
     // Form fields
     field_country: 'Negara / Rantau',

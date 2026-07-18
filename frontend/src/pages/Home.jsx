@@ -4,6 +4,7 @@ import FileUploadZone from '../components/FileUploadZone.jsx';
 import GenerationProgress from '../components/GenerationProgress.jsx';
 import { useGeneration } from '../hooks/useGeneration.js';
 import Dashboard from './Dashboard.jsx';
+import { buildMaterialSearchUrl, getCurriculumMapping } from '../utils/curriculumMapping.js';
 
 const PERSONAS = [
   { id: 'Beginner', emoji: '🌱', label_key: 'persona_beginner' },
@@ -26,6 +27,7 @@ export default function Home() {
     country: '',
     curriculumStandard: '',
     studentPersona: 'On-Level',
+    materialUrl: '',
   });
   const [file, setFile] = useState(null);
   const [formError, setFormError] = useState('');
@@ -59,7 +61,8 @@ export default function Home() {
     generate({ ...form, language: lang, file });
   }, [form, file, generate, t]);
 
-  const materialSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent([form.subject, form.year, form.topic, 'teaching material PDF'].filter(Boolean).join(' '));
+  const curriculumMapping = getCurriculumMapping(selectedCountry?.code, form.subject, form.year);
+  const materialSearchUrl = buildMaterialSearchUrl({ countryCode: selectedCountry?.code, country: form.country, subject: form.subject, year: form.year, topic: form.topic });
 
   const currentGrades = selectedCountry
     ? (t.gradeSystems[selectedCountry.gradeSystem] || t.gradeSystems.us)
@@ -112,6 +115,7 @@ export default function Home() {
               onChange={set('materialUrl')}
               placeholder={t.material_link_placeholder}
             />
+            <a className="material-search-link" href={materialSearchUrl} target="_blank" rel="noreferrer">{t.material_search_label}</a>
           </div>
 
           {/* Country Quick-Select */}
@@ -138,7 +142,9 @@ export default function Home() {
                 <button type="button" className="curriculum-clear" onClick={() => { setSelectedCountry(null); setForm(f => ({ ...f, country: '', curriculumStandard: '' })); }}>✕</button>
               </div>
             )}
-            {!selectedCountry && (
+            {selectedCountry && form.subject && form.year && curriculumMapping.framework && (
+              <div className="curriculum-map">{curriculumMapping.framework} · {curriculumMapping.subject} · {curriculumMapping.grade}</div>
+            )}            {!selectedCountry && (
               <input
                 className="field-input field-input-sm"
                 placeholder={t.country_other}

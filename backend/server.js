@@ -5,6 +5,7 @@ import multer from 'multer';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { extractFileText } from './utils/fileParser.js';
+import { extractUrlText } from './utils/urlParser.js';
 import { runCurriculumIntelligence } from './agents/curriculumIntelligence.js';
 import { runExperienceDesigner } from './agents/experienceDesigner.js';
 import { runContentGenerator } from './agents/contentGenerator.js';
@@ -85,6 +86,16 @@ app.post('/api/extract', upload.single('file'), async (req, res) => {
   }
 });
 
+app.post('/api/extract-url', async (req, res) => {
+  const { url } = req.body || {};
+  if (typeof url !== 'string' || url.length > 2048) return res.status(400).json({ error: 'A valid material URL is required.' });
+  try {
+    const text = await extractUrlText(url);
+    res.json({ status: 'ok', text, sourceUrl: url });
+  } catch (err) {
+    res.status(400).json({ error: err.message || 'Failed to read material link.' });
+  }
+});
 // ─── Main Generation ──────────────────────────────────────────────────────────
 app.post('/api/generate', async (req, res) => {
   let payload;
@@ -109,10 +120,10 @@ app.post('/api/generate', async (req, res) => {
     console.log(`\n🎭 [DEMO] ${subject} ${year} — ${topic} (${country || 'International'})`);
     await new Promise(r => setTimeout(r, 2500)); // let animation play
 
-    // Pick demo based on country/language hint
-    let demo = DEMO_RESPONSES.universal;
-    if (country === 'Malaysia' || language === 'Bahasa Melayu') demo = DEMO_RESPONSES.malaysia;
-    else if (country === 'United Kingdom') demo = DEMO_RESPONSES.uk;
+    const demo = selectMatchingDemo({ subject, year, topic, country, language });
+    if (!demo) {
+      return res.status(409).json({ error: 'Demo mode only returns exact pre-built examples. Enable live mode with an OpenAI API key to generate a precise lesson for this subject, year, and source material.' });
+    }
 
     return res.json({
       ...demo,
@@ -240,6 +251,15 @@ function buildMatchingEngineConfig(matching) {
   return { title: matching?.title || 'Matching', instruction: matching?.instruction || '', pairs: matching?.pairs || [], type: 'drag_drop' };
 }
 
+function selectMatchingDemo({ subject, year, topic, country, language }) {
+  const normalizedSubject = subject.toLowerCase();
+  const normalizedTopic = topic.toLowerCase();
+  const isMatter = normalizedTopic.includes('state') || normalizedTopic.includes('jirim') || normalizedTopic.includes('matter');
+  if ((country === 'Malaysia' || language === 'Bahasa Melayu') && ['sains', 'science'].includes(normalizedSubject) && /^(year|tahun) 4$/i.test(year) && isMatter) return DEMO_RESPONSES.malaysia;
+  if (country === 'United Kingdom' && normalizedSubject === 'history' && /^year 8$/i.test(year) && normalizedTopic.includes('norman')) return DEMO_RESPONSES.uk;
+  if (normalizedSubject === 'science' && /^grade 5$/i.test(year) && isMatter) return DEMO_RESPONSES.universal;
+  return null;
+}
 // ─── Export for Vercel Serverless ────────────────────────────────────────────
 export default app;
 

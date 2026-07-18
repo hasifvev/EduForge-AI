@@ -20,8 +20,14 @@ export function useGeneration() {
     return data.text;
   }, []);
 
+  const extractMaterialUrl = useCallback(async (materialUrl) => {
+    const res = await fetch(`${API}/api/extract-url`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: materialUrl }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Material link could not be read');
+    return data.text;
+  }, []);
   const generate = useCallback(async ({
-    subject, year, topic, language, objectives, file,
+    subject, year, topic, language, objectives, file, materialUrl,
     country, curriculumStandard, studentPersona,
   }) => {
     setStatus('generating');
@@ -30,12 +36,18 @@ export function useGeneration() {
     setResult(null);
 
     try {
-      let extractedText = '';
+      const materialParts = [];
       if (file) {
         setStatus('uploading');
-        extractedText = await uploadFile(file);
+        materialParts.push(await uploadFile(file));
         setStatus('generating');
       }
+      if (materialUrl) {
+        setStatus('uploading');
+        materialParts.push(await extractMaterialUrl(materialUrl));
+        setStatus('generating');
+      }
+      const extractedText = materialParts.join('\n\n').slice(0, 6000);
 
       // Simulate 5-agent progress (each agent ~3-5s, evaluator faster)
       const stepTimers = [
@@ -71,7 +83,7 @@ export function useGeneration() {
       setError(err.message);
       setStatus('error');
     }
-  }, [uploadFile]);
+  }, [extractMaterialUrl, uploadFile]);
 
   const reset = useCallback(() => {
     setStatus('idle');

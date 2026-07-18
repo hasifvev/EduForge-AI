@@ -29,6 +29,7 @@ Teacher Context:
 - Country/Region: ${country || 'Not specified — use international framework'}
 - Curriculum Standard: ${curriculumStandard || 'Not specified — infer or use generic'}
 - Student Persona: ${studentPersona || 'On-Level'}
+- STRICT SCOPE: Only use the exact Subject and Grade/Year above. Never mix content, standards, examples, or assessment difficulty from a different grade. Flag a conflict in source material instead of silently using it.
 - Learning objectives: ${objectives || 'Not provided — infer from topic'}
 ${extractedText ? `\nLesson material provided:\n${formatUntrustedLessonMaterial(extractedText)}` : ''}
 

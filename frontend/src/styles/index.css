@@ -664,3 +664,7 @@ body {
   .lesson-form { padding: 20px; }
   .brand-tag { display: none; }
 }
+
+.material-search-link { align-self: flex-start; color: var(--blue); font-size: 13px; font-weight: 600; text-decoration: none; }
+.material-search-link:hover { text-decoration: underline; }
+.curriculum-map { margin-top: 8px; color: var(--text-secondary); font-size: 12px; font-weight: 600; }
