@@ -23,12 +23,15 @@ Rules:
 8. Follow the exact resource counts requested in the user prompt`;
 
 const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => {
-  const compactLive = process.env.DEMO_MODE === 'false';
-  // Keep live lessons substantial enough for a complete classroom activity.
+  const isEarlyYears = /(kindergarten|reception|foundation|preschool|pre-primary|nursery|prasekolah)/i.test(String(year));
+  // Use a full classroom bank for school-age learners without overwhelming early years.
   // These counts remain within one structured response, so they do not add API calls.
-  const questionCount = compactLive ? 10 : 12;
-  const pairCount = compactLive ? 8 : 10;
-  const worksheetCount = compactLive ? 8 : 10;
+  const questionCount = isEarlyYears ? 10 : 15;
+  const pairCount = isEarlyYears ? 8 : 12;
+  const worksheetCount = isEarlyYears ? 10 : 15;
+  const worksheetMix = isEarlyYears
+    ? 'short, play-based prompts: identify, sort, explain orally, and apply in a familiar situation'
+    : '4 recall/vocabulary items, 5 application items, 4 reasoning or evidence items, and 2 contextual transfer or extension items';
   return `
 Create educational game content for this lesson.
 
@@ -77,6 +80,8 @@ Return this EXACT JSON (no extra text):
 }
 
 CRITICAL: Generate exactly ${questionCount} quiz questions, exactly ${pairCount} matching pairs, exactly ${worksheetCount} worksheet items.
+- Worksheet mix: ${worksheetMix}. Number questions in a sensible learning progression.
+- Quiz mix: begin with knowledge checks, then application, then one or more reasoning/transfer questions.
 Adjust all difficulty to match ${studentPersona || 'On-Level'} persona.
 Use real-world examples from ${country || 'the student context'}.`;
 };

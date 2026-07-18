@@ -11,7 +11,7 @@ import ClozePassage from '../components/ClozePassage.jsx';
 import MindMap from '../components/MindMap.jsx';
 import StudySchedule from '../components/StudySchedule.jsx';
 
-const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', memory: '🧠', worksheet: '📄', answer_key: '🔑' };
+const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', memory: '🧠', term_sprint: '⚡', worksheet: '📄', answer_key: '🔑' };
 
 function downloadHTML(html, filename) {
   const blob = new Blob([html], { type: 'text/html' });
@@ -45,7 +45,7 @@ export default function Dashboard({ result, onReset }) {
 
   // Magic Moment: reveal cards one by one
   useEffect(() => {
-    const total = 8; // analytics + 5 resource cards + quality + rationale
+    const total = 9; // analytics + 6 resource cards + quality + rationale
     let i = 0;
     const timer = setInterval(() => {
       i++;
@@ -73,6 +73,12 @@ export default function Dashboard({ result, onReset }) {
       count: resources.matching?.data?.pairs?.length, countLabel: t.pairs_count,
       hasGame: true, gameType: 'memory', engineConfig: resources.matching?.engineConfig, html: null,
       description: 'A second game mode for reinforcing the same key vocabulary.',
+    },
+    {
+      key: 'term_sprint', label: 'Term Sprint', icon: RESOURCE_ICONS.term_sprint,
+      count: resources.matching?.data?.pairs?.length, countLabel: t.questions_count,
+      hasGame: true, gameType: 'term_sprint', engineConfig: resources.matching?.engineConfig, html: null,
+      description: 'A fast retrieval quiz using the same verified lesson vocabulary.',
     },
     {
       key: 'worksheet', label: t.resource_worksheet, icon: RESOURCE_ICONS.worksheet,
