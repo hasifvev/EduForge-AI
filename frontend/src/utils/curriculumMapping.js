@@ -43,6 +43,37 @@ const MALAYSIA_TOPICS = {
   'Asas Sains Komputer': ['Pemikiran komputasional', 'Algoritma', 'Pengaturcaraan asas', 'Data', 'Keselamatan digital'],
 };
 
+
+// These are curriculum-aware starting points, not a replacement for an official syllabus.
+// Teachers can always refine the selected suggestion in the lesson-topic field.
+const TOPIC_BANKS = {
+  language: { primary: ['Listening and speaking', 'Reading and comprehension', 'Vocabulary and grammar', 'Guided writing', 'Stories and texts'], secondary: ['Reading and analysis', 'Grammar and language use', 'Writing for purpose and audience', 'Oral communication', 'Texts and literature'] },
+  mathematics: { primary: ['Number and place value', 'Operations and problem solving', 'Fractions and decimals', 'Measurement', 'Geometry and data'], secondary: ['Number and algebra', 'Geometry and measurement', 'Statistics and probability', 'Functions and graphs', 'Mathematical problem solving'] },
+  science: { primary: ['Scientific inquiry', 'Living things', 'Matter and materials', 'Forces and energy', 'Earth and space'], secondary: ['Working scientifically', 'Cells and systems', 'Matter and chemical change', 'Forces, energy and waves', 'Earth and environment'] },
+  humanities: { primary: ['People and communities', 'Maps, places and environments', 'History and chronology', 'Civics and citizenship', 'Resources and economic choices'], secondary: ['Historical and geographical enquiry', 'Civilisations and change', 'People, places and power', 'Economics and society', 'Global issues and sustainability'] },
+  computing: { primary: ['Digital literacy', 'Algorithms', 'Programming basics', 'Data and information', 'Online safety'], secondary: ['Computational thinking', 'Programming and problem solving', 'Data representation', 'Networks and systems', 'Cyber safety and ethics'] },
+  design: { primary: ['Design process', 'Materials and tools', 'Making and testing', 'Structures and mechanisms', 'Sustainable design'], secondary: ['User-centred design', 'Materials and manufacturing', 'Systems and control', 'Prototyping and evaluation', 'Sustainable innovation'] },
+  arts: { primary: ['Elements of art', 'Drawing and mark making', 'Colour and composition', 'Creative response', 'Artists and visual culture'], secondary: ['Visual language', 'Media and techniques', 'Research and development', 'Creative production', 'Critical and cultural contexts'] },
+  music: { primary: ['Beat and rhythm', 'Pitch and melody', 'Singing and performance', 'Listening and responding', 'Creating music'], secondary: ['Musical elements', 'Performance skills', 'Composition', 'Listening and analysis', 'Music in context'] },
+  wellbeing: { primary: ['Movement skills', 'Healthy choices', 'Safety and wellbeing', 'Teamwork and fair play', 'Body awareness'], secondary: ['Fitness and training', 'Health and wellbeing', 'Movement analysis', 'Teamwork and leadership', 'Safety and lifelong activity'] },
+  religionEthics: { primary: ['Beliefs and practices', 'Stories and traditions', 'Values and character', 'Respect for others', 'Community and service'], secondary: ['Beliefs, practices and texts', 'Ethics and moral reasoning', 'Religion in society', 'Identity and diversity', 'Reflection and action'] },
+  citizenship: { primary: ['Identity and belonging', 'Rights and responsibilities', 'Respect and empathy', 'Community participation', 'Care for the environment'], secondary: ['Citizenship and governance', 'Rights, responsibilities and law', 'Identity and diversity', 'Community action', 'Global citizenship'] },
+  business: { primary: ['Needs and wants', 'Money and choices', 'Enterprise ideas', 'Resources and sustainability', 'Working together'], secondary: ['Business activity', 'Marketing and customers', 'Finance and decision making', 'Operations and people', 'Enterprise and sustainability'] },
+};
+
+const SUBJECT_CATEGORIES = {
+  'Bahasa Melayu': 'language', 'Bahasa Inggeris': 'language', 'Bahasa Arab': 'language', 'Bahasa Cina': 'language', 'Bahasa Tamil': 'language',
+  English: 'language', 'English Language': 'language', Hindi: 'language', 'Mother Tongue Language': 'language', 'World Languages': 'language', 'Modern Foreign Languages': 'language', Languages: 'language', 'Language Acquisition': 'language', 'Language and Literature': 'language',
+  Matematik: 'mathematics', Mathematics: 'mathematics', Sains: 'science', Science: 'science', Sciences: 'science',
+  Sejarah: 'humanities', Geografi: 'humanities', History: 'humanities', Geography: 'humanities', 'Social Studies': 'humanities', 'Social Science': 'humanities', 'Humanities and Social Sciences': 'humanities', 'Individuals and Societies': 'humanities', 'Environmental Studies': 'humanities',
+  'Asas Sains Komputer': 'computing', Computing: 'computing', 'Computer Science': 'computing', Technologies: 'computing',
+  'Reka Bentuk dan Teknologi': 'design', 'Design & Technology': 'design', Design: 'design',
+  'Pendidikan Seni Visual': 'arts', 'Visual Arts': 'arts', 'Art & Design': 'arts', 'The Arts': 'arts', Art: 'arts', 'Art Education': 'arts', Arts: 'arts',
+  'Pendidikan Muzik': 'music', Music: 'music',
+  'Pendidikan Jasmani dan Pendidikan Kesihatan': 'wellbeing', 'Physical Education': 'wellbeing', 'Health and Physical Education': 'wellbeing', 'Physical and Health Education': 'wellbeing',
+  'Pendidikan Islam': 'religionEthics', 'Pendidikan Moral': 'religionEthics', 'Religious Education': 'religionEthics', 'Character and Citizenship Education': 'citizenship',
+  Ekonomi: 'business', Perniagaan: 'business',
+};
 const GENERAL_TOPICS = {
   Mathematics: ['Number and place value', 'Operations and problem solving', 'Fractions and decimals', 'Measurement', 'Geometry and data'],
   Science: ['Scientific inquiry', 'Living things', 'Matter and materials', 'Forces and energy', 'Earth and space'],
@@ -59,6 +90,15 @@ const GENERAL_TOPICS = {
 
 function gradeNumber(year) { return Number((year || '').match(/\d+/)?.[0] || 0); }
 
+function isSecondaryYear(year) {
+  return /(?:Form|Tingkatan|Secondary|JC)\s|Year\s(?:[7-9]|1[0-3])|Grade\s(?:[7-9]|1[0-2])/.test(year || '');
+}
+
+function categoryTopics(subject, year) {
+  const topicBank = TOPIC_BANKS[SUBJECT_CATEGORIES[subject]];
+  return topicBank?.[isSecondaryYear(year) ? 'secondary' : 'primary'];
+}
+
 export function getTopicSuggestions(countryCode, subject, year) {
   const grade = gradeNumber(year);
   if (countryCode === 'MY') {
@@ -68,7 +108,7 @@ export function getTopicSuggestions(countryCode, subject, year) {
     if (subject === 'Matematik') return ['Nombor dan operasi', 'Algebra', 'Geometri', 'Sukatan dan ukuran', 'Statistik dan kebarangkalian'];
     if (subject === 'Sains') return ['Penyiasatan saintifik', 'Sel sebagai unit kehidupan', 'Jirim', 'Daya dan gerakan', 'Bumi dan angkasa'];
   }
-  return GENERAL_TOPICS[subject] || ['Core concepts', 'Vocabulary and understanding', 'Application', 'Problem solving', 'Review and assessment'];
+  return categoryTopics(subject, year) || GENERAL_TOPICS[subject] || ['Core concepts', 'Vocabulary and understanding', 'Application', 'Problem solving', 'Review and assessment'];
 }
 export function getSubjectsForCountry(countryCode, fallbackSubjects) {
   return COUNTRY_SUBJECTS[countryCode] || fallbackSubjects;
