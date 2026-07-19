@@ -14,6 +14,7 @@ import { runLessonEvaluator } from './agents/lessonEvaluator.js';
 import { runStudyMaterialsGenerator } from './agents/studyMaterialsGenerator.js';
 import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
+import { buildGlobalDemo } from './demo/globalDemo.js';
 import { buildSourcePreview } from './demo/sourcePreview.js';
 import { AI_PROVIDER, GPT_MODEL } from './openai.js';
 import { generateRequestSchema, performanceRequestSchema, parseRequest } from './validators/requestSchemas.js';
@@ -153,10 +154,7 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
       });
     }
 
-    const demo = selectMatchingDemo({ subject, year, topic, country, language });
-    if (!demo) {
-      return res.status(409).json({ error: 'Demo mode only returns exact pre-built examples. Enable live mode with an OpenAI API key to generate a precise lesson for this subject, year, and source material.' });
-    }
+    const demo = selectMatchingDemo({ subject, year, topic, country, language }) || buildGlobalDemo({ subject, year, topic, language, country, curriculumStandard, studentPersona });
 
     return res.json({
       ...demo,

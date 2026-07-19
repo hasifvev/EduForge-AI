@@ -136,7 +136,7 @@ export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary,
         </div>
       </div>
 
-      {source_preview && source_notice && <div className="source-preview-notice">{source_notice}</div>}
+      {source_notice && <div className="source-preview-notice">{source_notice}</div>}
 
       {/* ── Analytics Bar ───────────────────────────────────────────────── */}
       {analytics && visibleCards >= 1 && (

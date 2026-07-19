@@ -6,6 +6,7 @@
 
 - My Lessons: a browser-local library to open, duplicate, delete, export, and restore generated lessons.
 - Teach Mode progress and reflections now stay attached to the saved lesson they belong to.
+- Global deterministic demo fallback for arbitrary country, subject, grade, topic, and language selections.
 
 ## 2026-07-19
 
