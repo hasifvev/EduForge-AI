@@ -12,27 +12,28 @@ function getAssessmentProfile({ country = '', year = '', curriculumStandard = ''
   const primary = earlyYears || /(year [1-6]|grade [1-6]|primary|tahun [1-6]|standard [1-6])/.test(context);
 
   if (/malaysia|kssr|kssm/.test(context)) {
-    return { framework: earlyYears ? 'KSPK' : primary ? 'KSSR / PBD' : 'KSSM / PBD', focus: earlyYears ? 'guided observation and play-based evidence' : 'knowledge, skills, and application practice' };
+    return { framework: earlyYears ? 'KSPK' : primary ? 'KSSR / PBD' : 'KSSM / PBD', focus: earlyYears ? 'guided observation and play-based evidence' : 'knowledge, skills, and application practice', format: 'Teacher-editable classroom assessment', structure: primary ? 'Short knowledge checks followed by a familiar application task and teacher evidence note.' : 'Recall, explanation and application items with feedback or mastery evidence.' };
   }
   if (/united states|ngss|common core|ccss/.test(context)) {
-    return { framework: /science|ngss/.test(context) ? 'NGSS performance expectations' : 'State / Common Core-aligned practice', focus: earlyYears ? 'developmentally appropriate demonstration' : 'evidence, reasoning, and application' };
+    return { framework: /science|ngss/.test(context) ? 'NGSS performance expectations' : 'State standards-aligned practice', focus: earlyYears ? 'developmentally appropriate demonstration' : 'evidence, reasoning, and application', format: 'Standards-based practice resource', structure: /science|ngss/.test(context) ? 'Use a phenomenon, evidence or model, then ask for a claim supported by reasoning.' : 'Use selected response, short constructed response and one real-world application item.' };
   }
   if (/united kingdom|england|wales|scotland|northern ireland|gcse|ks[1-5]|national curriculum/.test(context)) {
-    return { framework: earlyYears ? 'EYFS' : 'UK National Curriculum / qualification practice', focus: earlyYears ? 'observation-led learning' : 'knowledge recall, explanation, and application' };
+    return { framework: earlyYears ? 'EYFS' : 'UK National Curriculum / qualification practice', focus: earlyYears ? 'observation-led learning' : 'knowledge recall, explanation, and application', format: primary ? 'KS2-style practice resource' : 'Curriculum / qualification practice resource', structure: primary ? 'Use arithmetic, reasoning, reading or grammar item types as relevant; this is not a live SATs paper.' : 'Use command words, marks and model-answer guidance appropriate to the course.' };
   }
   if (/australia|acara|naplan/.test(context)) {
-    return { framework: earlyYears ? 'Australian Curriculum Foundation' : 'Australian Curriculum-aligned practice', focus: earlyYears ? 'play-based evidence' : 'understanding, fluency, and reasoning' };
+    return { framework: earlyYears ? 'Australian Curriculum Foundation' : 'Australian Curriculum-aligned practice', focus: earlyYears ? 'play-based evidence' : 'understanding, fluency, and reasoning', format: 'Achievement-standard practice resource', structure: 'Sequence understanding, fluency and reasoning; use NAPLAN conventions only for relevant literacy or numeracy practice.' };
   }
   if (/singapore|moe/.test(context)) {
-    return { framework: 'Singapore MOE syllabus-aligned practice', focus: earlyYears ? 'guided exploration' : 'conceptual understanding and problem solving' };
+    return { framework: 'Singapore MOE syllabus-aligned practice', focus: earlyYears ? 'guided exploration' : 'conceptual understanding and problem solving', format: 'Singapore syllabus practice resource', structure: primary ? 'Use clear method spaces, short-answer and application items; reserve PSLE-style wording for Primary 6.' : 'Build from foundational skills to structured problem solving, with marks beside each item.' };
   }
   if (/india|cbse|ncert/.test(context)) {
-    return { framework: earlyYears ? 'Foundational Stage / NEP practice' : 'NCERT / CBSE-aligned practice', focus: earlyYears ? 'foundational skills' : 'competency-based application' };
+    return { framework: earlyYears ? 'Foundational Stage / NEP practice' : 'NCERT / CBSE-aligned practice', focus: earlyYears ? 'foundational skills' : 'competency-based application', format: 'Competency-based practice resource', structure: earlyYears ? 'Use visual, oral or written evidence in familiar contexts.' : 'Use objective, short-answer and case/context-based questions that assess application.' };
   }
   if (/international baccalaureate|ib|cambridge|igcse/.test(context)) {
-    return { framework: /ib/.test(context) ? 'IB inquiry-aligned practice' : 'Cambridge curriculum-aligned practice', focus: 'conceptual understanding, inquiry, and reflection' };
+    const ib = /international baccalaureate|\bib\b/.test(context);
+    return { framework: ib ? 'IB inquiry-aligned practice' : 'Cambridge curriculum-aligned practice', focus: ib ? 'conceptual understanding, inquiry, reflection and criterion-linked feedback' : 'conceptual understanding, inquiry, and reflection', format: ib ? (primary ? 'PYP inquiry and reflection resource' : 'IB criterion-referenced practice task') : 'Cambridge curriculum practice resource', structure: ib ? (primary ? 'Include an inquiry prompt, learner reflection and teacher feedback; it is not a formal PYP examination.' : 'Use an authentic task, visible success criteria and a short reflection prompt.') : 'Use clear command words, mark allocations and teacher feedback.' };
   }
-  return { framework: curriculumStandard || curriculumSource || 'Teacher-selected curriculum framework', focus: 'grade-appropriate recall, explanation, and application' };
+  return { framework: curriculumStandard || curriculumSource || 'Teacher-selected curriculum framework', focus: 'grade-appropriate recall, explanation, and application', format: 'Teacher-editable practice resource', structure: 'Sequence recall, explanation and application with feedback guidance.' };
 }
 /**
  * Build printable worksheet and answer key HTML.
@@ -97,6 +98,8 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
     <h1>${escapeHtml(title)}</h1>
     <div class="meta">${labels.subject}: ${escapeHtml(subject)} | ${labels.year}: ${escapeHtml(year)}</div>
     <div class="meta">Framework: ${escapeHtml(assessment.framework)} | Assessment focus: ${escapeHtml(assessment.focus)}</div>
+  <div class="meta">Format: ${escapeHtml(assessment.format)} | ${escapeHtml(assessment.structure)}</div>
+    <div class="meta">Format: ${escapeHtml(assessment.format)} | ${escapeHtml(assessment.structure)}</div>
     <div class="school-info">
       <div class="info-row"><span class="info-label">${labels.name}:</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-label">${labels.class}:</span><span class="info-line"></span></div>
@@ -135,6 +138,7 @@ export function buildWorksheet({ blueprint, gameContent, subject, year, topic, l
   <h1>${labels.answerKey}</h1>
   <div class="meta">${labels.subject}: ${escapeHtml(subject)} | ${labels.year}: ${escapeHtml(year)} | ${labels.topic}: ${escapeHtml(topic)}</div>
   <div class="meta">Framework: ${escapeHtml(assessment.framework)} | Assessment focus: ${escapeHtml(assessment.focus)}</div>
+  <div class="meta">Format: ${escapeHtml(assessment.format)} | ${escapeHtml(assessment.structure)}</div>
   ${items.map((item, i) => `
   <div class="answer-item">
     <span class="num">${i + 1}.</span>

@@ -123,7 +123,17 @@ export default function Home() {
 
           {/* Upload */}
           <div className="form-block">
-            <FileUploadZone onFileSelect={setFile} selectedFile={file} />
+            <FileUploadZone
+              onFileSelect={(selectedFile) => {
+                setFile(selectedFile);
+                if (selectedFile) setFormError('');
+              }}
+              onFileTooLarge={(selectedFile) => {
+                setFile(null);
+                setFormError(`“${selectedFile.name}” is too large. Upload a file that is 4 MB or smaller.`);
+              }}
+              selectedFile={file}
+            />
             <div className="divider"><span>{t.upload_or}</span></div>
           </div>
 
