@@ -1,24 +1,47 @@
 # EduForge AI
 
-> An AI teaching workspace that turns a curriculum-aligned lesson brief into an interactive lesson package.
+> An AI teaching workspace that turns a curriculum-aligned lesson brief into a classroom-ready lesson package.
 
 Built for OpenAI Build Week 2026. Live app: [edu-forge-ai-weld.vercel.app](https://edu-forge-ai-weld.vercel.app)
 
-## What It Does
+EduForge helps teachers turn a subject, grade, topic, region, language, learner profile, and optional source material into interactive activities, printable practice, study resources, and teaching guidance.
 
-EduForge creates a lesson package from a subject, grade/year, topic, country/region, language, learner profile, and optional source material. The package includes:
+## Highlights
 
-- Interactive multiple-choice quiz and matching activity
-- Printable worksheet and answer key
-- Study notes, flashcards, cloze passage, mock exam, and study schedule
-- A four-level Learning Atlas: lesson core -> learning strand -> concept -> practice skill
-- Teaching insights and a Bloom's-taxonomy self-evaluation
+- Seven supported education contexts: Malaysia, United States, United Kingdom, Australia, Singapore, India, and International / IB
+- Grade-aware subjects and suggested lesson pathways from early years through pre-university
+- Interactive Quiz, Matching, Memory Match, and Term Sprint activities
+- Printable worksheet and teacher answer key
+- Study Hub with flashcards, notes, mock exam, cloze passage, Learning Atlas, and differentiated study schedule
+- Five product-level AI stages that plan, design, generate, support, and evaluate a lesson
+- Source ingestion from PDF, TXT, PNG, JPG, WEBP, and approved public links
+- English and Bahasa Melayu interface support, with generation in a teacher-selected language
 
-The generation flow has five named agent stages: Curriculum Intelligence, Experience Designer, Content Generator, Teacher Assistant, and Lesson Evaluator. Some stages make parallel model calls; the health endpoint reports the five product-level agent stages.
+## What a Lesson Package Includes
+
+| Area | Resources |
+|---|---|
+| Interactive practice | Multiple-choice quiz, matching activity, Memory Match, Term Sprint |
+| Printable practice | Worksheet and teacher answer key |
+| Study Hub | Flashcards, study notes, mock exam, cloze passage, Learning Atlas, study schedule |
+| Teacher support | Misconceptions, teaching tips, intervention strategy, extension activity |
+| Quality | Bloom's-taxonomy evaluation, lesson quality score, generation analytics |
+
+The Learning Atlas maps learning from the lesson core through strands, concepts, and practice skills. The study schedule contains differentiated notes for Beginner, On-Level, Gifted & Talented, and SEN Support learners.
+
+## How Generation Works
+
+EduForge uses five named product stages:
+
+1. **Curriculum Intelligence** — identifies objectives, concepts, misconceptions, prerequisites, and curriculum alignment.
+2. **Experience Designer** — selects and explains the most suitable activity sequence.
+3. **Content Generator** — produces quiz questions, matching pairs, game data, and worksheet items.
+4. **Teacher Assistant** — creates classroom guidance, differentiation, intervention, and extension suggestions.
+5. **Lesson Evaluator** — checks coverage, engagement, difficulty balance, and Bloom's taxonomy.
+
+A companion Study Materials generator creates the Study Hub resources in parallel with the lesson content. Worksheet rendering runs after content generation so printable materials are never built from incomplete data.
 
 ## Curriculum and Grade Support
-
-The interface has grade-aware subject and topic paths for these currently supported regions:
 
 | Region | Framework shown in app | Early-years entry |
 |---|---|---|
@@ -30,11 +53,27 @@ The interface has grade-aware subject and topic paths for these currently suppor
 | India | NCF-SE 2023 / CBSE | Pre-primary |
 | International / IB | IB PYP / MYP / DP | Early Years |
 
-The catalog changes available subjects and starter lesson pathways by learning stage: early years, primary, lower secondary, and upper secondary. It is a teacher-facing planning guide, not a replacement for a school, board, or state syllabus. Each supported region exposes an official curriculum-guide link in the form. See [curriculum sources](docs/curriculum-sources.md).
+The catalog adjusts subjects and starter topics across early years, primary, lower secondary, upper secondary, and pre-university learning stages. It is a teacher-facing planning aid, not a substitute for a school, board, or state syllabus. Each region exposes an official curriculum source in the lesson form; see [curriculum sources](docs/curriculum-sources.md).
+
+## Regional Assessment Formats
+
+Generated assessments are **teacher-editable classroom practice**, not official examination papers. The generator uses appropriate local conventions while clearly avoiding claims of endorsement by an examination authority.
+
+| Region | Practice format approach |
+|---|---|
+| Malaysia | KSSR/KSSM and PBD-aligned classroom assessment; does not label materials as UPSR or PT3 |
+| United States | State standards practice; NGSS science uses phenomena, evidence, models, and reasoning |
+| United Kingdom | KS2, KS3, GCSE, and A-level-style classroom practice with command words and mark guidance |
+| Australia | Achievement-standard practice progressing through understanding, fluency, and reasoning |
+| Singapore | MOE syllabus practice; PSLE-style wording is reserved for Primary 6 and GCE-style wording for exam preparation |
+| India | NCERT/CBSE competency-based practice using objective, short-answer, and contextual application items |
+| International / IB | PYP inquiry and reflection; MYP/DP criterion-referenced tasks with authentic contexts and success criteria |
+
+Printable worksheets and answer keys include the relevant framework, assessment focus, practice format, and recommended item structure.
 
 ## Languages
 
-Quick chips provide common languages, and the **Any language** control accepts a custom language name. The underlying model is asked to generate in the language entered by the teacher; quality and script coverage depend on the configured provider and should be reviewed before class.
+The interface includes quick language choices and an **Any language** input. The configured AI provider is instructed to generate the lesson in the language selected by the teacher. Teachers should review accuracy, script coverage, cultural fit, and accessibility before classroom use.
 
 ## Source Material Ingestion
 
@@ -43,27 +82,45 @@ Quick chips provide common languages, and the **Any language** control accepts a
 | Upload | 4 MB | PDF, TXT, PNG, JPG, WEBP |
 | Public link | 2 MB remote response | PDF, TXT, image, or public web page |
 
-Text is capped before it enters the model pipeline. Public links are checked for private-network targets and redirect destinations before they are fetched. Teachers should still verify that a source is appropriate for their class.
+Source text is capped before it reaches the model pipeline. Public links are checked for private-network targets and redirect destinations before fetching. Uploaded or linked content should always be reviewed for suitability and copyright compliance.
+
+## Demo Mode and Live Mode
+
+`DEMO_MODE` defaults to `true`, so the application runs without an API key.
+
+- **Demo mode** provides verified examples for Grade 5 Science: States of Matter, Form 1 Sains: Keadaan Jirim, and Year 10 History: Norman Conquest.
+- Any lesson with supplied source material uses a source-preview response so teachers can review extracted context.
+- Other exact lesson requests require live mode with a configured provider.
+- **Live mode** runs the AI pipeline and creates a tailored lesson package.
 
 ## Run Locally
 
+Install the frontend and backend dependencies:
+
 ```bash
-# Install frontend and backend dependencies
 cd frontend && npm install
 cd ../backend && npm install
+```
 
-# Terminal 1: backend
+Start the backend in one terminal:
+
+```bash
+cd backend
 node server.js
+```
 
-# Terminal 2: frontend
-cd ../frontend && npm run dev
+Start the frontend in a second terminal:
+
+```bash
+cd frontend
+npm run dev
 ```
 
 Open `http://localhost:5173`.
 
 ## AI Provider Configuration
 
-`DEMO_MODE` defaults to `true`. Set it to `false` only when a provider is configured.
+Set `DEMO_MODE=false` only when a provider is configured. Keep keys server-side; never expose them in frontend variables.
 
 ### OpenAI
 
@@ -94,8 +151,6 @@ AI_MODEL=provider-model-id
 AI_MAX_TOKENS=4096
 ```
 
-Never commit keys or place them in frontend variables. In Vercel, configure the same variables for the intended Production and Preview environments.
-
 ## Environment Variables
 
 | Variable | Purpose |
@@ -107,46 +162,75 @@ Never commit keys or place them in frontend variables. In Vercel, configure the 
 | `AI_API_KEY`, `AI_BASE_URL`, `AI_MODEL`, `AI_MAX_TOKENS` | Custom OpenAI-compatible provider configuration |
 | `PORT` | Backend port; defaults to `3001` |
 | `FRONTEND_URL` | Additional allowed frontend origin |
-| `ALLOW_VERCEL_PREVIEWS` | Enables Vercel preview-origin support when set to `true` |
+| `ALLOW_VERCEL_PREVIEWS` | Enables Vercel preview-origin support when `true` |
+
+For Vercel, configure the same server-side variables in the intended Production and Preview environments. The `api/index.js` serverless entry point wraps the Express application.
 
 ## API
 
-See [API reference](docs/api.md) for the current endpoints and payloads.
+See the full [API reference](docs/api.md). The main endpoints are:
 
-- `GET /api/health`
-- `POST /api/extract`
-- `POST /api/extract-url`
-- `POST /api/generate`
-- `POST /api/analyze-performance`
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/health` | Reports mode, provider, model, product-stage count, and timestamp |
+| `POST /api/extract` | Extracts text from an uploaded supported file (`multipart/form-data`, field name `file`) |
+| `POST /api/extract-url` | Extracts text from an approved public URL |
+| `POST /api/generate` | Creates the lesson package |
+| `POST /api/analyze-performance` | Produces a class-level quiz performance report |
+
+Example generation request:
+
+```json
+{
+  "subject": "Science",
+  "year": "Grade 5",
+  "topic": "States of Matter",
+  "language": "English",
+  "country": "United States",
+  "curriculumStandard": "NGSS 5-PS1-1",
+  "studentPersona": "On-Level",
+  "objectives": "Students explain particle behaviour in solids, liquids, and gases."
+}
+```
+
+## Security and Responsible Use
+
+The backend applies security headers, CORS allow-listing, API and generation rate limits, request validation, upload-size limits, public-link safety checks, text caps, and prompt-safety controls. See [architecture](docs/architecture.md) and the [security remediation plan](docs/2026-07-17-security-remediation-plan.md) for implementation detail.
+
+EduForge creates draft teaching resources. Teachers must verify curriculum alignment, factual accuracy, age suitability, cultural fit, accessibility, assessment suitability, source rights, and local policy requirements before classroom use.
 
 ## Project Layout
 
 ```text
+api/
+  index.js                 Vercel serverless entry point
 backend/
-  agents/                 Five generation stages
-  demo/                   Cached scenarios and source-preview mode
-  utils/                  Parsing, URL safety, prompt safety, worksheets
-  validators/             Request and response schemas
+  agents/                  Curriculum, design, content, teacher, evaluation, study-material stages
+  demo/                    Cached scenarios and source-preview mode
+  utils/                   Parsing, URL safety, prompt safety, worksheet rendering
+  validators/              Request and response schemas
 frontend/
-  src/components/         Learning Atlas, games, notes, schedules, exams
-  src/utils/              Grade-aware curriculum catalog and mappings
+  public/engines/          Browser game engines
+  src/components/          Games, Study Hub, Learning Atlas, exams, notes, schedules
+  src/utils/               Grade-aware curriculum catalog and mappings
 docs/
-  api.md                  Current API contract
-  architecture.md         System architecture
-  curriculum-sources.md   Official curriculum source register
-  codex-log.md            Build history
+  api.md                   API contract
+  architecture.md          System architecture
+  curriculum-sources.md    Official curriculum source register
+LICENSE                     Apache License 2.0
+NOTICE                      Project copyright notice
 ```
 
 ## Verification
 
-Run the frontend build:
+Run the production frontend build:
 
 ```bash
 npm run build
 ```
 
-The curriculum catalog is validated against all supported locale, region, grade, subject, topic, and material-search combinations. Production health is available at `/api/health`.
+The curriculum catalog is validated against supported locale, region, grade, subject, topic, and material-search combinations. Production health is available at `/api/health`.
 
-## Responsible Use
+## License
 
-EduForge generates draft teaching resources. Teachers must check curriculum alignment, factual accuracy, cultural fit, accessibility, and assessment suitability before classroom use.
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for project attribution.
