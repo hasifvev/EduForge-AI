@@ -25,58 +25,77 @@ function detectGradeBand(year) {
   return { band: 'lower_secondary', label: 'Secondary', age: '12–16', examStyle: 'Structured Assessment' };
 }
 
-// ─── Exam Style by Country + Grade Band ──────────────────────────────────────
+// ─── Practice Assessment Format by Country + Grade Band ───────────────────────
+// These are teacher-editable practice templates. They describe familiar local
+// assessment conventions without presenting generated work as an official paper.
 function getExamStyle(country, gradeBand, curriculumAlignment = '', curriculumSource = '') {
   const curriculum = `${curriculumAlignment} ${curriculumSource}`.toLowerCase();
   if (country === 'United States' && curriculum.includes('ngss')) {
     const formats = {
-      primary: { board: 'Next Generation Science Standards (NGSS)', format: 'Grade 3–5 NGSS Performance Task', duration: 40, totalMarks: 30 },
-      lower_secondary: { board: 'Next Generation Science Standards (NGSS)', format: 'Middle School NGSS Performance Task', duration: 60, totalMarks: 50 },
-      upper_secondary: { board: 'Next Generation Science Standards (NGSS)', format: 'High School NGSS Performance Task', duration: 90, totalMarks: 80 },
-      pre_university: { board: 'Next Generation Science Standards (NGSS)', format: 'Advanced Science Performance Task', duration: 120, totalMarks: 100 },
+      primary: { board: 'NGSS-aligned classroom practice', format: 'Elementary Science Performance Task', duration: 40, totalMarks: 30, guidance: 'Use a phenomenon, evidence or model, then ask learners to explain their reasoning. Include a short application item.' },
+      lower_secondary: { board: 'NGSS-aligned classroom practice', format: 'Middle School Science Performance Task', duration: 60, totalMarks: 50, guidance: 'Use a multi-step phenomenon, evidence table or model; assess explanation and evidence-based reasoning.' },
+      upper_secondary: { board: 'NGSS-aligned classroom practice', format: 'High School Science Performance Task', duration: 90, totalMarks: 80, guidance: 'Include analysis of evidence, a model or data set, and a defended scientific explanation.' },
+      pre_university: { board: 'NGSS-aligned classroom practice', format: 'Advanced Science Investigation', duration: 120, totalMarks: 100, guidance: 'Include data interpretation, evaluation of limitations and a justified conclusion.' },
     };
     return formats[gradeBand] || formats.lower_secondary;
   }
+
   const styles = {
     Malaysia: {
-      primary: { board: 'Malaysia MOE', format: 'UPSR / Penilaian Darjah Format (Primary)', duration: 60, totalMarks: 40 },
-      lower_secondary: { board: 'Malaysia MOE', format: 'PT3 Format (Lower Secondary)', duration: 60, totalMarks: 60 },
-      upper_secondary: { board: 'Malaysia MOE', format: 'SPM Format (Upper Secondary)', duration: 90, totalMarks: 80 },
-      pre_university: { board: 'Malaysia MOE / STPM', format: 'STPM / Matriculation Format', duration: 120, totalMarks: 100 },
+      primary: { board: 'KPM — KSSR / PBD practice', format: 'Primary Classroom Assessment', duration: 45, totalMarks: 30, guidance: 'Use short knowledge and application items. Include an evidence note or performance-level observation; do not label this as UPSR.' },
+      lower_secondary: { board: 'KPM — KSSM / PBD practice', format: 'Lower Secondary Classroom Assessment', duration: 60, totalMarks: 50, guidance: 'Use recall, explanation and application. Include a teacher feedback or mastery-evidence prompt; do not label this as PT3.' },
+      upper_secondary: { board: 'KPM — KSSM practice', format: 'SPM-style Classroom Practice', duration: 90, totalMarks: 80, guidance: 'Use sections with increasing cognitive demand, command words and a concise mark scheme. State that it is practice, not an official SPM paper.' },
+      pre_university: { board: 'KPM — STPM practice', format: 'STPM-style Classroom Practice', duration: 120, totalMarks: 100, guidance: 'Use analytical, structured and extended-response practice with transparent marking guidance.' },
     },
     'United Kingdom': {
-      primary: { board: 'UK DfE / SATs', format: 'KS2 SATs Practice Format', duration: 45, totalMarks: 35 },
-      lower_secondary: { board: 'UK DfE', format: 'KS3 Assessment Format', duration: 60, totalMarks: 50 },
-      upper_secondary: { board: 'AQA / Edexcel / OCR', format: 'GCSE Style Paper', duration: 90, totalMarks: 80 },
-      pre_university: { board: 'AQA / Edexcel', format: 'A-Level Style Paper', duration: 120, totalMarks: 100 },
+      primary: { board: 'DfE / STA classroom practice', format: 'KS2-style Practice', duration: 45, totalMarks: 35, guidance: 'Use age-appropriate arithmetic, reasoning, reading or grammar item types. Keep this clearly separate from live SATs materials.' },
+      lower_secondary: { board: 'UK National Curriculum practice', format: 'KS3 Assessment', duration: 60, totalMarks: 50, guidance: 'Use knowledge recall, explanation and application, with a short success-criteria mark scheme.' },
+      upper_secondary: { board: 'GCSE classroom practice', format: 'GCSE-style Practice Paper', duration: 90, totalMarks: 80, guidance: 'Use command words, structured mark allocations and model responses. Do not imply endorsement by AQA, Edexcel or OCR.' },
+      pre_university: { board: 'A-level classroom practice', format: 'A-level-style Practice Paper', duration: 120, totalMarks: 100, guidance: 'Include source/data analysis or extended response as relevant, with level-based rubric guidance.' },
     },
     'United States': {
-      primary: { board: 'Common Core', format: 'Elementary Practice Assessment (DOK 1–2)', duration: 40, totalMarks: 30 },
-      lower_secondary: { board: 'Common Core', format: 'Middle School Assessment (DOK 1–3)', duration: 60, totalMarks: 50 },
-      upper_secondary: { board: 'College Board', format: 'SAT / AP Style Practice', duration: 90, totalMarks: 80 },
-      pre_university: { board: 'College Board', format: 'AP Exam Format', duration: 120, totalMarks: 100 },
+      primary: { board: 'State standards classroom practice', format: 'Elementary Standards-Based Practice', duration: 40, totalMarks: 30, guidance: 'Use a mix of selected response, short constructed response and one applied real-world item.' },
+      lower_secondary: { board: 'State standards classroom practice', format: 'Middle School Standards-Based Practice', duration: 60, totalMarks: 50, guidance: 'Use depth-of-knowledge progression from recall to strategic reasoning; include a short rubric.' },
+      upper_secondary: { board: 'State standards classroom practice', format: 'High School Course Practice', duration: 90, totalMarks: 80, guidance: 'Use course-appropriate analysis and evidence. Only use AP or SAT conventions when the teacher explicitly selects that programme.' },
+      pre_university: { board: 'College-readiness classroom practice', format: 'Advanced Course Practice', duration: 120, totalMarks: 100, guidance: 'Use data/source analysis and extended reasoning, with point-based scoring guidance.' },
     },
     Australia: {
-      primary: { board: 'ACARA', format: 'NAPLAN Practice Format (Primary)', duration: 45, totalMarks: 40 },
-      lower_secondary: { board: 'ACARA', format: 'Year 7–9 Assessment Format', duration: 60, totalMarks: 60 },
-      upper_secondary: { board: 'ATAR', format: 'WACE / VCE Style Paper', duration: 90, totalMarks: 80 },
-      pre_university: { board: 'ATAR / VCAA', format: 'Year 12 ATAR Examination Format', duration: 120, totalMarks: 100 },
+      primary: { board: 'Australian Curriculum practice', format: 'Primary Achievement-Standard Practice', duration: 45, totalMarks: 40, guidance: 'Use understanding, fluency and reasoning tasks aligned to the achievement standard. Only use NAPLAN conventions for relevant literacy or numeracy practice.' },
+      lower_secondary: { board: 'Australian Curriculum practice', format: 'Years 7–9 Assessment', duration: 60, totalMarks: 60, guidance: 'Mix knowledge, application and reasoning; include success criteria aligned to the achievement standard.' },
+      upper_secondary: { board: 'Senior secondary classroom practice', format: 'Senior Secondary Practice Paper', duration: 90, totalMarks: 80, guidance: 'Use subject-relevant analysis and clear marks. Do not claim a state-specific ATAR, VCE or WACE format unless selected by the teacher.' },
+      pre_university: { board: 'Senior secondary classroom practice', format: 'Year 12 Extended Practice', duration: 120, totalMarks: 100, guidance: 'Use extended analytical tasks and a rubric; adapt to the teacher-selected state authority where supplied.' },
+    },
+    Singapore: {
+      primary: { board: 'Singapore MOE syllabus practice', format: 'Primary Syllabus Practice', duration: 50, totalMarks: 40, guidance: 'Use clear worked-method expectations, short answer and application items. Reserve PSLE-style wording for Primary 6 practice only.' },
+      lower_secondary: { board: 'Singapore MOE syllabus practice', format: 'Lower Secondary School Assessment', duration: 60, totalMarks: 60, guidance: 'Build from foundational skills to application and problem solving, with marks beside each item.' },
+      upper_secondary: { board: 'Singapore GCE classroom practice', format: 'GCE O-Level-style Practice', duration: 90, totalMarks: 80, guidance: 'Use sectioned questions, clear command terms and a concise mark scheme; identify it as school practice.' },
+      pre_university: { board: 'Singapore GCE classroom practice', format: 'GCE A-Level-style Practice', duration: 120, totalMarks: 100, guidance: 'Use structured analysis and extended response where appropriate, with transparent mark allocation.' },
+    },
+    India: {
+      primary: { board: 'NCERT / CBSE classroom practice', format: 'Foundational Competency Practice', duration: 45, totalMarks: 30, guidance: 'Use visual, oral or written evidence as age-appropriate, with application in familiar contexts.' },
+      lower_secondary: { board: 'NCERT / CBSE competency practice', format: 'Competency-Based Assessment', duration: 60, totalMarks: 50, guidance: 'Use objective, short-answer and case/context-based items that assess conceptual understanding and application.' },
+      upper_secondary: { board: 'CBSE classroom practice', format: 'CBSE-style Competency Practice', duration: 90, totalMarks: 80, guidance: 'Use sectioned papers with competency-based, short-answer and extended-response items as appropriate to the subject.' },
+      pre_university: { board: 'Senior secondary classroom practice', format: 'Advanced Competency Practice', duration: 120, totalMarks: 100, guidance: 'Use analytical and application-focused questions with a detailed mark scheme.' },
+    },
+    'International / IB': {
+      primary: { board: 'IB PYP classroom practice', format: 'Inquiry Evidence and Reflection', duration: 45, totalMarks: 30, guidance: 'Prioritise inquiry, self-assessment and reflection. Do not present the task as a formal PYP examination.' },
+      lower_secondary: { board: 'IB MYP classroom practice', format: 'Criterion-Referenced Task', duration: 60, totalMarks: 50, guidance: 'Use an authentic task with a visible criterion-based rubric, reflection and application in context.' },
+      upper_secondary: { board: 'IB DP classroom practice', format: 'DP-style Criterion Practice', duration: 90, totalMarks: 80, guidance: 'Use subject-appropriate analysis, evaluation and criterion-linked feedback. Do not imply an official IB paper.' },
+      pre_university: { board: 'IB DP classroom practice', format: 'DP Extended Response Practice', duration: 120, totalMarks: 100, guidance: 'Use extended argument, evidence evaluation and a criterion-based rubric.' },
     },
   };
 
-  const countryStyles = styles[country] || null;
-  if (countryStyles && countryStyles[gradeBand]) return countryStyles[gradeBand];
+  const countryStyles = styles[country];
+  if (countryStyles?.[gradeBand]) return countryStyles[gradeBand];
 
-  // Fallback generic
   const fallbacks = {
-    primary: { board: 'International Framework', format: 'Primary Practice Paper', duration: 45, totalMarks: 30 },
-    lower_secondary: { board: 'International Framework', format: 'Junior Assessment Paper', duration: 60, totalMarks: 50 },
-    upper_secondary: { board: 'International Framework', format: 'Senior Examination Paper', duration: 90, totalMarks: 80 },
-    pre_university: { board: 'International Framework', format: 'Advanced Level Paper', duration: 120, totalMarks: 100 },
+    primary: { board: 'International classroom practice', format: 'Primary Practice Resource', duration: 45, totalMarks: 30, guidance: 'Use short recall and application questions with encouraging feedback.' },
+    lower_secondary: { board: 'International classroom practice', format: 'Junior Assessment Resource', duration: 60, totalMarks: 50, guidance: 'Use a balanced mix of recall, explanation and application with marks and model answers.' },
+    upper_secondary: { board: 'International classroom practice', format: 'Senior Practice Resource', duration: 90, totalMarks: 80, guidance: 'Use structured questions, clear command words and a concise mark scheme.' },
+    pre_university: { board: 'International classroom practice', format: 'Advanced Practice Resource', duration: 120, totalMarks: 100, guidance: 'Use analysis, evaluation and extended response with transparent scoring guidance.' },
   };
   return fallbacks[gradeBand] || fallbacks.lower_secondary;
 }
-
 // ─── Tone / Complexity Guide by Grade Band ────────────────────────────────────
 function getGradeToneGuide(gradeBand) {
   const guides = {
@@ -163,6 +182,8 @@ Exam Style to use:
 - Board: ${examStyle.board}
 - Format: ${examStyle.format}
 - Duration: ${examStyle.duration} minutes | Total Marks: ${examStyle.totalMarks}
+- Template rules: ${examStyle.guidance}
+- Label the resource as teacher-editable classroom practice. Never call it an official examination paper or use protected live-paper material.
 
 Key Concepts to cover: ${blueprint.key_concepts.join(', ')}
 Learning Objectives: ${blueprint.objectives.slice(0, 4).join(' | ')}

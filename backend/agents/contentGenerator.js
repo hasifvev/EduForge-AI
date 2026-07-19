@@ -22,6 +22,18 @@ Rules:
 7. Worksheet items must progress from recall to application and use the named curriculum framework only as a practice alignment, never as an official examination.
 8. Follow the exact resource counts requested in the user prompt`;
 
+function getRegionalActivityGuide(country = '') {
+  const guides = {
+    Malaysia: 'Sequence knowledge, explanation and application. Add a teacher-observable mastery or feedback cue; do not call the quiz an UPSR or PT3 paper.',
+    'United States': 'Use standards-based items: selected response, short constructed response and a real-world transfer item. For NGSS science, use a phenomenon, evidence or model.',
+    'United Kingdom': 'Use age-appropriate command words and visible marks for written practice. Keep any SATs, GCSE or A-level resemblance clearly labelled as classroom practice.',
+    Australia: 'Sequence understanding, fluency and reasoning against the achievement standard. Use NAPLAN-like conventions only for relevant literacy or numeracy practice.',
+    Singapore: 'Use clear method and working expectations alongside application and problem-solving items. Reserve PSLE wording for Primary 6 and GCE wording for secondary exam preparation.',
+    India: 'Use competency-based item types: objective checks, short answers and a case or familiar-context application item.',
+    'International / IB': 'For PYP, include inquiry and reflection. For MYP/DP, use authentic contexts, criterion-linked success cues and application rather than a generic exam-only pattern.',
+  };
+  return guides[country] || 'Use a balanced progression from knowledge check to explanation and real-world application.';
+}
 const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => {
   const isEarlyYears = /(kindergarten|reception|foundation|preschool|pre-primary|nursery|prasekolah)/i.test(String(year));
   // Use a full classroom bank for school-age learners without overwhelming early years.
@@ -47,6 +59,9 @@ ${JSON.stringify({ objectives: blueprint.objectives.slice(0, 3), key_concepts: b
 Experience Design:
 ${JSON.stringify({ primary_activity: experienceDesign.primary_activity, quiz_focus: experienceDesign.quiz_focus, matching_focus: experienceDesign.matching_focus, difficulty_calibration: experienceDesign.difficulty_calibration }, null, 2)}
 
+Regional resource format guide:
+${getRegionalActivityGuide(country)}
+All quizzes, matching activities and worksheets are teacher-editable classroom practice, never official examination materials.
 Return this EXACT JSON (no extra text):
 {
   "quiz": {
