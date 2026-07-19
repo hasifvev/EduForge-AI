@@ -10,6 +10,7 @@ import MockExam from '../components/MockExam.jsx';
 import ClozePassage from '../components/ClozePassage.jsx';
 import MindMap from '../components/MindMap.jsx';
 import StudySchedule from '../components/StudySchedule.jsx';
+import TeachMode from './TeachMode.jsx';
 
 const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', memory: '🧠', term_sprint: '⚡', worksheet: '📄', answer_key: '🔑' };
 
@@ -30,11 +31,12 @@ function formatTime(ms) {
   return ms < 1000 ? `${ms}ms` : `${(ms / 1000).toFixed(1)}s`;
 }
 
-export default function Dashboard({ result, onReset }) {
+export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary, onSaveTeachSession }) {
   const { t } = useLang();
   const [preview, setPreview] = useState(null);
   const [visibleCards, setVisibleCards] = useState(0);
   const [studyHubTab, setStudyHubTab] = useState('flashcards');
+  const [teachMode, setTeachMode] = useState(false);
 
   const {
     lesson, resources, teaching_insights,
@@ -100,6 +102,8 @@ export default function Dashboard({ result, onReset }) {
     general: { text: t.confidence_general, suffix: '', color: '#6366f1' },
   }[confidenceKey];
 
+  if (teachMode) return <TeachMode result={result} initialSession={savedLesson?.teachSession} onSaveSession={onSaveTeachSession} onBack={() => setTeachMode(false)} />;
+
   return (
     <main className="dashboard-main">
 
@@ -126,6 +130,8 @@ export default function Dashboard({ result, onReset }) {
           )}
         </div>
         <div className="dashboard-header-right">
+          <button className="new-lesson-btn" onClick={onOpenLibrary}>My Lessons</button>
+          <button className="teach-launch" onClick={() => setTeachMode(true)}>⚡ Teach on this device</button>
           <button className="new-lesson-btn" onClick={onReset} id="new-lesson-btn">{t.new_lesson_btn}</button>
         </div>
       </div>

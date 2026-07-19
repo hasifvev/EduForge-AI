@@ -1,9 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useLang } from '../context/LanguageContext.jsx';
 import FileUploadZone from '../components/FileUploadZone.jsx';
 import GenerationProgress from '../components/GenerationProgress.jsx';
 import { useGeneration } from '../hooks/useGeneration.js';
 import Dashboard from './Dashboard.jsx';
+import MyLessons from './MyLessons.jsx';
+import { saveLocalLesson, updateLocalTeachSession } from '../lib/localLessons.js';
 import { buildMaterialSearchUrl, getCurriculumMapping, getSubjectsForCountry, getTopicSuggestions } from '../utils/curriculumMapping.js';
 import { WORLD_LANGUAGE_OPTIONS } from '../utils/curriculumCatalog.js';
 
@@ -39,6 +41,15 @@ export default function Home() {
   const [formError, setFormError] = useState('');
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [customYear, setCustomYear] = useState('');
+  const [savedLesson, setSavedLesson] = useState(null);
+  const [showLibrary, setShowLibrary] = useState(false);
+  const savedGeneration = useRef(null);
+
+  useEffect(() => {
+    if (status !== 'complete' || !result || savedGeneration.current === result) return;
+    try { setSavedLesson(saveLocalLesson(result)); savedGeneration.current = result; }
+    catch { setFormError('This lesson could not be saved because browser storage is full. Export or clear older local lessons, then try again.'); }
+  }, [result, status]);
 
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
 
@@ -85,8 +96,17 @@ export default function Home() {
     ? (t.gradeSystems[selectedCountry.gradeSystem] || t.gradeSystems.us)
     : t.gradeSystems.us;
 
-  if (status === 'complete' && result) {
-    return <Dashboard result={result} onReset={reset} />;
+  const openLesson = (lesson) => { setSavedLesson(lesson); setShowLibrary(false); };
+  const updateTeachSession = (session) => {
+    if (!savedLesson) return;
+    try { const next = updateLocalTeachSession(savedLesson.id, session); if (next) setSavedLesson(next); }
+    catch { setFormError('Teaching progress could not be saved because browser storage is full.'); }
+  };
+
+  if (showLibrary) return <MyLessons onBack={() => setShowLibrary(false)} onOpenLesson={openLesson} />;
+
+  if (savedLesson || (status === 'complete' && result)) {
+    return <Dashboard result={savedLesson?.result || result} savedLesson={savedLesson} onSaveTeachSession={updateTeachSession} onOpenLibrary={() => setShowLibrary(true)} onReset={() => { reset(); setSavedLesson(null); }} />;
   }
 
   if (status === 'generating' || status === 'uploading') {
@@ -103,6 +123,7 @@ export default function Home() {
           {t.hero_headline.split('\n').map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
         </h1>
         <p className="hero-sub">{t.hero_sub}</p>
+        <button className="library-entry" type="button" onClick={() => setShowLibrary(true)}>📚 My Lessons</button>
 
         {/* Agent pills */}
         <div className="hero-agents">
