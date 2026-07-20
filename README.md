@@ -6,6 +6,14 @@ Built for OpenAI Build Week 2026. Live app: [edu-forge-ai-weld.vercel.app](https
 
 EduForge helps teachers turn a subject, grade, topic, region, language, learner profile, and optional source material into interactive activities, printable practice, study resources, and teaching guidance.
 
+## OpenAI Build Week Evidence
+
+**Track:** Education. EduForge was meaningfully extended during the Build Week submission period through the July 17–20 commits visible in this repository, including global curriculum coverage, browser-local Teach Mode and lesson history, offline language packs, standards coverage boundaries, and source-grounded Material Intelligence.
+
+Codex and GPT-5.6 were used as the engineering partner for product, architecture, implementation, and verification decisions. The most important decision was to build reusable browser game engines once rather than generate fragile game HTML for every lesson; this keeps interactive activities faster, portable, and dependable. See the detailed [Codex contribution log](docs/codex-log.md) and the [Build Week submission guide](docs/build-week-submission.md).
+
+For judges: use the live demo above, select one of the verified scenarios, generate a lesson, open an activity, and inspect the curriculum/source review notices. The product runs in demo mode without an API key. A `/feedback` Codex Session ID is supplied in the Devpost submission form as required by the event.
+
 ## Highlights
 
 - Seven source-registered education contexts: Malaysia, US/NGSS, England, Australia, Singapore, India/CBSE, and International / IB
