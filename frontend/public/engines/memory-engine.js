@@ -1,8 +1,8 @@
 /**
- * EduHelp AI — Memory Match Engine
+ * IlmuEducator — Memory Match Engine
  * Uses the same teacher-approved term/definition pairs as the matching activity.
  */
-const EduHelpMemory = (() => {
+const IlmuEducatorMemory = (() => {
   let state = { config: null, deck: [], open: [], matched: 0, moves: 0, locked: false };
 
   function escapeHtml(value) {
@@ -37,7 +37,7 @@ const EduHelpMemory = (() => {
       const kind = revealed ? card.kind : 'hidden';
       return '<button class="option-btn memory-card" style="min-height:92px;text-align:center;font-size:13px;line-height:1.35;' +
         (revealed ? '' : 'font-size:28px;font-weight:700;') +
-        '" ' + (revealed || state.locked ? 'disabled' : '') + ' onclick="EduHelpMemory.flip(' + index + ')">' +
+        '" ' + (revealed || state.locked ? 'disabled' : '') + ' onclick="IlmuEducatorMemory.flip(' + index + ')">' +
         '<span style="display:block;color:' + (kind === 'term' ? '#4F6EF7' : kind === 'definition' ? '#0f766e' : '#64748b') + '">' + label + '</span></button>';
     }).join('');
 
@@ -78,7 +78,7 @@ const EduHelpMemory = (() => {
     const app = document.getElementById('matching-app');
     app.innerHTML = '<div class="results-screen"><div class="results-icon">🏆</div><h2 class="results-title">Memory Match Complete</h2>' +
       '<div class="score-circle"><div class="score-num">' + state.matched + '/' + state.config.pairs.length + '</div><div class="score-pct">' + state.moves + ' moves</div></div>' +
-      '<p class="results-sub">' + escapeHtml(state.config.title) + '</p><button class="retry-btn" onclick="EduHelpMemory.restart()">Play Again</button></div>';
+      '<p class="results-sub">' + escapeHtml(state.config.title) + '</p><button class="retry-btn" onclick="IlmuEducatorMemory.restart()">Play Again</button></div>';
   }
 
   function restart() {

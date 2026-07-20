@@ -1,7 +1,7 @@
 {
-  "name": "eduhelp-backend",
+  "name": "ilmueducator-backend",
   "version": "1.0.0",
-  "description": "EduHelp AI — Backend API Server",
+  "description": "IlmuEducator — Backend API Server",
   "main": "server.js",
   "type": "module",
   "scripts": {

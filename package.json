@@ -1,7 +1,7 @@
 {
-  "name": "eduhelp-ai",
+  "name": "ilmueducator-ai",
   "version": "2.0.0",
-  "description": "EduHelp AI — The AI Teaching Operating System",
+  "description": "IlmuEducator — The AI Teaching Operating System",
   "type": "module",
   "private": true,
   "scripts": {

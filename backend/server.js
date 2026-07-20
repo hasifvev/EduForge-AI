@@ -338,7 +338,7 @@ export default app;
 if (process.env.VERCEL !== '1') {
   app.listen(PORT, () => {
     const mode = DEMO_MODE ? '🎭 DEMO (no API key)' : `🤖 LIVE — ${AI_PROVIDER} / ${LIVE_MODEL}`;
-    console.log(`\n🚀 EduHelp AI — The AI Teaching Operating System`);
+    console.log(`\n🚀 IlmuEducator — The AI Teaching Operating System`);
     console.log(`   http://localhost:${PORT} | ${mode} | 5 Agents`);
     console.log(`   Health: http://localhost:${PORT}/api/health\n`);
   });

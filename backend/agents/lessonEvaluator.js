@@ -3,13 +3,13 @@ import { withRetry } from '../utils/retry.js';
 import { evaluatorSchema } from '../validators/schemas.js';
 
 /**
- * EduHelp AI — Lesson Evaluator Agent (Agent 5)
+ * IlmuEducator — Lesson Evaluator Agent (Agent 5)
  * GPT-5.6 evaluating its own output.
  * Reviews the entire generated lesson and scores it on 4 educational dimensions.
- * This is the "AI judges AI" feature — unique to EduHelp AI.
+ * This is the "AI judges AI" feature — unique to IlmuEducator.
  */
 
-const SYSTEM_PROMPT = `You are EduHelp AI — Lesson Evaluator Agent.
+const SYSTEM_PROMPT = `You are IlmuEducator — Lesson Evaluator Agent.
 You are a senior educational assessment expert and curriculum auditor.
 
 Your role is to critically evaluate the generated lesson content and provide an honest quality assessment.

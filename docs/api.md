@@ -1,4 +1,4 @@
-# EduHelp AI API Reference
+# IlmuEducator API Reference
 
 Base URL locally: `http://localhost:3001/api`.
 

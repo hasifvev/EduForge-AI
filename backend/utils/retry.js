@@ -1,6 +1,6 @@
 /**
  * withRetry — wraps an async agent call with Zod validation and automatic retry.
- * Built by Codex as part of EduHelp AI infrastructure.
+ * Built by Codex as part of IlmuEducator infrastructure.
  *
  * @param {Function} fn         - Async function that calls the AI agent
  * @param {Object}   options

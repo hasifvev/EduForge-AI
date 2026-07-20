@@ -1,4 +1,4 @@
-# EduHelp AI Documentation
+# IlmuEducator Documentation
 
 - [Architecture](architecture.md) — system and runtime design
 - [API reference](api.md) — endpoint contract and limits

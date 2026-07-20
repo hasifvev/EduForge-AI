@@ -222,7 +222,7 @@ export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary,
                   <button
                     className="btn-download"
                     id={`btn-download-${res.key}`}
-                    onClick={() => downloadHTML(res.html, `eduhelp-${res.key}.html`)}
+                    onClick={() => downloadHTML(res.html, `ilmueducator-${res.key}.html`)}
                   >
                     ↓ {t.btn_download}
                   </button>

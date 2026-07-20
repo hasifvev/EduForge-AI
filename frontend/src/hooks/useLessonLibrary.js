@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-const STORAGE_KEY = 'eduhelp.lesson-library.v1';
-const LEGACY_STORAGE_KEY = 'eduforge.lesson-library.v1';
+const STORAGE_KEY = 'ilmueducator.lesson-library.v1';
+const LEGACY_STORAGE_KEYS = ['eduhelp.lesson-library.v1', 'eduforge.lesson-library.v1'];
 const MAX_SAVED_LESSONS = 12;
 
 function readLibraryForKey(key) {
@@ -16,9 +16,14 @@ function readLibraryForKey(key) {
 function readLibrary() {
   try {
     if (window.localStorage.getItem(STORAGE_KEY) !== null) return readLibraryForKey(STORAGE_KEY);
-    const legacy = readLibraryForKey(LEGACY_STORAGE_KEY);
-    if (legacy.length) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
-    return legacy;
+    for (const key of LEGACY_STORAGE_KEYS) {
+      const legacy = readLibraryForKey(key);
+      if (legacy.length) {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
+        return legacy;
+      }
+    }
+    return [];
   } catch {
     return [];
   }

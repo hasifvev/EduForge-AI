@@ -1,15 +1,15 @@
 /**
- * EduHelp AI — Drag-and-Drop Matching Engine
- * Built by Codex as part of EduHelp AI game infrastructure.
+ * IlmuEducator — Drag-and-Drop Matching Engine
+ * Built by Codex as part of IlmuEducator game infrastructure.
  *
  * Usage:
- *   EduHelpMatching.init(config);
+ *   IlmuEducatorMatching.init(config);
  *
  * Config shape:
  *   { title: string, instruction: string, pairs: [{ id, term, definition }] }
  */
 
-const EduHelpMatching = (() => {
+const IlmuEducatorMatching = (() => {
   let state = { config: null, matched: {}, dragging: null, complete: false };
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (char) => ({
@@ -60,9 +60,9 @@ const EduHelpMatching = (() => {
                  id="def-${p.id}"
                  draggable="${!isMatched}"
                  ${!isMatched ? `
-                   ondragstart="EduHelpMatching.dragStart(${p.id})"
-                   ondragend="EduHelpMatching.dragEnd()"
-                   onclick="EduHelpMatching.tapSelect(${p.id})"
+                   ondragstart="IlmuEducatorMatching.dragStart(${p.id})"
+                   ondragend="IlmuEducatorMatching.dragEnd()"
+                   onclick="IlmuEducatorMatching.tapSelect(${p.id})"
                  ` : ''}>
               ${escapeHtml(p.definition)}
               ${isMatched ? '<span class="match-tick">✓</span>' : ''}
@@ -76,9 +76,9 @@ const EduHelpMatching = (() => {
     pairs.forEach(p => {
       const termEl = document.getElementById(`term-${p.id}`);
       if (termEl && !state.matched[p.id]) {
-        termEl.setAttribute('ondragover', 'EduHelpMatching.dragOver(event)');
-        termEl.setAttribute('ondrop', `EduHelpMatching.drop(event, ${p.id})`);
-        termEl.setAttribute('onclick', `EduHelpMatching.tapTarget(${p.id})`);
+        termEl.setAttribute('ondragover', 'IlmuEducatorMatching.dragOver(event)');
+        termEl.setAttribute('ondrop', `IlmuEducatorMatching.drop(event, ${p.id})`);
+        termEl.setAttribute('onclick', `IlmuEducatorMatching.tapTarget(${p.id})`);
       }
     });
   }
@@ -148,7 +148,7 @@ const EduHelpMatching = (() => {
           <div class="score-pct">100%</div>
         </div>
         <p class="results-sub">${escapeHtml(state.config.title)}</p>
-        <button class="retry-btn" onclick="EduHelpMatching.restart()">Cuba Semula / Try Again</button>
+        <button class="retry-btn" onclick="IlmuEducatorMatching.restart()">Cuba Semula / Try Again</button>
       </div>
     `;
 

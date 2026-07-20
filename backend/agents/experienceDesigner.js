@@ -2,7 +2,7 @@ import { openai, GPT_MODEL, MODEL_MAX_TOKENS } from '../openai.js';
 import { withRetry } from '../utils/retry.js';
 import { experienceSchema } from '../validators/schemas.js';
 
-const SYSTEM_PROMPT = `You are EduHelp AI — Learning Experience Designer Agent.
+const SYSTEM_PROMPT = `You are IlmuEducator — Learning Experience Designer Agent.
 You are an expert instructional designer who creates optimal learning experiences for any classroom worldwide.
 
 Your role is to decide the BEST learning strategy for this lesson — and explain WHY.

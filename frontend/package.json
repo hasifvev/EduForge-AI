@@ -1,7 +1,7 @@
 {
-  "name": "eduhelp-frontend",
+  "name": "ilmueducator-frontend",
   "version": "1.0.0",
-  "description": "EduHelp AI — Teacher Dashboard",
+  "description": "IlmuEducator — Teacher Dashboard",
   "type": "module",
   "scripts": {
     "dev": "vite",

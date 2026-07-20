@@ -1,6 +1,6 @@
 # Curriculum Source Register
 
-EduHelp uses a local, grade-aware planning catalog for the regions shown in the UI. It links teachers to the official framework for final verification; it does not claim to reproduce every local syllabus, state variation, or school sequence. A source-registered pack means the framework boundary is documented; it does **not** mean every subject and outcome has been reviewed.
+IlmuEducator uses a local, grade-aware planning catalog for the regions shown in the UI. It links teachers to the official framework for final verification; it does not claim to reproduce every local syllabus, state variation, or school sequence. A source-registered pack means the framework boundary is documented; it does **not** mean every subject and outcome has been reviewed.
 
 | Region | Planning framework | Official source |
 |---|---|---|
@@ -30,4 +30,4 @@ Only the records below can receive the **Reviewed curriculum match** label. All 
 | United States | NGSS | Grade 5 Science | `5-PS1-1` — particle model of matter |
 | England | National Curriculum | Key Stage 3 Science | particle model of states of matter |
 
-Australia, Singapore, India/CBSE, and IB are source-registered framework packs; they do not yet contain reviewed subject/outcome records. This boundary prevents EduHelp from claiming universal official alignment before the underlying records have been independently reviewed.
+Australia, Singapore, India/CBSE, and IB are source-registered framework packs; they do not yet contain reviewed subject/outcome records. This boundary prevents IlmuEducator from claiming universal official alignment before the underlying records have been independently reviewed.

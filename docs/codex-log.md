@@ -1,13 +1,13 @@
-# EduHelp AI — Codex and GPT-5.6 Contribution Log
+# IlmuEducator — Codex and GPT-5.6 Contribution Log
 
-> This document tracks every contribution made by Codex to EduHelp AI.
+> This document tracks every contribution made by Codex to IlmuEducator.
 > Required for OpenAI Build Week submission.
 
 ---
 
 ## Summary
 
-EduHelp AI uses Codex with GPT-5.6 as its **software engineering partner**. Rather than generating HTML every time a lesson is requested (slow, unreliable), Codex was used to **build the reusable game infrastructure once** — a more sophisticated and production-appropriate pattern.
+IlmuEducator uses Codex with GPT-5.6 as its **software engineering partner**. Rather than generating HTML every time a lesson is requested (slow, unreliable), Codex was used to **build the reusable game infrastructure once** — a more sophisticated and production-appropriate pattern.
 
 During the Build Week submission period, Codex/GPT-5.6 also supported the July 17–20 extension work visible in the repository history: local-first Teach Mode, worldwide curriculum pathways, source-registered standards boundaries, offline language packs, and source-grounded Material Intelligence. The exact `/feedback` Session ID is entered in the Devpost submission form rather than committed to the repository.
 
@@ -157,4 +157,4 @@ This architectural insight from Codex improved the entire system.
 
 ---
 
-*EduHelp AI | OpenAI Build Week 2026*
+*IlmuEducator | OpenAI Build Week 2026*

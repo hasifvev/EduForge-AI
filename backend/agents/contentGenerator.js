@@ -2,7 +2,7 @@ import { openai, GPT_MODEL, MODEL_MAX_TOKENS } from '../openai.js';
 import { withRetry } from '../utils/retry.js';
 import { gameContentSchema } from '../validators/schemas.js';
 
-const SYSTEM_PROMPT = `You are EduHelp AI — Content Generator Agent.
+const SYSTEM_PROMPT = `You are IlmuEducator — Content Generator Agent.
 You are a master assessment writer with expertise in creating high-quality educational content for any curriculum worldwide.
 
 Your role is to create the actual questions, options, answers, and game content for any teacher, any grade, any country.

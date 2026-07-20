@@ -1,5 +1,5 @@
 /**
- * EduHelp AI — Demo Cache
+ * IlmuEducator — Demo Cache
  * Three pre-built scenarios for instant demo without API calls.
  * Universal (default), Malaysia (BM), UK (History)
  */

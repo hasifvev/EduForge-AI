@@ -1,4 +1,4 @@
-# EduHelp AI — System Architecture
+# IlmuEducator — System Architecture
 
 > Full technical design of the 5-agent AI Teaching Operating System
 
@@ -6,11 +6,11 @@
 
 ## Overview
 
-EduHelp AI is a **multi-agent AI pipeline** where each named agent has a single, well-defined responsibility. Curriculum Intelligence and Experience Designer run first; content, study materials, and teaching insights then run in parallel; Lesson Evaluator runs after the required outputs are available.
+IlmuEducator is a **multi-agent AI pipeline** where each named agent has a single, well-defined responsibility. Curriculum Intelligence and Experience Designer run first; content, study materials, and teaching insights then run in parallel; Lesson Evaluator runs after the required outputs are available.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         EDUHELP AI PIPELINE                        │
+│                         ILMUEDUCATOR AI PIPELINE                        │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  Teacher Input                                                      │
@@ -439,4 +439,4 @@ Nodes may contain a description, learning goal, example, and quick-check questio
 
 ---
 
-*EduHelp AI | OpenAI Build Week 2026*
+*IlmuEducator | OpenAI Build Week 2026*

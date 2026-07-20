@@ -1,16 +1,16 @@
-// EduHelp AI — i18n Translations
+// IlmuEducator — i18n Translations
 // English + Bahasa Melayu Malaysia
 // Global version — any teacher, any country, any curriculum
 
 export const translations = {
   en: {
     // Nav
-    brand: 'EduHelp AI',
+    brand: 'IlmuEducator',
     tagline: 'The AI Teaching Operating System',
 
     // Home Hero
     hero_headline: 'The AI that thinks\nlike your best teacher.',
-    hero_sub: 'Describe your lesson topic. EduHelp AI analyses the curriculum, designs the perfect learning experience, creates interactive activities — and evaluates its own work.',
+    hero_sub: 'Describe your lesson topic. IlmuEducator analyses the curriculum, designs the perfect learning experience, creates interactive activities — and evaluates its own work.',
     upload_label: 'Upload Lesson Material',
     upload_hint: 'PDF, TXT, PNG, JPG, or WEBP — up to 4 MB',
     upload_or: 'or describe your lesson',
@@ -185,12 +185,12 @@ export const translations = {
 
   bm: {
     // Nav
-    brand: 'EduHelp AI',
+    brand: 'IlmuEducator',
     tagline: 'Sistem Pengendalian Pengajaran AI',
 
     // Home Hero
     hero_headline: 'AI yang berfikir seperti\nguru terbaik anda.',
-    hero_sub: 'Nyatakan tajuk pelajaran anda. EduHelp AI menganalisis kurikulum, mereka bentuk pengalaman pembelajaran terbaik, mencipta aktiviti interaktif — dan menilai kerjanya sendiri.',
+    hero_sub: 'Nyatakan tajuk pelajaran anda. IlmuEducator menganalisis kurikulum, mereka bentuk pengalaman pembelajaran terbaik, mencipta aktiviti interaktif — dan menilai kerjanya sendiri.',
     upload_label: 'Muat Naik Bahan Pelajaran',
     upload_hint: 'PDF, TXT, PNG, JPG atau WEBP — sehingga 4 MB',
     upload_or: 'atau nyatakan pelajaran anda',
