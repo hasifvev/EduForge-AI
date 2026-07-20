@@ -160,7 +160,7 @@ Rules:
 7. Use the teacher's country for real-world examples throughout`;
 
 // ─── Build Prompt ─────────────────────────────────────────────────────────────
-const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, gradeBandInfo, examStyle }) => {
+const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, gradeBandInfo, examStyle, standardsContext }) => {
   const toneGuide = getGradeToneGuide(gradeBandInfo.band);
   const compactLive = process.env.DEMO_MODE === 'false';
   const counts = compactLive
@@ -187,6 +187,7 @@ Exam Style to use:
 
 Key Concepts to cover: ${blueprint.key_concepts.join(', ')}
 Learning Objectives: ${blueprint.objectives.slice(0, 4).join(' | ')}
+${standardsContext?.exact_match ? `Reviewed standards contract: ${standardsContext.standard_id} (${standardsContext.standard_code}) — ${standardsContext.outcome}. The mock exam and study resources must use the stated progression: ${standardsContext.exercise_profile.progression.join(' → ')}.` : ''}
 
 Return this EXACT JSON structure (no extra text):
 {
@@ -322,7 +323,7 @@ function normalizeStudyMaterials(materials) {
   };
 }
 // ─── Main Agent ───────────────────────────────────────────────────────────────
-export async function runStudyMaterialsGenerator({ subject, year, topic, language, country, studentPersona, blueprint }) {
+export async function runStudyMaterialsGenerator({ subject, year, topic, language, country, studentPersona, blueprint, standardsContext }) {
   const gradeBandInfo = detectGradeBand(year);
   const examStyle = getExamStyle(country, gradeBandInfo.band, blueprint.curriculum_alignment, blueprint.curriculum_source);
 
@@ -335,7 +336,7 @@ export async function runStudyMaterialsGenerator({ subject, year, topic, languag
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: buildPrompt({ subject, year, topic, language, country, studentPersona, blueprint, gradeBandInfo, examStyle }) },
+          { role: 'user', content: buildPrompt({ subject, year, topic, language, country, studentPersona, blueprint, gradeBandInfo, examStyle, standardsContext }) },
         ],
       });
       const raw = res.choices[0].message.content;

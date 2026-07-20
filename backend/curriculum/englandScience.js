@@ -1,0 +1,30 @@
+export const ENGLAND_SCIENCE_RECORDS = [
+  {
+    id: 'ENG-NC-KS3-SCI-PARTICLE-MATTER',
+    country: 'United Kingdom',
+    jurisdiction: 'England',
+    framework: 'National Curriculum in England',
+    framework_version: 'Key Stage 3 Science',
+    subject: 'Science',
+    grade: 'Key Stage 3',
+    strand: 'Chemistry — The particulate nature of matter',
+    topic: 'Particle model of states of matter',
+    standard_code: 'KS3-SCI-PARTICLE-MATTER',
+    outcome_en: 'Explain the properties of solids, liquids and gases and changes of state using the particle model.',
+    accepted_subjects: ['science'],
+    accepted_years: ['year 7', 'year 8', 'year 9', 'key stage 3', 'ks3'],
+    topic_patterns: [/particle\s+model.*(states?|matter)/i, /(states?|matter).*(particle\s+model)/i, /properties?\s+of\s+(solids?|liquids?|gases?).*particle/i],
+    exercise_profile: {
+      format_profile: 'England KS3 science classroom practice',
+      progression: ['identify', 'represent', 'explain', 'apply'],
+      evidence_type: 'Student uses a particle representation to explain a property or change of state.',
+      teacher_observation: 'Check the representation, vocabulary, and causal explanation between particle arrangement/motion and the observed property.',
+    },
+    source: {
+      title: 'National curriculum in England: science programmes of study',
+      url: 'https://www.gov.uk/government/publications/national-curriculum-in-england-science-programmes-of-study/national-curriculum-in-england-science-programmes-of-study',
+      evidence: 'The KS3 chemistry programme specifies states of matter and changes of state in terms of the particle model.',
+      reviewed_on: '2026-07-20',
+    },
+  },
+];

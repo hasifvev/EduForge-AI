@@ -8,7 +8,8 @@ EduForge helps teachers turn a subject, grade, topic, region, language, learner 
 
 ## Highlights
 
-- Seven supported education contexts: Malaysia, United States, United Kingdom, Australia, Singapore, India, and International / IB
+- Seven source-registered education contexts: Malaysia, US/NGSS, England, Australia, Singapore, India/CBSE, and International / IB
+- A versioned standards registry that distinguishes reviewed exact matches from framework-only and teacher-review coverage
 - Grade-aware subjects and suggested lesson pathways from early years through pre-university
 - Interactive Quiz, Matching, Memory Match, and Term Sprint activities
 - Printable worksheet and teacher answer key
@@ -54,6 +55,12 @@ A companion Study Materials generator creates the Study Hub resources in paralle
 | International / IB | IB PYP / MYP / DP | Early Years |
 
 The catalog adjusts subjects and starter topics across early years, primary, lower secondary, upper secondary, and pre-university learning stages. It is a teacher-facing planning aid, not a substitute for a school, board, or state syllabus. Each region exposes an official curriculum source in the lesson form; see [curriculum sources](docs/curriculum-sources.md).
+
+### Standards Coverage
+
+Every supported region now has a source-registered country pack with an explicit jurisdiction boundary. A lesson is labelled **Reviewed curriculum match** only when its country, subject, year, and topic resolve to a reviewed outcome record; otherwise it is labelled **Curriculum review needed** and links to the official framework source.
+
+Current reviewed seed records are Malaysia KSSM Form 1 Science `5.1.3`, NGSS Grade 5 Science `5-PS1-1`, and England KS3 Science particle-model matter. Australia, Singapore, India/CBSE, and IB packs are registered with their official sources and await reviewed subject/outcome records. This prevents the product from claiming universal official alignment before the data exists. See [global standards platform](docs/2026-07-20-global-standards-platform.md).
 
 ## Regional Assessment Formats
 
@@ -177,6 +184,7 @@ See the full [API reference](docs/api.md). The main endpoints are:
 | `POST /api/extract-url` | Extracts text from an approved public URL |
 | `POST /api/generate` | Creates the lesson package |
 | `POST /api/analyze-performance` | Produces a class-level quiz performance report |
+| `GET /api/curriculum/coverage` | Returns the versioned country-pack register and reviewed-record coverage summary |
 
 Example generation request:
 
@@ -206,6 +214,7 @@ api/
   index.js                 Vercel serverless entry point
 backend/
   agents/                  Curriculum, design, content, teacher, evaluation, study-material stages
+  curriculum/              Source-registered country packs, reviewed standards records, resolver, coverage validator
   demo/                    Cached scenarios and source-preview mode
   utils/                   Parsing, URL safety, prompt safety, worksheet rendering
   validators/              Request and response schemas

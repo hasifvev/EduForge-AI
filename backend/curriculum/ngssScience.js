@@ -1,0 +1,30 @@
+export const NGSS_SCIENCE_RECORDS = [
+  {
+    id: 'NGSS-SCI-G5-5-PS1-1',
+    country: 'United States',
+    jurisdiction: 'NGSS adopting state or district',
+    framework: 'Next Generation Science Standards',
+    framework_version: 'NGSS',
+    subject: 'Science',
+    grade: 'Grade 5',
+    strand: 'Matter and Its Interactions',
+    topic: 'Matter is made of particles too small to be seen',
+    standard_code: '5-PS1-1',
+    outcome_en: 'Develop a model to describe that matter is made of particles too small to be seen.',
+    accepted_subjects: ['science'],
+    accepted_years: ['grade 5', '5th grade'],
+    topic_patterns: [/particles?\s+too\s+small\s+to\s+be\s+seen/i, /model.*matter.*particles?/i, /matter.*particles?.*model/i],
+    exercise_profile: {
+      format_profile: 'NGSS three-dimensional classroom evidence task',
+      progression: ['observe', 'model', 'explain', 'revise'],
+      evidence_type: 'Student develops and explains a particle model using an observable phenomenon or evidence.',
+      teacher_observation: 'Check that the model represents unseen particles and is supported by an appropriate observation or phenomenon.',
+    },
+    source: {
+      title: 'NGSS 5-PS1-1 Matter and Its Interactions',
+      url: 'https://www.nextgenscience.org/pe/5-ps1-1-matter-and-its-interactions',
+      evidence: 'Official NGSS performance expectation with practice, disciplinary core idea, crosscutting concept, clarification statement, and assessment boundary.',
+      reviewed_on: '2026-07-20',
+    },
+  },
+];

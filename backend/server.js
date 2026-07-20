@@ -16,6 +16,9 @@ import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
 import { buildGlobalDemo } from './demo/globalDemo.js';
 import { buildSourcePreview } from './demo/sourcePreview.js';
+import { resolveStandardsContext } from './curriculum/standardsResolver.js';
+import { enrichLessonWithStandards } from './curriculum/exerciseValidator.js';
+import { getRegistrySummary } from './curriculum/standardsRegistry.js';
 import { AI_PROVIDER, GPT_MODEL } from './openai.js';
 import { generateRequestSchema, performanceRequestSchema, parseRequest } from './validators/requestSchemas.js';
 
@@ -122,6 +125,12 @@ app.post('/api/extract-url', async (req, res) => {
     res.status(400).json({ error: err.message || 'Failed to read material link.' });
   }
 });
+
+// Public, source-only registry metadata. It exposes coverage boundaries without
+// distributing protected curriculum text or pretending every framework is mapped.
+app.get('/api/curriculum/coverage', (_req, res) => {
+  res.json({ status: 'ok', registry: getRegistrySummary() });
+});
 // ─── Main Generation ──────────────────────────────────────────────────────────
 app.post('/api/generate', generationLimiter, async (req, res) => {
   let payload;
@@ -154,7 +163,9 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
       });
     }
 
-    const demo = selectMatchingDemo({ subject, year, topic, country, language }) || buildGlobalDemo({ subject, year, topic, language, country, curriculumStandard, studentPersona });
+    const standardsContext = resolveStandardsContext({ country, subject, year, topic });
+    const generatedDemo = selectMatchingDemo({ subject, year, topic, country, language }) || buildGlobalDemo({ subject, year, topic, language, country, curriculumStandard, studentPersona });
+    const demo = enrichLessonWithStandards(generatedDemo, standardsContext);
 
     return res.json({
       ...demo,
@@ -170,7 +181,8 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
   let agentCalls = 0;
 
   try {
-    const context = { subject, year, topic, language, objectives, extractedText, country, curriculumStandard, studentPersona };
+    const standardsContext = resolveStandardsContext({ country, subject, year, topic });
+    const context = { subject, year, topic, language, objectives, extractedText, country, curriculumStandard, studentPersona, standardsContext };
     console.log(`\n🎓 [${generationId}] ${subject} ${year} — ${topic} | ${country || 'International'} | ${studentPersona}`);
 
     // Agent 1 — Curriculum Intelligence
@@ -216,7 +228,7 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
       source_confidence: blueprint.confidenceLevel || 'general',
     };
 
-    res.json({
+    res.json(enrichLessonWithStandards({
       generation_id: generationId,
       model: LIVE_MODEL,
       created_at: new Date().toISOString(),
@@ -233,7 +245,7 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
       teaching_insights: teachingInsights,
       lesson_evaluation: lessonEvaluation,
       analytics,
-    });
+    }, standardsContext));
 
   } catch (err) {
     console.error(`  ❌ [${generationId}] Error:`, err.message);

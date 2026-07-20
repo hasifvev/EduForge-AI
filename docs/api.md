@@ -19,6 +19,23 @@ Returns the service state.
 
 `DEMO` serves cached scenarios. `LIVE` calls the configured provider.
 
+## `GET /curriculum/coverage`
+
+Returns public registry metadata: source-registered country packs, their scope boundaries, and the count of reviewed outcome records. It intentionally does not return protected curriculum text.
+
+```json
+{
+  "status": "ok",
+  "registry": {
+    "version": "2026.07.20.1",
+    "records": 3,
+    "country_packs": [
+      { "id": "MY", "framework": "KSPK / KSSR Semakan 2017 / KSSM", "coverage_status": "records_in_progress" }
+    ]
+  }
+}
+```
+
 ## `POST /extract`
 
 Extracts lesson text from an uploaded file. Use `multipart/form-data` with field name `file`.
@@ -87,6 +104,8 @@ Successful live responses have `status: "complete"` and include:
 - `teaching_insights`
 - `lesson_evaluation`
 - `analytics`
+- `standards_context`: exact reviewed standard match or framework-only review boundary
+- `coverage_report`: exercise mapping information when a reviewed record applies
 
 The Learning Atlas data is a nested structure of `root`, `topic`, `subtopic`, and `skill` nodes. Nodes may include `description`, `learning_goal`, `example`, and `check_question`.
 

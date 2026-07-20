@@ -42,7 +42,7 @@ export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary,
     lesson, resources, teaching_insights,
     lesson_evaluation, analytics, study_materials,
     generation_id, created_at, source_preview, source_notice,
-    subject, year, topic, country, studentPersona,
+    subject, year, topic, country, studentPersona, standards_context, coverage_report,
   } = result;
 
   // Magic Moment: reveal cards one by one
@@ -137,6 +137,19 @@ export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary,
       </div>
 
       {source_notice && <div className="source-preview-notice">{source_notice}</div>}
+
+      {standards_context && (
+        <div className="source-preview-notice" style={{ borderLeftColor: standards_context.exact_match ? '#10b981' : '#f59e0b' }}>
+          <strong>{standards_context.exact_match ? 'Reviewed curriculum match' : 'Curriculum review needed'}:</strong>{' '}
+          {standards_context.exact_match
+            ? `${standards_context.framework} ${standards_context.standard_code} — ${standards_context.outcome}`
+            : standards_context.message}
+          {standards_context.registry_version && ` · Registry ${standards_context.registry_version}`}
+          {coverage_report?.mapped && ` · ${coverage_report.mapped_items}/${coverage_report.total_items} exercise items mapped`}
+          {standards_context.source?.url && <><br /><a href={standards_context.source.url} target="_blank" rel="noreferrer">View reviewed official source</a></>}
+          {!standards_context.source?.url && standards_context.country_pack?.source?.url && <><br /><a href={standards_context.country_pack.source.url} target="_blank" rel="noreferrer">View official framework source</a></>}
+        </div>
+      )}
 
       {/* ── Analytics Bar ───────────────────────────────────────────────── */}
       {analytics && visibleCards >= 1 && (

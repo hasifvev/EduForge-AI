@@ -34,7 +34,7 @@ function getRegionalActivityGuide(country = '') {
   };
   return guides[country] || 'Use a balanced progression from knowledge check to explanation and real-world application.';
 }
-const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) => {
+const buildPrompt = ({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign, standardsContext }) => {
   const isEarlyYears = /(kindergarten|reception|foundation|preschool|pre-primary|nursery|prasekolah)/i.test(String(year));
   // Use a full classroom bank for school-age learners without overwhelming early years.
   // These counts remain within one structured response, so they do not add API calls.
@@ -61,6 +61,13 @@ ${JSON.stringify({ primary_activity: experienceDesign.primary_activity, quiz_foc
 
 Regional resource format guide:
 ${getRegionalActivityGuide(country)}
+${standardsContext?.exact_match ? `
+Reviewed standards contract (mandatory):
+- Standard ID: ${standardsContext.standard_id} (${standardsContext.standard_code})
+- Required outcome: ${standardsContext.outcome}
+- Required progression: ${standardsContext.exercise_profile.progression.join(' → ')}
+- Evidence cue: ${standardsContext.exercise_profile.evidence_type}
+Every generated item must directly support this outcome. Do not introduce a different standard code.` : ''}
 All quizzes, matching activities and worksheets are teacher-editable classroom practice, never official examination materials.
 Return this EXACT JSON (no extra text):
 {
@@ -101,7 +108,7 @@ Adjust all difficulty to match ${studentPersona || 'On-Level'} persona.
 Use real-world examples from ${country || 'the student context'}.`;
 };
 
-export async function runContentGenerator({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) {
+export async function runContentGenerator({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign, standardsContext }) {
   return withRetry(
     async () => {
       const res = await openai.chat.completions.create({
@@ -111,7 +118,7 @@ export async function runContentGenerator({ subject, year, topic, language, coun
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: buildPrompt({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign }) },
+          { role: 'user', content: buildPrompt({ subject, year, topic, language, country, studentPersona, blueprint, experienceDesign, standardsContext }) },
         ],
       });
       const raw = res.choices[0].message.content;
