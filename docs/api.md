@@ -106,8 +106,11 @@ Successful live responses have `status: "complete"` and include:
 - `analytics`
 - `standards_context`: exact reviewed standard match or framework-only review boundary
 - `coverage_report`: exercise mapping information when a reviewed record applies
+- `material_intelligence` (when `extractedText` is supplied): source-grounded `summary`, `topics`, `key_terms`, `essential_points`, `learning_goals`, and a source-confidence label
 
 The Learning Atlas data is a nested structure of `root`, `topic`, `subtopic`, and `skill` nodes. Nodes may include `description`, `learning_goal`, `example`, and `check_question`.
+
+Material Intelligence never claims unsupported facts. `source-grounded` means sufficient readable source context was present; `limited-source-grounded` and `insufficient-source-detail` signal that the teacher should consult the original material before relying on the briefing.
 
 ## `POST /analyze-performance`
 

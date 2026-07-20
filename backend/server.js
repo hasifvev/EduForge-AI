@@ -16,6 +16,7 @@ import { buildWorksheet } from './utils/worksheetBuilder.js';
 import { DEMO_RESPONSES } from './demo/demoCache.js';
 import { buildGlobalDemo } from './demo/globalDemo.js';
 import { buildSourcePreview } from './demo/sourcePreview.js';
+import { analyzeMaterial } from './utils/materialIntelligence.js';
 import { resolveStandardsContext } from './curriculum/standardsResolver.js';
 import { enrichLessonWithStandards } from './curriculum/exerciseValidator.js';
 import { getRegistrySummary } from './curriculum/standardsRegistry.js';
@@ -228,6 +229,10 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
       source_confidence: blueprint.confidenceLevel || 'general',
     };
 
+    const materialIntelligence = extractedText
+      ? analyzeMaterial({ extractedText, topic })
+      : undefined;
+
     res.json(enrichLessonWithStandards({
       generation_id: generationId,
       model: LIVE_MODEL,
@@ -245,6 +250,7 @@ app.post('/api/generate', generationLimiter, async (req, res) => {
       teaching_insights: teachingInsights,
       lesson_evaluation: lessonEvaluation,
       analytics,
+      ...(materialIntelligence ? { material_intelligence: materialIntelligence } : {}),
     }, standardsContext));
 
   } catch (err) {

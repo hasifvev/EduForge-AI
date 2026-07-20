@@ -1,12 +1,12 @@
 # EduForge AI — Handoff
 
 **Last updated:** 2026-07-20
-**Status:** All supported framework packs registered; reviewed outcome coverage expanding
+**Status:** Source-material intelligence added; framework coverage expanding
 **Owner:** Lord Hasif
 
 ## Current State
 
-EduForge's generator and Study Hub remain intact. Generated lessons, Teach Mode progress, and teacher reflections are available in My Lessons only on the current browser. Teachers can export and restore a JSON backup. Demo mode now accepts arbitrary lesson inputs without relying on an AI provider. Its bundled instruction packs fully localize reusable teaching scaffolds for English, Bahasa Melayu, French, and Spanish; unsupported selections truthfully use the English pack and identify that fallback.
+EduForge's generator and Study Hub remain intact. Uploaded or linked source material now produces a local Material Intelligence briefing: summary, topics, key terms, essential points, evidence, and learner explain-goals. It marks limited extraction instead of inventing context. Generated lessons, Teach Mode progress, and teacher reflections are available in My Lessons only on the current browser. Teachers can export and restore a JSON backup. Demo mode now accepts arbitrary lesson inputs without relying on an AI provider. Its bundled instruction packs fully localize reusable teaching scaffolds for English, Bahasa Melayu, French, and Spanish; unsupported selections truthfully use the English pack and identify that fallback.
 
 ## What's Next
 

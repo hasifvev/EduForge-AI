@@ -123,6 +123,11 @@ export const translations = {
     differentiation_label: 'Differentiation Note',
     new_lesson_btn: '+ New Lesson',
     ai_review_disclaimer: 'AI-generated content — please review before use in class',
+    material_intelligence_title: 'Material Summary',
+    material_intelligence_topics: 'Topics to understand',
+    material_intelligence_explain: 'What learners should be able to explain',
+    material_intelligence_evidence: 'Evidence from the material',
+    material_intelligence_limited: 'The extracted text is limited, so check the original material before relying on this summary.',
 
     // Curriculum confidence
     confidence_high: 'Adapted for',
@@ -298,6 +303,11 @@ export const translations = {
     differentiation_label: 'Nota Pembezaan',
     new_lesson_btn: '+ Pelajaran Baru',
     ai_review_disclaimer: 'Kandungan dijana AI — sila semak sebelum digunakan dalam kelas',
+    material_intelligence_title: 'Ringkasan Bahan',
+    material_intelligence_topics: 'Topik untuk difahami',
+    material_intelligence_explain: 'Perkara yang murid perlu dapat jelaskan',
+    material_intelligence_evidence: 'Bukti daripada bahan',
+    material_intelligence_limited: 'Teks yang diekstrak adalah terhad; semak bahan asal sebelum bergantung pada ringkasan ini.',
 
     // Curriculum confidence
     confidence_high: 'Disesuaikan untuk',

@@ -10,6 +10,7 @@ import MockExam from '../components/MockExam.jsx';
 import ClozePassage from '../components/ClozePassage.jsx';
 import MindMap from '../components/MindMap.jsx';
 import StudySchedule from '../components/StudySchedule.jsx';
+import MaterialIntelligence from '../components/MaterialIntelligence.jsx';
 import TeachMode from './TeachMode.jsx';
 
 const RESOURCE_ICONS = { quiz: '🎯', matching: '🧩', memory: '🧠', term_sprint: '⚡', worksheet: '📄', answer_key: '🔑' };
@@ -41,7 +42,7 @@ export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary,
   const {
     lesson, resources, teaching_insights,
     lesson_evaluation, analytics, study_materials,
-    generation_id, created_at, source_preview, source_notice,
+    generation_id, created_at, source_preview, source_notice, material_intelligence,
     subject, year, topic, country, studentPersona, standards_context, coverage_report,
   } = result;
 
@@ -137,6 +138,8 @@ export default function Dashboard({ result, savedLesson, onReset, onOpenLibrary,
       </div>
 
       {source_notice && <div className="source-preview-notice">{source_notice}</div>}
+
+      {material_intelligence && <MaterialIntelligence intelligence={material_intelligence} />}
 
       {standards_context && (
         <div className="source-preview-notice" style={{ borderLeftColor: standards_context.exact_match ? '#10b981' : '#f59e0b' }}>

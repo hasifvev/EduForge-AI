@@ -16,6 +16,7 @@ EduForge helps teachers turn a subject, grade, topic, region, language, learner 
 - Study Hub with flashcards, notes, mock exam, cloze passage, Learning Atlas, and differentiated study schedule
 - Five product-level AI stages that plan, design, generate, support, and evaluate a lesson
 - Source ingestion from PDF, TXT, PNG, JPG, WEBP, and approved public links
+- Material Intelligence for uploaded or linked sources: grounded summary, topics, key terms, essential points, and explain-with-evidence goals
 - English and Bahasa Melayu interface support, with generation in a teacher-selected language
 
 ## What a Lesson Package Includes
@@ -90,6 +91,8 @@ The interface includes quick language choices and an **Any language** input. The
 | Public link | 2 MB remote response | PDF, TXT, image, or public web page |
 
 Source text is capped before it reaches the model pipeline. Public links are checked for private-network targets and redirect destinations before fetching. Uploaded or linked content should always be reviewed for suitability and copyright compliance.
+
+When source text is supplied, EduForge also returns a **Material Intelligence** briefing. It extracts a concise source-grounded summary, identifies topics and key terms, preserves short source evidence, and states what learners should be able to explain. If the readable source text is too short, the interface explicitly marks that limit instead of inventing detail.
 
 ## Demo Mode and Live Mode
 
