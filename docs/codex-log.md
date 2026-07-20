@@ -11,6 +11,16 @@ EduForge AI uses Codex with GPT-5.6 as its **software engineering partner**. Rat
 
 During the Build Week submission period, Codex/GPT-5.6 also supported the July 17–20 extension work visible in the repository history: local-first Teach Mode, worldwide curriculum pathways, source-registered standards boundaries, offline language packs, and source-grounded Material Intelligence. The exact `/feedback` Session ID is entered in the Devpost submission form rather than committed to the repository.
 
+**Primary Codex Build Week session evidence:** `019f7a42-c8fa-7c63-9211-41e8af01b47c` (local rollout metadata dated July 19, 2026). This is preserved here as traceable build evidence; Devpost's `/feedback` field should use the identifier returned or accepted by the Codex feedback flow.
+
+### Evidence artifact manifest
+
+The following private Codex artifacts support the Build Week evidence trail. Their names are documented for traceability; the raw artifacts are intentionally not committed because they can contain private session context.
+
+- `codex-doctor-report.json`
+- `rollout-2026-07-19T20-03-45-019f7a42-c8fa-7c63-9211-41e8af01b47c.jsonl`
+- `auto-review-rollout-019f7a42-c8fa-7c63-9211-41e8af01b47c.jsonl`
+
 **Total Codex-generated code: ~788 lines**
 
 ---
