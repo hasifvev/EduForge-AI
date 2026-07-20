@@ -69,7 +69,7 @@ The catalog adjusts subjects and starter topics across early years, primary, low
 
 Every supported region now has a source-registered country pack with an explicit jurisdiction boundary. A lesson is labelled **Reviewed curriculum match** only when its country, subject, year, and topic resolve to a reviewed outcome record; otherwise it is labelled **Curriculum review needed** and links to the official framework source.
 
-Current reviewed seed records are Malaysia KSSM Form 1 Science `5.1.3`, NGSS Grade 5 Science `5-PS1-1`, and England KS3 Science particle-model matter. Australia, Singapore, India/CBSE, and IB packs are registered with their official sources and await reviewed subject/outcome records. This prevents the product from claiming universal official alignment before the data exists. See [global standards platform](docs/2026-07-20-global-standards-platform.md).
+Current reviewed seed records are Malaysia KSSM Form 1 Science `5.1.3`, NGSS Grade 5 Science `5-PS1-1`, and England KS3 Science particle-model matter. Australia, Singapore, India/CBSE, and IB packs are registered with their official sources and await reviewed subject/outcome records. This prevents the product from claiming universal official alignment before the data exists. See the [reviewed standards coverage](docs/curriculum-sources.md#reviewed-standards-seed-coverage).
 
 ## Regional Assessment Formats
 
