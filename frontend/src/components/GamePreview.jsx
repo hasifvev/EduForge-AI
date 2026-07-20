@@ -82,7 +82,7 @@ function buildQuizHTML(engineConfig) {
 <body>
   <div id="quiz-app"></div>
   <script src="${window.location.origin}/engines/quiz-engine.js"><\/script>
-  <script>EduForgeQuiz.init(${configJson});<\/script>
+  <script>EduHelpQuiz.init(${configJson});<\/script>
 </body>
 </html>`;
 }
@@ -93,7 +93,7 @@ function buildMemoryHTML(engineConfig) {
     escapeDocumentText(engineConfig.title) +
     '</title><style>' + GAME_STYLES +
     '</style></head><body><div id="matching-app"></div><script src="' + window.location.origin +
-    '/engines/memory-engine.js"></script><script>EduForgeMemory.init(' + configJson +
+    '/engines/memory-engine.js"></script><script>EduHelpMemory.init(' + configJson +
     ');</script></body></html>';
 }
 function buildTermSprintHTML(engineConfig) {
@@ -102,7 +102,7 @@ function buildTermSprintHTML(engineConfig) {
     escapeDocumentText(engineConfig.title) +
     '</title><style>' + GAME_STYLES +
     '</style></head><body><div id="matching-app"></div><script src="' + window.location.origin +
-    '/engines/term-sprint-engine.js"></script><script>EduForgeTermSprint.init(' + configJson +
+    '/engines/term-sprint-engine.js"></script><script>EduHelpTermSprint.init(' + configJson +
     ');</script></body></html>';
 }
 function buildMatchingHTML(engineConfig) {
@@ -118,7 +118,7 @@ function buildMatchingHTML(engineConfig) {
 <body>
   <div id="matching-app"></div>
   <script src="${window.location.origin}/engines/matching-engine.js"><\/script>
-  <script>EduForgeMatching.init(${configJson});<\/script>
+  <script>EduHelpMatching.init(${configJson});<\/script>
 </body>
 </html>`;
 }

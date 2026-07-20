@@ -1,15 +1,15 @@
 /**
- * EduForge AI — Drag-and-Drop Matching Engine
- * Built by Codex as part of EduForge AI game infrastructure.
+ * EduHelp AI — Drag-and-Drop Matching Engine
+ * Built by Codex as part of EduHelp AI game infrastructure.
  *
  * Usage:
- *   EduForgeMatching.init(config);
+ *   EduHelpMatching.init(config);
  *
  * Config shape:
  *   { title: string, instruction: string, pairs: [{ id, term, definition }] }
  */
 
-const EduForgeMatching = (() => {
+const EduHelpMatching = (() => {
   let state = { config: null, matched: {}, dragging: null, complete: false };
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (char) => ({
@@ -60,9 +60,9 @@ const EduForgeMatching = (() => {
                  id="def-${p.id}"
                  draggable="${!isMatched}"
                  ${!isMatched ? `
-                   ondragstart="EduForgeMatching.dragStart(${p.id})"
-                   ondragend="EduForgeMatching.dragEnd()"
-                   onclick="EduForgeMatching.tapSelect(${p.id})"
+                   ondragstart="EduHelpMatching.dragStart(${p.id})"
+                   ondragend="EduHelpMatching.dragEnd()"
+                   onclick="EduHelpMatching.tapSelect(${p.id})"
                  ` : ''}>
               ${escapeHtml(p.definition)}
               ${isMatched ? '<span class="match-tick">✓</span>' : ''}
@@ -76,9 +76,9 @@ const EduForgeMatching = (() => {
     pairs.forEach(p => {
       const termEl = document.getElementById(`term-${p.id}`);
       if (termEl && !state.matched[p.id]) {
-        termEl.setAttribute('ondragover', 'EduForgeMatching.dragOver(event)');
-        termEl.setAttribute('ondrop', `EduForgeMatching.drop(event, ${p.id})`);
-        termEl.setAttribute('onclick', `EduForgeMatching.tapTarget(${p.id})`);
+        termEl.setAttribute('ondragover', 'EduHelpMatching.dragOver(event)');
+        termEl.setAttribute('ondrop', `EduHelpMatching.drop(event, ${p.id})`);
+        termEl.setAttribute('onclick', `EduHelpMatching.tapTarget(${p.id})`);
       }
     });
   }
@@ -148,7 +148,7 @@ const EduForgeMatching = (() => {
           <div class="score-pct">100%</div>
         </div>
         <p class="results-sub">${escapeHtml(state.config.title)}</p>
-        <button class="retry-btn" onclick="EduForgeMatching.restart()">Cuba Semula / Try Again</button>
+        <button class="retry-btn" onclick="EduHelpMatching.restart()">Cuba Semula / Try Again</button>
       </div>
     `;
 

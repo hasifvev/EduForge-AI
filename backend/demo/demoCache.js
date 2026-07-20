@@ -1,5 +1,5 @@
 /**
- * EduForge AI — Demo Cache
+ * EduHelp AI — Demo Cache
  * Three pre-built scenarios for instant demo without API calls.
  * Universal (default), Malaysia (BM), UK (History)
  */

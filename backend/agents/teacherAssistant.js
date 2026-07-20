@@ -2,7 +2,7 @@ import { openai, GPT_MODEL, MODEL_MAX_TOKENS } from '../openai.js';
 import { withRetry } from '../utils/retry.js';
 import { teacherInsightsSchema } from '../validators/schemas.js';
 
-const SYSTEM_PROMPT = `You are EduForge AI — Teacher Assistant Agent.
+const SYSTEM_PROMPT = `You are EduHelp AI — Teacher Assistant Agent.
 You are an experienced educator and instructional coach who supports classroom teachers worldwide.
 
 Your role is to provide actionable teaching insights tailored to the teacher's country, curriculum, and student persona.

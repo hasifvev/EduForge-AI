@@ -1,12 +1,24 @@
-const STORAGE_KEY = 'eduforge:local-lessons:v1';
+const STORAGE_KEY = 'eduhelp:local-lessons:v1';
+const LEGACY_STORAGE_KEY = 'eduforge:local-lessons:v1';
 const MAX_LESSONS = 20;
 
 const createId = () => globalThis.crypto?.randomUUID?.() || `lesson-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
+function readStoreForKey(key) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(value) ? value.filter((item) => item?.id && item?.result) : [];
+  } catch {
+    return [];
+  }
+}
+
 function readStore() {
   try {
-    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    return Array.isArray(value) ? value.filter((item) => item?.id && item?.result) : [];
+    if (localStorage.getItem(STORAGE_KEY) !== null) return readStoreForKey(STORAGE_KEY);
+    const legacy = readStoreForKey(LEGACY_STORAGE_KEY);
+    if (legacy.length) localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
+    return legacy;
   } catch {
     return [];
   }
@@ -57,7 +69,7 @@ export function exportLocalLessons() { return JSON.stringify({ version: 1, expor
 
 export function importLocalLessons(serialized) {
   const payload = JSON.parse(serialized);
-  if (!payload || !Array.isArray(payload.lessons)) throw new Error('That file is not an EduForge lesson backup.');
+  if (!payload || !Array.isArray(payload.lessons)) throw new Error('That file is not an EduHelp lesson backup.');
   const valid = payload.lessons.filter((item) => item?.result && typeof item.result === 'object').map((item) => ({ ...item, id: item.id || createId(), createdAt: item.createdAt || new Date().toISOString(), updatedAt: item.updatedAt || new Date().toISOString(), ...metadata(item.result), teachSession: item.teachSession || null }));
   if (!valid.length) throw new Error('That backup does not contain any usable lessons.');
   const importedIds = new Set(valid.map((item) => item.id));

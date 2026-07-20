@@ -1,8 +1,8 @@
 /**
- * EduForge AI — Term Sprint Engine
+ * EduHelp AI — Term Sprint Engine
  * A quick retrieval game generated from the lesson's vetted matching pairs.
  */
-const EduForgeTermSprint = (() => {
+const EduHelpTermSprint = (() => {
   let state = { config: null, order: [], current: 0, score: 0, answered: false };
 
   function escapeHtml(value) {
@@ -44,7 +44,7 @@ const EduForgeTermSprint = (() => {
       '<div class="progress-text">' + (state.current + 1) + ' / ' + state.order.length + ' | ' + state.score + ' correct</div></div>' +
       '<div class="question-card"><p class="question-text">' + escapeHtml(pair.term) + '</p>' +
       '<div class="options-grid">' + options.map((option, index) =>
-        '<button class="option-btn" onclick="EduForgeTermSprint.answer(' + index + ')">' + escapeHtml(option) + '</button>'
+        '<button class="option-btn" onclick="EduHelpTermSprint.answer(' + index + ')">' + escapeHtml(option) + '</button>'
       ).join('') + '</div><div id="sprint-feedback" class="feedback-box hidden"></div></div>';
   }
 
@@ -65,7 +65,7 @@ const EduForgeTermSprint = (() => {
     feedback.className = 'feedback-box ' + (correct ? 'feedback-correct' : 'feedback-wrong');
     feedback.innerHTML = '<div class="feedback-icon">' + (correct ? '✓' : '✗') + '</div><div class="feedback-text"><strong>' +
       (correct ? 'Correct!' : 'Try again next round.') + '</strong><p>' + escapeHtml(pair.definition) +
-      '</p></div><button class="next-btn" onclick="EduForgeTermSprint.next()">' +
+      '</p></div><button class="next-btn" onclick="EduHelpTermSprint.next()">' +
       (state.current + 1 === state.order.length ? 'See results' : 'Next') + '</button>';
   }
 
@@ -81,7 +81,7 @@ const EduForgeTermSprint = (() => {
     const pct = Math.round((state.score / total) * 100);
     app.innerHTML = '<div class="results-screen"><div class="results-icon">⚡</div><h2 class="results-title">Term Sprint Complete</h2>' +
       '<div class="score-circle"><div class="score-num">' + state.score + '/' + total + '</div><div class="score-pct">' + pct + '%</div></div>' +
-      '<p class="results-sub">Replay to practise the same terms in a new order.</p><button class="retry-btn" onclick="EduForgeTermSprint.restart()">Play Again</button></div>';
+      '<p class="results-sub">Replay to practise the same terms in a new order.</p><button class="retry-btn" onclick="EduHelpTermSprint.restart()">Play Again</button></div>';
   }
 
   function restart() {

@@ -4,7 +4,7 @@
 
 - **Track:** Education
 - **Live demo:** https://edu-forge-ai-weld.vercel.app
-- **Repository:** https://github.com/hasifvev/EduForge-AI
+- **Repository:** https://github.com/hasifvev/EduHelp-AI
 - **Repository access:** Public, Apache-2.0 licensed
 - **Judge path:** Select a verified scenario, generate the lesson, launch an activity, then inspect Study Hub, curriculum review, and Material Intelligence.
 
@@ -12,23 +12,23 @@
 
 | Devpost field | Ready-to-use value |
 |---|---|
-| Project name | **EduForge AI — Local-First Curriculum Intelligence for Teachers** |
+| Project name | **EduHelp AI — Local-First Curriculum Intelligence for Teachers** |
 | Track | **Education** |
 | Project URL | https://edu-forge-ai-weld.vercel.app |
-| Repository URL | https://github.com/hasifvev/EduForge-AI |
+| Repository URL | https://github.com/hasifvev/EduHelp-AI |
 | Repository access | Public; no tester invitations required |
 | License | Apache License 2.0 |
 | Primary Codex Build Week session | `019f7a42-c8fa-7c63-9211-41e8af01b47c` |
 | Private evidence manifest | `codex-doctor-report.json`, the July 19 rollout, and the matching auto-review rollout; names recorded in `docs/codex-log.md` |
-| Short description | EduForge AI turns a teacher's curriculum context and optional source material into reviewable lesson activities, printable practice, study resources, and local-first teaching guidance. |
+| Short description | EduHelp AI turns a teacher's curriculum context and optional source material into reviewable lesson activities, printable practice, study resources, and local-first teaching guidance. |
 
 ### Suggested Devpost description
 
-Teachers spend too much time turning curriculum requirements and source material into activities they can actually use. EduForge AI is a local-first teaching workspace that accepts a subject, grade, region, learner profile, language, and optional material, then creates interactive practice, printable resources, study support, teaching guidance, and a quality review.
+Teachers spend too much time turning curriculum requirements and source material into activities they can actually use. EduHelp AI is a local-first teaching workspace that accepts a subject, grade, region, learner profile, language, and optional material, then creates interactive practice, printable resources, study support, teaching guidance, and a quality review.
 
-EduForge is designed around transparent trust boundaries. It distinguishes reviewed curriculum matches from framework-only guidance, keeps lesson history and Teach Mode reflections on the teacher's device, and turns uploaded or linked material into Material Intelligence: a source-grounded summary, topics, evidence, and learner explain-goals. When source text is limited, EduForge says so rather than inventing detail.
+EduHelp is designed around transparent trust boundaries. It distinguishes reviewed curriculum matches from framework-only guidance, keeps lesson history and Teach Mode reflections on the teacher's device, and turns uploaded or linked material into Material Intelligence: a source-grounded summary, topics, evidence, and learner explain-goals. When source text is limited, EduHelp says so rather than inventing detail.
 
-We used Codex with GPT-5.6 as an engineering partner for product and architecture decisions, implementation, and verification. A key decision was replacing per-request generated game HTML with reusable, self-contained browser game engines. That made interactive learning activities portable, faster, and more reliable. During Build Week we extended EduForge with local-first Teach Mode, a worldwide curriculum catalog, source-registered standards boundaries, offline language packs, and Material Intelligence. The repository includes the contribution log, dated commits, setup instructions, and a live no-key demo path for judges.
+We used Codex with GPT-5.6 as an engineering partner for product and architecture decisions, implementation, and verification. A key decision was replacing per-request generated game HTML with reusable, self-contained browser game engines. That made interactive learning activities portable, faster, and more reliable. During Build Week we extended EduHelp with local-first Teach Mode, a worldwide curriculum catalog, source-registered standards boundaries, offline language packs, and Material Intelligence. The repository includes the contribution log, dated commits, setup instructions, and a live no-key demo path for judges.
 
 ## Required-submission ledger
 
@@ -36,7 +36,7 @@ We used Codex with GPT-5.6 as an engineering partner for product and architectur
 |---|---|---|
 | Working project | Ready | Live demo works without an API key. |
 | Education track | Ready | Select **Education** in Devpost. |
-| Public code repository | Ready | `https://github.com/hasifvev/EduForge-AI` is public and Apache-2.0 licensed. |
+| Public code repository | Ready | `https://github.com/hasifvev/EduHelp-AI` is public and Apache-2.0 licensed. |
 | Setup and judge instructions | Ready | `README.md` and this document. |
 | Codex/GPT-5.6 evidence | Ready | `docs/codex-log.md`, dated commits, and README evidence section. |
 | Primary Codex session evidence | Ready | `019f7a42-c8fa-7c63-9211-41e8af01b47c`, from local July 19 rollout metadata. |
@@ -74,14 +74,14 @@ Copy this checklist into your notes and tick every box before selecting **Submit
 
 | Time | Screen | Voiceover point |
 |---:|---|---|
-| 0:00–0:18 | EduForge home | Teachers spend hours turning curriculum requirements and source material into usable activities. EduForge creates a reviewable, classroom-ready lesson workspace. |
+| 0:00–0:18 | EduHelp home | Teachers spend hours turning curriculum requirements and source material into usable activities. EduHelp creates a reviewable, classroom-ready lesson workspace. |
 | 0:18–0:45 | Choose Malaysia Form 1 Sains or US Grade 5 Science scenario | The teacher chooses country, grade, subject, learner profile, language, and curriculum context. |
 | 0:45–1:15 | Generate and dashboard | Five product stages create activities, printable work, study resources, teaching guidance, and a quality review. |
 | 1:15–1:40 | Launch quiz or matching game | The interactive activities are reusable browser engines: fast, portable, and designed for classroom use. |
 | 1:40–2:05 | Upload/link material and Material Intelligence | Source material becomes a grounded summary, topics, evidence, and learner explain-goals; limited extraction is labelled instead of invented. |
 | 2:05–2:25 | Standards and Teach Mode / My Lessons | Alignment is transparent: only reviewed outcomes claim an exact match. Lessons and teaching reflections remain on the teacher's device. |
 | 2:25–2:55 | Architecture/README or a brief Codex view | Codex with GPT-5.6 helped us make the key architecture decision: reusable game engines instead of repeatedly generated HTML, then extend the product with local-first teaching, standards boundaries, and source intelligence. |
-| 2:55–3:00 | Live URL and repository | EduForge AI: practical, local-first curriculum support for teachers worldwide. |
+| 2:55–3:00 | Live URL and repository | EduHelp AI: practical, local-first curriculum support for teachers worldwide. |
 
 ## Video safety checks
 

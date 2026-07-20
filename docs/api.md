@@ -1,4 +1,4 @@
-# EduForge AI API Reference
+# EduHelp AI API Reference
 
 Base URL locally: `http://localhost:3001/api`.
 

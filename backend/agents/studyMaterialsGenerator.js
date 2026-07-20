@@ -144,7 +144,7 @@ GRADE BAND: PRE-UNIVERSITY (Age 17–19)
 }
 
 // ─── System Prompt ─────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `You are EduForge AI — Study Materials Generator Agent.
+const SYSTEM_PROMPT = `You are EduHelp AI — Study Materials Generator Agent.
 You create comprehensive, grade-appropriate study resources for teachers and students worldwide.
 
 Your outputs are used by teachers at ALL levels — from primary school teachers in Malaysia to A-Level teachers in the UK.

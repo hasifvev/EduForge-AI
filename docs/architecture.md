@@ -1,4 +1,4 @@
-# EduForge AI — System Architecture
+# EduHelp AI — System Architecture
 
 > Full technical design of the 5-agent AI Teaching Operating System
 
@@ -6,11 +6,11 @@
 
 ## Overview
 
-EduForge AI is a **multi-agent AI pipeline** where each named agent has a single, well-defined responsibility. Curriculum Intelligence and Experience Designer run first; content, study materials, and teaching insights then run in parallel; Lesson Evaluator runs after the required outputs are available.
+EduHelp AI is a **multi-agent AI pipeline** where each named agent has a single, well-defined responsibility. Curriculum Intelligence and Experience Designer run first; content, study materials, and teaching insights then run in parallel; Lesson Evaluator runs after the required outputs are available.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         EDUFORGE AI PIPELINE                        │
+│                         EDUHELP AI PIPELINE                        │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  Teacher Input                                                      │
@@ -439,4 +439,4 @@ Nodes may contain a description, learning goal, example, and quick-check questio
 
 ---
 
-*EduForge AI | OpenAI Build Week 2026*
+*EduHelp AI | OpenAI Build Week 2026*

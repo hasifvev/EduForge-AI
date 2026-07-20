@@ -1,12 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
 
-const STORAGE_KEY = 'eduforge.lesson-library.v1';
+const STORAGE_KEY = 'eduhelp.lesson-library.v1';
+const LEGACY_STORAGE_KEY = 'eduforge.lesson-library.v1';
 const MAX_SAVED_LESSONS = 12;
+
+function readLibraryForKey(key) {
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(key) || '[]');
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
 
 function readLibrary() {
   try {
-    const saved = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
-    return Array.isArray(saved) ? saved : [];
+    if (window.localStorage.getItem(STORAGE_KEY) !== null) return readLibraryForKey(STORAGE_KEY);
+    const legacy = readLibraryForKey(LEGACY_STORAGE_KEY);
+    if (legacy.length) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
+    return legacy;
   } catch {
     return [];
   }

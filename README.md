@@ -1,14 +1,14 @@
-# EduForge AI
+# EduHelp AI
 
 > An AI teaching workspace that turns a curriculum-aligned lesson brief into a classroom-ready lesson package.
 
 Built for OpenAI Build Week 2026. Live app: [edu-forge-ai-weld.vercel.app](https://edu-forge-ai-weld.vercel.app)
 
-EduForge helps teachers turn a subject, grade, topic, region, language, learner profile, and optional source material into interactive activities, printable practice, study resources, and teaching guidance.
+EduHelp helps teachers turn a subject, grade, topic, region, language, learner profile, and optional source material into interactive activities, printable practice, study resources, and teaching guidance.
 
 ## OpenAI Build Week Evidence
 
-**Track:** Education. EduForge was meaningfully extended during the Build Week submission period through the July 17–20 commits visible in this repository, including global curriculum coverage, browser-local Teach Mode and lesson history, offline language packs, standards coverage boundaries, and source-grounded Material Intelligence.
+**Track:** Education. EduHelp was meaningfully extended during the Build Week submission period through the July 17–20 commits visible in this repository, including global curriculum coverage, browser-local Teach Mode and lesson history, offline language packs, standards coverage boundaries, and source-grounded Material Intelligence.
 
 Codex and GPT-5.6 were used as the engineering partner for product, architecture, implementation, and verification decisions. The most important decision was to build reusable browser game engines once rather than generate fragile game HTML for every lesson; this keeps interactive activities faster, portable, and dependable. See the detailed [Codex contribution log](docs/codex-log.md) and the [Build Week submission guide](docs/build-week-submission.md).
 
@@ -41,7 +41,7 @@ The Learning Atlas maps learning from the lesson core through strands, concepts,
 
 ## How Generation Works
 
-EduForge uses five named product stages:
+EduHelp uses five named product stages:
 
 1. **Curriculum Intelligence** — identifies objectives, concepts, misconceptions, prerequisites, and curriculum alignment.
 2. **Experience Designer** — selects and explains the most suitable activity sequence.
@@ -100,7 +100,7 @@ The interface includes quick language choices and an **Any language** input. The
 
 Source text is capped before it reaches the model pipeline. Public links are checked for private-network targets and redirect destinations before fetching. Uploaded or linked content should always be reviewed for suitability and copyright compliance.
 
-When source text is supplied, EduForge also returns a **Material Intelligence** briefing. It extracts a concise source-grounded summary, identifies topics and key terms, preserves short source evidence, and states what learners should be able to explain. If the readable source text is too short, the interface explicitly marks that limit instead of inventing detail.
+When source text is supplied, EduHelp also returns a **Material Intelligence** briefing. It extracts a concise source-grounded summary, identifies topics and key terms, preserves short source evidence, and states what learners should be able to explain. If the readable source text is too short, the interface explicitly marks that limit instead of inventing detail.
 
 ## Demo Mode and Live Mode
 
@@ -216,7 +216,7 @@ Example generation request:
 
 The backend applies security headers, CORS allow-listing, API and generation rate limits, request validation, upload-size limits, public-link safety checks, text caps, and prompt-safety controls. See [architecture](docs/architecture.md) and the [security remediation plan](docs/2026-07-17-security-remediation-plan.md) for implementation detail.
 
-EduForge creates draft teaching resources. Teachers must verify curriculum alignment, factual accuracy, age suitability, cultural fit, accessibility, assessment suitability, source rights, and local policy requirements before classroom use.
+EduHelp creates draft teaching resources. Teachers must verify curriculum alignment, factual accuracy, age suitability, cultural fit, accessibility, assessment suitability, source rights, and local policy requirements before classroom use.
 
 ## Project Layout
 

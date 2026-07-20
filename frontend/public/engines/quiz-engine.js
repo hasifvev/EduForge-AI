@@ -1,15 +1,15 @@
 /**
- * EduForge AI — MCQ Quiz Engine
- * Built by Codex as part of EduForge AI game infrastructure.
+ * EduHelp AI — MCQ Quiz Engine
+ * Built by Codex as part of EduHelp AI game infrastructure.
  *
  * Usage:
- *   EduForgeQuiz.init(config);
+ *   EduHelpQuiz.init(config);
  *
  * Config shape:
  *   { title: string, questions: [{ id, question, options, correct, explanation }] }
  */
 
-const EduForgeQuiz = (() => {
+const EduHelpQuiz = (() => {
   let state = { config: null, current: 0, score: 0, answers: [], started: false };
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, (char) => ({
@@ -44,7 +44,7 @@ const EduForgeQuiz = (() => {
         <p class="question-text">${escapeHtml(question.question)}</p>
         <div class="options-grid">
           ${question.options.map((opt, i) => `
-            <button class="option-btn" id="opt-${i}" onclick="EduForgeQuiz.select(${i})">
+            <button class="option-btn" id="opt-${i}" onclick="EduHelpQuiz.select(${i})">
               ${opt}
             </button>`).join('')}
         </div>
@@ -75,7 +75,7 @@ const EduForgeQuiz = (() => {
         <strong>${isCorrect ? 'Betul! / Correct!' : 'Salah. / Incorrect.'}</strong>
         <p>${escapeHtml(question.explanation)}</p>
       </div>
-      <button class="next-btn" onclick="EduForgeQuiz.next()">
+      <button class="next-btn" onclick="EduHelpQuiz.next()">
         ${state.current + 1 < state.config.questions.length ? 'Seterusnya / Next →' : 'Lihat Keputusan / See Results'}
       </button>
     `;
@@ -107,7 +107,7 @@ const EduForgeQuiz = (() => {
           <div class="results-fill" style="width:0%" id="res-fill"></div>
         </div>
         <p class="results-sub">${escapeHtml(state.config.title)}</p>
-        <button class="retry-btn" onclick="EduForgeQuiz.restart()">Cuba Semula / Try Again</button>
+        <button class="retry-btn" onclick="EduHelpQuiz.restart()">Cuba Semula / Try Again</button>
       </div>
     `;
 

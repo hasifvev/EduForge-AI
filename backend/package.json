@@ -1,7 +1,7 @@
 {
-  "name": "eduforge-backend",
+  "name": "eduhelp-backend",
   "version": "1.0.0",
-  "description": "EduForge AI — Backend API Server",
+  "description": "EduHelp AI — Backend API Server",
   "main": "server.js",
   "type": "module",
   "scripts": {

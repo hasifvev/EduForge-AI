@@ -11,7 +11,7 @@
 - Offline instruction packs for English, Bahasa Melayu, French, and Spanish across demo teaching materials.
 - Malaysia standards-engine foundation: reviewed KSSM Form 1 Science 5.1.3 resolver, exercise metadata, coverage report, and dashboard trust card.
 - Global standards-platform registry with reviewed seed records for Malaysia KSSM, NGSS Grade 5 Science, and England Key Stage 3 Science.
-- Official-source country packs for every EduForge region, plus a public curriculum-coverage endpoint and framework-only fallback links.
+- Official-source country packs for every EduHelp region, plus a public curriculum-coverage endpoint and framework-only fallback links.
 
 ## 2026-07-19
 

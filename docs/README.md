@@ -1,4 +1,4 @@
-# EduForge AI Documentation
+# EduHelp AI Documentation
 
 - [Architecture](architecture.md) — system and runtime design
 - [API reference](api.md) — endpoint contract and limits

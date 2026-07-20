@@ -1,7 +1,7 @@
 {
-  "name": "eduforge-frontend",
+  "name": "eduhelp-frontend",
   "version": "1.0.0",
-  "description": "EduForge AI — Teacher Dashboard",
+  "description": "EduHelp AI — Teacher Dashboard",
   "type": "module",
   "scripts": {
     "dev": "vite",
